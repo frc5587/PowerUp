@@ -16,6 +16,11 @@ deploy {
             team = TEAM
         }
     }
+    artifacts {
+        artifact('frcJava', jaci.openrio.gradle.frc.FRCJavaArtifact) {
+            targets << "roborio"
+        }
+    }
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
@@ -24,6 +29,10 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
+}
+
+wpi {
+    wpilibVersion = '2018.2.2' 
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
