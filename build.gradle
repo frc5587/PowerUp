@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.20"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.21"
 }
 
 def TEAM = 5587
@@ -29,10 +29,6 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
-}
-
-wpi {
-    wpilibVersion = '2018.2.2' 
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
