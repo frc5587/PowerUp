@@ -7,13 +7,18 @@
 
 package org.frc5587.robot2018;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.ExampleSubsystem;
+import org.frc5587.robot2018.commands.CurveDrive;
 import org.frc5587.robot2018.commands.ExampleCommand;
+import org.frc5587.robot2018.commands.auto.DriveStraight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,12 +28,14 @@ import org.frc5587.robot2018.commands.ExampleCommand;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final ExampleSubsystem kExampleSubsystem
-			= new ExampleSubsystem();
 	public static OI m_oi;
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+	public static Drive kDrive;
+
+	CameraServer cam;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -36,10 +43,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		kDrive = new Drive();
 		m_oi = new OI();
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
+		m_chooser.addDefault("Default Auto", new DriveStraight(10));
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		
+
+		cam = CameraServer.getInstance();
+		cam.startAutomaticCapture("LifeCam", 0);
+
 	}
 
 	/**

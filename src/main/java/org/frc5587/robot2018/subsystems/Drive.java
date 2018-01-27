@@ -11,15 +11,20 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import org.frc5587.robot2018.RobotMap;
+import org.frc5587.robot2018.commands.CurveDrive;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
 public class Drive extends Subsystem {
 
-	WPI_TalonSRX leftMaster, rightMaster, leftSlave, rightSlave;
+	WPI_TalonSRX leftMaster, rightMaster;
+	VictorSPX leftSlave, rightSlave;
 
 	DifferentialDrive vbusDrive;
 
@@ -42,8 +47,8 @@ public class Drive extends Subsystem {
 		//initialize Talons
 		leftMaster = new WPI_TalonSRX(RobotMap.leftMaster);
 		rightMaster = new WPI_TalonSRX(RobotMap.rightMaster);
-		leftSlave = new WPI_TalonSRX(RobotMap.leftSlave);
-		rightSlave = new WPI_TalonSRX(RobotMap.rightSlave);
+		leftSlave = new VictorSPX(RobotMap.leftSlave);
+		rightSlave = new VictorSPX(RobotMap.rightSlave);
 
 		//Set the slaves to mimic the masters
 		leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
@@ -68,16 +73,31 @@ public class Drive extends Subsystem {
 		rightMaster.config_kF(slotIdx, rightPIDs[3], 0);
 	}
 
-	public void curvatureDrive(double throttle, double curve){
-		vbusDrive.curvatureDrive(throttle, curve*Math.signum(throttle), Math.abs(throttle) <= .1);
+	public void curvatureDrive(double throttle, double curve, boolean isQuickTurn){
+		double turn = isQuickTurn? -curve: curve;
+		vbusDrive.curvatureDrive(throttle, Math.signum(throttle)*turn, isQuickTurn && throttle < .1);
 	}
 
 	public void arcadeDrive(double throttle, double curve){
 		vbusDrive.arcadeDrive(throttle, curve, false);
 	}
 
+	public double getLeftPosition(){
+		return leftMaster.getSelectedSensorPosition(0);
+	}
+	public double getRightPosition(){
+		return rightMaster.getSelectedSensorPosition(0);
+	}
+	public double getLeftVelocity(){
+		return leftMaster.getSelectedSensorPosition(0);
+	}
+	public double getRightVelocity(){
+		return rightMaster.getSelectedSensorPosition(0);
+	}
+
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
 		// setDefaultCommand(new MySpecialCommand());
+		setDefaultCommand(new CurveDrive());
 	}
 }
