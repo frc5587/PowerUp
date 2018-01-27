@@ -4,7 +4,6 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package org.frc5587.robot2018;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -12,8 +11,13 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
+
 import org.frc5587.robot2018.subsystems.ExampleSubsystem;
-import org.frc5587.robot2018.commands.ExampleCommand;
+import org.frc5587.robot2018.commands.*;
+import org.frc5587.robot2018.subsystems.LEDControl;
+import org.frc5587.robot2018.commands.LEDUnderLight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,11 +27,15 @@ import org.frc5587.robot2018.commands.ExampleCommand;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final ExampleSubsystem kExampleSubsystem
-			= new ExampleSubsystem();
+	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
 	public static OI m_oi;
+	public static I2C i2c;
+	public static LEDControl ledSubsystem;
+
 
 	Command m_autonomousCommand;
+	Command LEDOn;
+
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 	/**
@@ -40,7 +48,10 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
-	}
+		i2c = new I2C( Port.kMXP, 8);
+		ledSubsystem = new LEDControl();
+		LEDOn = new LEDUnderLight();
+		}
 
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
@@ -102,6 +113,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		LEDOn.start();
 	}
 
 	/**
@@ -112,10 +124,12 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 	}
 
+
 	/**
 	 * This function is called periodically during test mode.
 	 */
 	@Override
 	public void testPeriodic() {
 	}
+
 }
