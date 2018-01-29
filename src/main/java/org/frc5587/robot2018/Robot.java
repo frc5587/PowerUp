@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.frc5587.robot2018.commands.LEDUnderLight;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.commands.ExampleCommand;
+import org.frc5587.robot2018.subsystems.LEDControl;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,6 +29,7 @@ public class Robot extends TimedRobot {
 	public static final Elevator elevator = new Elevator();
 	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static OI m_oi;
+	public static LEDUnderLight ledUnderLight;
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -42,6 +45,7 @@ public class Robot extends TimedRobot {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		compressor.setClosedLoopControl(true); // TODO: migrate to function
+		ledUnderLight = new LEDUnderLight();
 	}
 
 	/**
@@ -104,6 +108,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		ledUnderLight.start();
 	}
 
 	/**

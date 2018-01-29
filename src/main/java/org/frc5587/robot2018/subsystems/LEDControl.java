@@ -1,16 +1,19 @@
 package org.frc5587.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class LEDControl extends Subsystem {
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
+    private I2C arduino = new I2C(I2C.Port.kMXP, 8);
 
+    public void sendAllianceColor(char Acolor){ //Parameter Alliance Color
+        byte[] color = {(byte) Acolor};
+        arduino.writeBulk(color);
+        System.out.println("Sending Alliance Color Packets");
+    }
 
     public void initDefaultCommand() {
-        // TODO: Set the default command, if any, for a subsystem here. Example:
-        //    setDefaultCommand(new MySpecialCommand());
     }
 }
 
