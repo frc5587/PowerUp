@@ -1,19 +1,13 @@
 package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.frc5587.robot2018.Robot;
 
-
-/**
- * PURPOSE
- *
- * @author Brendan Doney
- * @version 1.0
- * @since 1/27/18
- */
 public class FirePistons extends Command {
     public FirePistons() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+        requires(Robot.elevator);
     }
 
 
@@ -23,7 +17,7 @@ public class FirePistons extends Command {
      */
     @Override
     protected void initialize() {
-
+        Robot.elevator.triggerPistons(true);
     }
 
 
@@ -33,7 +27,6 @@ public class FirePistons extends Command {
      */
     @Override
     protected void execute() {
-
     }
 
 
@@ -56,8 +49,10 @@ public class FirePistons extends Command {
      */
     @Override
     protected boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        if(!Robot.compressor.enabled()) // Only ends when the tanks are full, meaning the pistons do not need more air
+            return true;
+        else
+            return false;
     }
 
 

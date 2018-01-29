@@ -7,12 +7,13 @@
 
 package org.frc5587.robot2018;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.frc5587.robot2018.subsystems.ExampleSubsystem;
+import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.commands.ExampleCommand;
 
 /**
@@ -23,8 +24,8 @@ import org.frc5587.robot2018.commands.ExampleCommand;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final ExampleSubsystem kExampleSubsystem
-			= new ExampleSubsystem();
+	public static final Elevator elevator = new Elevator();
+	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static OI m_oi;
 
 	Command m_autonomousCommand;
@@ -40,6 +41,7 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		compressor.setClosedLoopControl(true); // TODO: migrate to function
 	}
 
 	/**

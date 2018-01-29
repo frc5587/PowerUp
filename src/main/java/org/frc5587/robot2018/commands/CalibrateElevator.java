@@ -2,9 +2,9 @@ package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class StartElevator extends CommandGroup {
+public class CalibrateElevator extends CommandGroup {
 
-    public StartElevator() {
+    public CalibrateElevator() {
         addSequential(new FirePistons());
         addSequential(new ZeroElevator());
         // Add Commands here:

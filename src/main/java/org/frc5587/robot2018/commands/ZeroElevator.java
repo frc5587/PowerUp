@@ -1,19 +1,14 @@
 package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.frc5587.robot2018.Robot;
 
-
-/**
- * PURPOSE
- *
- * @author Brendan Doney
- * @version 1.0
- * @since 1/27/18
- */
 public class ZeroElevator extends Command {
+
     public ZeroElevator() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+        requires(Robot.elevator);
     }
 
 
@@ -23,7 +18,7 @@ public class ZeroElevator extends Command {
      */
     @Override
     protected void initialize() {
-
+        Robot.elevator.startCalibration();
     }
 
 
@@ -56,8 +51,12 @@ public class ZeroElevator extends Command {
      */
     @Override
     protected boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        if(Robot.elevator.getHallEffect() > 0) { // Hall effect sensor has been hit
+            Robot.elevator.stopMotor();
+            return true;
+        }
+        else
+            return false;
     }
 
 

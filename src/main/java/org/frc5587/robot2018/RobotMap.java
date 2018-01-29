@@ -23,4 +23,11 @@ public class RobotMap {
 	// number and the module. For example you with a rangefinder:
 	// public static int rangefinderPort = 1;
 	// public static int rangefinderModule = 1;
+
+    // Elevator subsystem
+    public static final int HALL_EFFECT_SENSOR = 0, ELEVATOR_MOTOR = 0;
+
+    // Pneumatics systems
+    public static final int COMPRESSOR = 0;
+    public static final int[] ELEVATOR_SOLENOID = {0, 1};
 }
