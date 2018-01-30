@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.frc5587.robot2018.commands.LEDUnderLight;
+import org.frc5587.robot2018.commands.FirePistons;
+import org.frc5587.robot2018.commands.HandZeroElevator;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.commands.ExampleCommand;
 import org.frc5587.robot2018.subsystems.LEDControl;
@@ -28,8 +29,8 @@ import org.frc5587.robot2018.subsystems.LEDControl;
 public class Robot extends TimedRobot {
 	public static final Elevator elevator = new Elevator();
 	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
-	public static OI m_oi;
-	public static LEDUnderLight ledUnderLight;
+	public static final LEDControl ledControl = new LEDControl();
+	public static final OI m_oi = new OI();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -40,12 +41,11 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		m_oi = new OI();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		compressor.setClosedLoopControl(true); // TODO: migrate to function
-		ledUnderLight = new LEDUnderLight();
+		new HandZeroElevator().start();
 	}
 
 	/**
@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		new FirePistons().start();
 		m_autonomousCommand = m_chooser.getSelected();
 
 		/*
@@ -108,7 +109,6 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		ledUnderLight.start();
 	}
 
 	/**

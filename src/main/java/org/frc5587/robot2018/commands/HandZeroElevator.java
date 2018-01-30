@@ -1,14 +1,16 @@
 package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import org.frc5587.robot2018.Robot;
 
-public class ZeroElevator extends Command {
 
-    public ZeroElevator() {
+public class HandZeroElevator extends Command {
+    public HandZeroElevator() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(Robot.elevator);
+        requires(Robot.ledControl);
     }
 
 
@@ -17,9 +19,7 @@ public class ZeroElevator extends Command {
      * this Command is run after being started.
      */
     @Override
-    protected void initialize() {
-        Robot.elevator.startCalibration();
-    }
+    protected void initialize() { }
 
 
     /**
@@ -28,7 +28,10 @@ public class ZeroElevator extends Command {
      */
     @Override
     protected void execute() {
-
+        if(Robot.elevator.isZeroed())
+            Scheduler.getInstance().add(new LEDUnderLight()); // TODO: Define in Robot.java and start that instance of the command from here
+        else
+            Robot.ledControl.sendColorChar('y');
     }
 
 
@@ -51,12 +54,8 @@ public class ZeroElevator extends Command {
      */
     @Override
     protected boolean isFinished() {
-        if(Robot.elevator.getHallEffect() > 0) { // Hall effect sensor has been hit
-            Robot.elevator.stopMotor();
-            return true;
-        }
-        else
-            return false;
+        // TODO: Make this return true when this Command no longer needs to run execute()
+        return false;
     }
 
 

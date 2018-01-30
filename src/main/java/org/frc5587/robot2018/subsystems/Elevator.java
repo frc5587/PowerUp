@@ -19,6 +19,7 @@ public class Elevator extends Subsystem {
         hallEffect.setUpDownCounterMode();
         elevatorController = new TalonSRX(RobotMap.ELEVATOR_MOTOR);
     }
+
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
@@ -29,23 +30,19 @@ public class Elevator extends Subsystem {
             tiltDoubleSol.set(DoubleSolenoid.Value.kOff);
     }
 
-    public void startCalibration() {
-        hallEffect.reset();
-        elevatorController.set(ControlMode.PercentOutput, -0.01);
+    public boolean isZeroed() {
+        if(hallEffect.get() > 0) {
+            hallEffect.reset();
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override
     public void initDefaultCommand() {
         // TODO: Set the default command, if any, for a subsystem here. Example:
         //    setDefaultCommand(new MySpecialCommand());
-    }
-
-    public int getHallEffect() {
-        return hallEffect.get();
-    }
-
-    public void stopMotor() {
-        elevatorController.set(ControlMode.PercentOutput, 0.0);
     }
 }
 

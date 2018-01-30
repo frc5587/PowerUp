@@ -3,36 +3,32 @@ package org.frc5587.robot2018.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.*;
 import edu.wpi.first.wpilibj.command.Command;
-
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.subsystems.LEDControl;
 
 /**
  *
  */
 public class LEDUnderLight extends Command{
 
-    LEDControl leds;
-    boolean direction = false;
-    Alliance color = DriverStation.getInstance().getAlliance();
+    private Alliance color = DriverStation.getInstance().getAlliance();
 
+    public LEDUnderLight() {
+        requires(Robot.ledControl);
+    }
 
     // Called just before this Command runs the first time
     @Override
-    protected void initialize(){
-        leds = new LEDControl();
-    }
+    protected void initialize() { }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        char B = 'b', R = 'r';
         switch (color){
             case Red:
-                    leds.sendAllianceColor(R);
+                Robot.ledControl.sendColorChar('r');
                 break;
             case Blue:
-                leds.sendAllianceColor(B);
+                Robot.ledControl.sendColorChar('b');
                 break;
             default:
         }
@@ -42,7 +38,6 @@ public class LEDUnderLight extends Command{
     @Override
     protected boolean isFinished() {
         return false;
-
     }
 
     // Called once after isFinished returns true
