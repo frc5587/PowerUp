@@ -5,18 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.frc5587.robot2018.commands;
+package org.frc5587.robot2018.commands.auto;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.subsystems.Drive;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ExampleCommand extends Command {
-	public ExampleCommand() {
+public class DriveStraight extends TimedCommand {
+	Drive kDrive; 
+	public DriveStraight(double time) {
+		super(time);
 		// Use requires() here to declare subsystem dependencies
-		//requires(Robot.kExampleSubsystem);
+		kDrive = Robot.kDrive;
+		requires(kDrive);
 	}
 
 	// Called just before this Command runs the first time
@@ -27,6 +32,7 @@ public class ExampleCommand extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+		kDrive.arcadeDrive(1, 0);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

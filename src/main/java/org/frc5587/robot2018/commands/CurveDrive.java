@@ -7,16 +7,23 @@
 
 package org.frc5587.robot2018.commands;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.subsystems.Drive;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class ExampleCommand extends Command {
-	public ExampleCommand() {
+public class CurveDrive extends Command {
+	Drive kDrive;
+	public CurveDrive() {
 		// Use requires() here to declare subsystem dependencies
-		//requires(Robot.kExampleSubsystem);
+		requires(Robot.kDrive);
+		this.kDrive = Robot.kDrive;
 	}
 
 	// Called just before this Command runs the first time
@@ -27,6 +34,12 @@ public class ExampleCommand extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+		double throttle = OI.xb.getY(Hand.kLeft);
+		double curve = -OI.xb.getX(Hand.kRight);
+		boolean isQuickTurn = OI.xb.getBumper(Hand.kRight);
+		SmartDashboard.putNumber("throttle", throttle);
+		SmartDashboard.putNumber("curve", curve);
+		kDrive.curvatureDrive(throttle, curve, isQuickTurn);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
