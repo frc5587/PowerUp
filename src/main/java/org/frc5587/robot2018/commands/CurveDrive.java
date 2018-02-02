@@ -39,7 +39,7 @@ public class CurveDrive extends Command {
 		boolean isQuickTurn = OI.xb.getBumper(Hand.kRight);
 		SmartDashboard.putNumber("throttle", throttle);
 		SmartDashboard.putNumber("curve", curve);
-		kDrive.curvatureDrive(throttle, curve, isQuickTurn);
+		kDrive.vbusCurve(throttle, curve, isQuickTurn);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

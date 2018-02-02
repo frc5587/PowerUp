@@ -24,9 +24,10 @@ public class RobotMap {
 	// public static int rangefinderPort = 1;
 	// public static int rangefinderModule = 1;
 
-	//CAN Devices
-	public static int leftMaster = 1;
-	public static int rightMaster = 2;
-	public static int leftSlave = 3;
-	public static int rightSlave = 4;
+	public static class Drive{
+		public static int leftMaster = 1;
+		public static int rightMaster = 2;
+		public static int leftSlave = 3;
+		public static int rightSlave = 4;
+	}
 }
