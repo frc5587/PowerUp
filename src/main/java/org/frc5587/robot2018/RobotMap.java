@@ -25,7 +25,7 @@ public class RobotMap {
 	// public static int rangefinderModule = 1;
 
     // Elevator subsystem
-    public static final int HALL_EFFECT_SENSOR = 0, ELEVATOR_MOTOR = 0;
+    public static final int HALL_EFFECT_SENSOR = 9, ELEVATOR_TALON = 2;
 
     // Pneumatics systems
     public static final int COMPRESSOR = 0;

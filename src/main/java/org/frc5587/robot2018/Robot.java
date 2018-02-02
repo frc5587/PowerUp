@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.FirePistons;
 import org.frc5587.robot2018.commands.HandZeroElevator;
+import org.frc5587.robot2018.commands.InitiateMotionMagic;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.LEDControl;
 
@@ -32,9 +33,10 @@ import org.frc5587.robot2018.commands.CurveDrive;
 public class Robot extends TimedRobot {
 	public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
-	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
+	// public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
 	public static final OI m_oi = new OI();
+	private static Command handZero;
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -51,11 +53,8 @@ public class Robot extends TimedRobot {
 		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
-
 		cam = CameraServer.getInstance();
 		cam.startAutomaticCapture("LifeCam", 0);
-
-		new HandZeroElevator().start();
 	}
 
 	/**
@@ -65,7 +64,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		Command handZero = new HandZeroElevator();
+		handZero.start();
 	}
 
 	@Override
@@ -112,6 +112,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		System.out.println("Teleop starting... ");
+		new InitiateMotionMagic(100000).start();
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove

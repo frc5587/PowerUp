@@ -28,8 +28,12 @@ public class HandZeroElevator extends Command {
      */
     @Override
     protected void execute() {
-        if(Robot.elevator.isZeroed())
-            Scheduler.getInstance().add(new LEDUnderLight()); // TODO: Define in Robot.java and start that instance of the command from here
+        if(Robot.elevator.isZeroed()) {
+            System.out.println("Elevator calibrated");
+            Command ledCommand = new LEDUnderLight();
+            ledCommand.start();
+            // Scheduler.getInstance().add(new LEDUnderLight()); // TODO: Define in Robot.java and start that instance of the command from here
+        }
         else
             Robot.ledControl.sendColorChar('y');
     }
