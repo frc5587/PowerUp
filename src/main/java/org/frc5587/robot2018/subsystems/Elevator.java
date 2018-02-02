@@ -21,10 +21,10 @@ public class Elevator extends Subsystem {
 
     public Elevator() {
         System.out.println("Elevator starting... ");
-        tiltDoubleSol = new DoubleSolenoid(RobotMap.ELEVATOR_SOLENOID[0], RobotMap.ELEVATOR_SOLENOID[1]);
-        hallEffect = new DigitalInput(RobotMap.HALL_EFFECT_SENSOR);
+        // tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
+        hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
         System.out.println("Elevator done starting... ");
-        elevatorTalon = new TalonSRX(RobotMap.ELEVATOR_TALON);
+        elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
         configureTalon();
     }
 
@@ -44,31 +44,31 @@ public class Elevator extends Subsystem {
 
     private void configureTalon() {
         // Choose sensor type
-        elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
         elevatorTalon.setSensorPhase(true);
         elevatorTalon.setInverted(false);
 
         // Set relevant frame periods to be at least as fast as periodic rate
-        elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.kTimeoutMs);
-        elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
+        elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.ElevatorTalon.kTimeoutMs);
 
         // set the peak and nominal outputs
-        elevatorTalon.configNominalOutputForward(Constants.elevatorMinPercentOut, Constants.kTimeoutMs);
-        elevatorTalon.configNominalOutputReverse(-Constants.elevatorMinPercentOut, Constants.kTimeoutMs);
-        elevatorTalon.configPeakOutputForward(Constants.elevatorMaxPercentOut, Constants.kTimeoutMs);
-        elevatorTalon.configPeakOutputReverse(-Constants.elevatorMaxPercentOut, Constants.kTimeoutMs);
+        elevatorTalon.configNominalOutputForward(Constants.ElevatorTalon.minPercentOut, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.configNominalOutputReverse(-Constants.ElevatorTalon.minPercentOut, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.configPeakOutputForward(Constants.ElevatorTalon.maxPercentOut, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.configPeakOutputReverse(-Constants.ElevatorTalon.maxPercentOut, Constants.ElevatorTalon.kTimeoutMs);
 
         // set closed loop gains in set slot
-        elevatorTalon.selectProfileSlot(Constants.kSlotIdx, Constants.kPIDLoopIdx);
-        elevatorTalon.config_kF(0, Constants.elevatorkF, Constants.kTimeoutMs);
-        elevatorTalon.config_kP(0, Constants.elevatorkP, Constants.kTimeoutMs);
-        elevatorTalon.config_kI(0, Constants.elevatorkI, Constants.kTimeoutMs);
-        elevatorTalon.config_kD(0, Constants.elevatorkD, Constants.kTimeoutMs);
+        elevatorTalon.selectProfileSlot(Constants.ElevatorTalon.kSlotIdx, Constants.ElevatorTalon.kPIDLoopIdx);
+        elevatorTalon.config_kF(0, Constants.ElevatorTalon.kF, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.config_kP(0, Constants.ElevatorTalon.kP, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.config_kI(0, Constants.ElevatorTalon.kI, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.config_kD(0, Constants.ElevatorTalon.kD, Constants.ElevatorTalon.kTimeoutMs);
         // set acceleration and vcruise velocity - see documentation
-        elevatorTalon.configMotionCruiseVelocity(Constants.elevatorMaxVelocity, Constants.kTimeoutMs);
-        elevatorTalon.configMotionAcceleration(Constants.elevatorMaxAcceleration, Constants.kTimeoutMs);
+        elevatorTalon.configMotionCruiseVelocity(Constants.ElevatorTalon.maxVelocity, Constants.ElevatorTalon.kTimeoutMs);
+        elevatorTalon.configMotionAcceleration(Constants.ElevatorTalon.maxAcceleration, Constants.ElevatorTalon.kTimeoutMs);
         // zero the sensor
-        elevatorTalon.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        elevatorTalon.setSelectedSensorPosition(0, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
     }
 
     public void sendDebugInfo(){
@@ -86,7 +86,7 @@ public class Elevator extends Subsystem {
     }
 
     public boolean isDone(){
-        return (elevatorTalon.getSelectedSensorPosition(0) - setpoint ) <= Constants.kDeadband;
+        return (elevatorTalon.getSelectedSensorPosition(0) - setpoint ) <= Constants.ElevatorTalon.kDeadband;
     }
 
     @Override

@@ -49,12 +49,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		compressor.setClosedLoopControl(true); // TODO: migrate to function
+		// compressor.setClosedLoopControl(true); // TODO: migrate to function
 		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
-		cam = CameraServer.getInstance();
-		cam.startAutomaticCapture("LifeCam", 0);
+//		cam = CameraServer.getInstance();
+//		cam.startAutomaticCapture("LifeCam", 0);
 	}
 
 	/**
