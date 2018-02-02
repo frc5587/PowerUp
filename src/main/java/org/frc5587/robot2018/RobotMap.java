@@ -30,4 +30,13 @@ public class RobotMap {
     // Pneumatics systems
     public static final int COMPRESSOR = 0;
     public static final int[] ELEVATOR_SOLENOID = {0, 1};
+
+	//CAN Devices
+
+	public static class Drive{
+		public static int leftMaster = 1;
+		public static int rightMaster = 2;
+		public static int leftSlave = 3;
+		public static int rightSlave = 4;
+	}
 }

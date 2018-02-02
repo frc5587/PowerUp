@@ -8,6 +8,7 @@
 package org.frc5587.robot2018;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -16,8 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.FirePistons;
 import org.frc5587.robot2018.commands.HandZeroElevator;
 import org.frc5587.robot2018.subsystems.Elevator;
-import org.frc5587.robot2018.commands.ExampleCommand;
 import org.frc5587.robot2018.subsystems.LEDControl;
+
+import org.frc5587.robot2018.subsystems.Drive;
+import org.frc5587.robot2018.commands.CurveDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,6 +30,7 @@ import org.frc5587.robot2018.subsystems.LEDControl;
  * project.
  */
 public class Robot extends TimedRobot {
+	public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
 	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
@@ -35,16 +39,22 @@ public class Robot extends TimedRobot {
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+	CameraServer cam;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
 		compressor.setClosedLoopControl(true); // TODO: migrate to function
+		
+		m_chooser.addDefault("Default Auto", null);
+		SmartDashboard.putData("Auto mode", m_chooser);
+
+		cam = CameraServer.getInstance();
+		cam.startAutomaticCapture("LifeCam", 0);
+
 		new HandZeroElevator().start();
 	}
 
