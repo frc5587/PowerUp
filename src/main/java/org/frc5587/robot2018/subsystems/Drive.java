@@ -8,25 +8,26 @@
 package org.frc5587.robot2018.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
+import org.frc5587.lib.TitanDrive;
+import org.frc5587.lib.TitanDrive.DriveSignal;
+import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
 import org.frc5587.robot2018.commands.CurveDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
  */
 public class Drive extends Subsystem {
 
-	WPI_TalonSRX leftMaster, rightMaster;
+	TalonSRX leftMaster, rightMaster;
 	VictorSPX leftSlave, rightSlave;
+	TitanDrive driveHelper;
 
-	DifferentialDrive vbusDrive;
+	double kMaxVelocity = 0.0;
 
 	//PIDF Constants
 	double[] leftPIDs = {
@@ -44,24 +45,38 @@ public class Drive extends Subsystem {
 	};
 
 	public Drive(){
+		driveHelper = new TitanDrive();
 		//initialize Talons
-		leftMaster = new WPI_TalonSRX(RobotMap.Drive.leftMaster);
-		rightMaster = new WPI_TalonSRX(RobotMap.Drive.rightMaster);
+		leftMaster = new TalonSRX(RobotMap.Drive.leftMaster);
+		rightMaster = new TalonSRX(RobotMap.Drive.rightMaster);
 		leftSlave = new VictorSPX(RobotMap.Drive.leftSlave);
 		rightSlave = new VictorSPX(RobotMap.Drive.rightSlave);
+
+		//invert right side
+		rightMaster.setInverted(true);
+		rightSlave.setInverted(true);
 
 		//Set the slaves to mimic the masters
 		leftSlave.follow(leftMaster);
 		rightSlave.follow(rightMaster);
 
-		vbusDrive = new DifferentialDrive(leftMaster, rightMaster);
+		//Enable Voltage Compensation
+		//rightMaster.configVoltageCompSaturation(12.0, 0);
+		//rightMaster.enableVoltageCompensation(true);
+		//leftMaster.configVoltageCompSaturation(12.0, 0);
+		//leftMaster.enableVoltageCompensation(true);
+
+		rightMaster.configPeakOutputForward(1, 0);
+		rightMaster.configPeakOutputReverse(-1, 0);
+		rightSlave.configPeakOutputForward(1, 0);
+		rightSlave.configPeakOutputReverse(-1, 0);
 	}
 
 	/**
 	 * Send PIDF constants to master talons
 	 * @param slotIdx Which slot to push values to
 	 */
-	private void pushPIDF(int slotIdx){
+	private void fillPIDFSlot(int slotIdx){
 		leftMaster.config_kP(slotIdx, leftPIDs[0], 0);
 		leftMaster.config_kI(slotIdx, leftPIDs[1], 0);
 		leftMaster.config_kD(slotIdx, leftPIDs[2], 0);
@@ -73,12 +88,33 @@ public class Drive extends Subsystem {
 		rightMaster.config_kF(slotIdx, rightPIDs[3], 0);
 	}
 
-	public void curvatureDrive(double throttle, double curve, boolean isQuickTurn){
-		vbusDrive.curvatureDrive(throttle, Math.signum(throttle)*curve, isQuickTurn && throttle < .1);
+	public void vbusCurve(double throttle, double curve, boolean isQuickTurn){
+		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
+		
+		leftMaster.set(ControlMode.PercentOutput, d.left);
+		rightMaster.set(ControlMode.PercentOutput, d.right);
 	}
 
-	public void arcadeDrive(double throttle, double curve){
-		vbusDrive.arcadeDrive(throttle, curve, false);
+	public void vbusArcade(double throttle, double turn){
+		DriveSignal d = driveHelper.arcadeDrive(throttle, turn);
+		
+		leftMaster.set(ControlMode.PercentOutput, d.left);
+		rightMaster.set(ControlMode.PercentOutput, d.right);
+		System.out.println(d.right);
+	}
+
+	public void velocityCurve(double throttle, double curve, boolean isQuickTurn){
+		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
+		
+		leftMaster.set(ControlMode.Velocity, d.left * kMaxVelocity);
+		rightMaster.set(ControlMode.Velocity, d.right * kMaxVelocity);
+	}
+
+	public void velocityArcade(double throttle, double turn){
+		DriveSignal d = driveHelper.arcadeDrive(throttle, turn);
+
+		leftMaster.set(ControlMode.Velocity, d.left * kMaxVelocity);
+		rightMaster.set(ControlMode.Velocity, d.right * kMaxVelocity);
 	}
 
 	public double getLeftPosition(){

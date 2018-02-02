@@ -36,7 +36,7 @@ public class ArcadeDrive extends Command {
 	protected void execute() {
 		double throttle = -OI.xb.getY(Hand.kLeft);
 		double curve = OI.xb.getX(Hand.kRight);
-		kDrive.arcadeDrive(throttle, curve);
+		kDrive.vbusArcade(throttle, curve);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
