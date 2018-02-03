@@ -34,9 +34,9 @@ public class CurveDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		double throttle = OI.xb.getY(Hand.kLeft);
-		double curve = -OI.xb.getX(Hand.kRight);
-		boolean isQuickTurn = OI.xb.getBumper(Hand.kRight);
+		double throttle = 1; //OI.xb.getY(Hand.kLeft);
+		double curve = -1; //-OI.xb.getX(Hand.kRight);
+		boolean isQuickTurn = true; //OI.xb.getBumper(Hand.kRight);
 		SmartDashboard.putNumber("throttle", throttle);
 		SmartDashboard.putNumber("curve", curve);
 		kDrive.curvatureDrive(throttle, curve, isQuickTurn);

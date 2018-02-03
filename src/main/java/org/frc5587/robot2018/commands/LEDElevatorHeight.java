@@ -1,16 +1,25 @@
 package org.frc5587.robot2018.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.LEDControl;
 
 
-public class HandZeroElevator extends Command {
-    public HandZeroElevator() {
+public class LEDElevatorHeight extends Command {
+    private char color = DriverStation.getInstance().getAlliance().toString().charAt(0);
+    private Elevator elevator;
+    private LEDControl ledControl;
+
+    public LEDElevatorHeight() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(Robot.elevator);
         requires(Robot.ledControl);
+        this.elevator = Robot.elevator;
+        this.ledControl = Robot.ledControl;
     }
 
 
@@ -28,14 +37,12 @@ public class HandZeroElevator extends Command {
      */
     @Override
     protected void execute() {
-        if(Robot.elevator.isZeroed()) {
-            System.out.println("Elevator calibrated");
-            Command ledCommand = new LEDUnderLight();
-            ledCommand.start();
-            // Scheduler.getInstance().add(new LEDUnderLight()); // TODO: Define in Robot.java and start that instance of the command from here
-        }
+        LEDControl.Color color;
+        if(elevator.isDoneMoving())
+            color = LEDControl.Color.GREEN;
         else
-            Robot.ledControl.sendColor(LEDControl.Color.YELLOW);
+            color = LEDControl.Color.BLUE;
+        ledControl.sendColorWithHeight(color, elevator.getElevatorHeightIn());
     }
 
 

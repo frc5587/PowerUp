@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.*;
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.subsystems.LEDControl;
 
 /**
  *
@@ -25,10 +26,10 @@ public class LEDUnderLight extends Command{
     protected void execute() {
         switch (color){
             case Red:
-                Robot.ledControl.sendColorChar('r');
+                Robot.ledControl.sendColor(LEDControl.Color.RED);
                 break;
             case Blue:
-                Robot.ledControl.sendColorChar('b');
+                Robot.ledControl.sendColor(LEDControl.Color.BLUE);
                 break;
             default:
         }

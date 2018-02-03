@@ -38,10 +38,17 @@ public class Elevator extends Subsystem {
             tiltDoubleSol.set(DoubleSolenoid.Value.kOff);
     }
 
+    /**
+     * Finds whether the elevator is currently zeroed by using a hall effect sensor
+     * @return whether the elevator is at the "zero" position
+     */
     public boolean isZeroed() {
         return hallEffect.get();
     }
 
+    /**
+     * Configures the elevatorTalon (no parameters)
+     */
     private void configureTalon() {
         // Choose sensor type
         elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
@@ -71,6 +78,9 @@ public class Elevator extends Subsystem {
         elevatorTalon.setSelectedSensorPosition(0, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
     }
 
+    /**
+     * Sends information about the elevatorTalon's current status to SmartDashboard
+     */
     public void sendDebugInfo(){
         double pos = elevatorTalon.getSelectedSensorPosition(0);
         double vel = elevatorTalon.getSelectedSensorVelocity(0);
@@ -80,13 +90,38 @@ public class Elevator extends Subsystem {
         SmartDashboard.putNumber("Elevator Voltage", voltage);
     }
 
+    /**
+     * Starts Motion Magic on elevatorTalon for a given setpoint
+     * @param targetPos the setpoint to use Motion Magic with
+     */
     public void createSetpoint(double targetPos) {
         setpoint = targetPos;
         elevatorTalon.set(ControlMode.MotionMagic, targetPos);
     }
 
-    public boolean isDone(){
-        return (elevatorTalon.getSelectedSensorPosition(0) - setpoint ) <= Constants.ElevatorTalon.kDeadband;
+    /**
+     * Gets the current position of the elevatorTalon's encoder position
+     * @return the current raw sensor units of elevatorTalon's encoder
+     */
+    public int getEncoderPosition() {
+        return elevatorTalon.getSelectedSensorPosition(0);
+    }
+
+    /**
+     * Returns how many inches from the ground the elevator currently is
+     * @return elevator's current height in inches
+     */
+    public float getElevatorHeightIn() {
+        // TODO: Implement an encoder revolutions to inches from ground conversion
+        return (float)getEncoderPosition() / 8; // PLACEHOLDER
+    }
+
+    /**
+     * Approximates whether or not the elevatorTalon is done going to a Magic Motion setpoint
+     * @return the talon's current progress in tracking to a Magic Motion setpoint
+     */
+    public boolean isDoneMoving(){
+        return (getEncoderPosition() - setpoint ) <= Constants.ElevatorTalon.kDeadband;
     }
 
     @Override
