@@ -9,7 +9,6 @@ import jaci.pathfinder.Trajectory.Segment;
 import jaci.pathfinder.Waypoint;
 import jaci.pathfinder.modifiers.TankModifier;
 import java.io.File;
-import java.io.IOException;
 
 public class Pathgen{
     double treadWidth, dt, vMax, aMax, jMax;
@@ -51,13 +50,33 @@ public class Pathgen{
      */
     public void createNew(String filename, Waypoint[] points){
         Trajectory trajectory = Pathfinder.generate(points, config);
+        System.out.println("Writing to csv");
         File myFile = new File(DIRECTORY + filename + ".csv");
         Pathfinder.writeToCSV(myFile, trajectory);
-        TankModifier modifier = new TankModifier(trajectory).modify(treadWidth);
+    }
+
+    /**
+     * Returns the trajectory specific to the left side of the drivetrain
+     */
+    public Trajectory getLeftSide(Trajectory t){
+        TankModifier modifier = new TankModifier(t).modify(treadWidth);
+        return modifier.getLeftTrajectory();
+    }
+
+    /**
+     * Returns the trajectory specific to the right side of the drivetrain
+     */
+    public Trajectory getRightSide(Trajectory t){
+        TankModifier modifier = new TankModifier(t).modify(treadWidth);
+        return modifier.getRightTrajectory();
     }
     
+    /**
+     * Load profile from file
+     * @param name Filename of profile, don't append .csv extension
+     */
     public Trajectory getTrajectoryFromFile(String name){
-        File myFile = new File(name + ".csv");
+        File myFile = new File(DIRECTORY + name + ".csv");
         Trajectory trajectory = Pathfinder.readFromCSV(myFile);
         return trajectory;
     }
@@ -79,13 +98,14 @@ public class Pathgen{
         TrajectoryPoint[] outProfile = new TrajectoryPoint[length];
         for(int i = 0; i < length; i++){
             Segment s = t.get(i);
-            TrajectoryPoint point = outProfile[i];
-            point.timeDur = TrajectoryDuration.Trajectory_Duration_0ms;
+            TrajectoryPoint point = new TrajectoryPoint();
             point.profileSlotSelect0 = pidfSlot;
             point.position = (int)((s.position + currentPos)* nativeUnitsPerInch);
             point.velocity = (int)(s.velocity * nativeUnitsPerInch / 10);
             point.zeroPos = i == 0;
             point.isLastPoint = (i+1) == length;
+            point.timeDur = TrajectoryDuration.Trajectory_Duration_0ms;
+            outProfile[i] = point;
         }
         return outProfile;
     }

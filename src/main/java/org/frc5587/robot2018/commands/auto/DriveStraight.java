@@ -7,7 +7,6 @@
 
 package org.frc5587.robot2018.commands.auto;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Drive;
@@ -32,7 +31,7 @@ public class DriveStraight extends TimedCommand {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		kDrive.arcadeDrive(1, 0);
+		kDrive.vbusArcade(1, 0);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
