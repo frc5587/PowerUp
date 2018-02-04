@@ -51,8 +51,8 @@ public class Drive extends Subsystem {
 		rightSlave = new VictorSPX(RobotMap.Drive.rightSlave);
 
 		//Set the slaves to mimic the masters
-		leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-		rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+		leftSlave.follow(leftMaster);
+		rightSlave.follow(rightMaster);
 
 		vbusDrive = new DifferentialDrive(leftMaster, rightMaster);
 	}
@@ -74,8 +74,7 @@ public class Drive extends Subsystem {
 	}
 
 	public void curvatureDrive(double throttle, double curve, boolean isQuickTurn){
-		double turn = isQuickTurn? -curve: curve;
-		vbusDrive.curvatureDrive(throttle, Math.signum(throttle)*turn, isQuickTurn && throttle < .1);
+		vbusDrive.curvatureDrive(throttle, Math.signum(throttle)*curve, isQuickTurn && throttle < .1);
 	}
 
 	public void arcadeDrive(double throttle, double curve){
