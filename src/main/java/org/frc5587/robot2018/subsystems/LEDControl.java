@@ -29,7 +29,8 @@ public class LEDControl extends Subsystem {
      */
     public void sendColorWithHeight(Color aColor, float heightInInches) {
         byte[] heightArray = toByteArray(heightInInches);
-        arduino.writeBulk(combineArrays(new byte[]{(byte) aColor.getChar()}, heightArray));
+        byte[] combinedArray = combineArrays(new byte[]{(byte) aColor.getChar()}, heightArray);
+        arduino.writeBulk(combinedArray);
     }
 
     /**

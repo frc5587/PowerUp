@@ -43,7 +43,7 @@ public class Elevator extends Subsystem {
      * @return whether the elevator is at the "zero" position
      */
     public boolean isZeroed() {
-        return hallEffect.get();
+        return !hallEffect.get();
     }
 
     /**
@@ -107,13 +107,17 @@ public class Elevator extends Subsystem {
         return elevatorTalon.getSelectedSensorPosition(0);
     }
 
+    public void resetEncoderPosition() {
+        elevatorTalon.setSelectedSensorPosition(496, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
+    }
+
     /**
      * Returns how many inches from the ground the elevator currently is
      * @return elevator's current height in inches
      */
     public float getElevatorHeightIn() {
-        // TODO: Implement an encoder revolutions to inches from ground conversion
-        return (float)getEncoderPosition() / 8; // PLACEHOLDER
+        // 874 native encoder units per inch of movement
+        return getEncoderPosition() / 874.0f;
     }
 
     /**
