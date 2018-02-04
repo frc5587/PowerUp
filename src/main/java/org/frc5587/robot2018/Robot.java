@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
+		elevatorHeight.start();
 	}
 
 	@Override
@@ -126,6 +127,8 @@ public class Robot extends TimedRobot {
 			m_autonomousCommand.cancel();
 		}
 		new TestIntake().start();
+		new TestElevator().start();
+		new ArcadeDrive().start();
 	}
 
 	/**

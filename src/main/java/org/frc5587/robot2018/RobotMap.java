@@ -26,7 +26,7 @@ public class RobotMap {
 	public static final int COMPRESSOR = 0;
 
 	public static class Elevator {
-		public static final int HALL_EFFECT_SENSOR = 9,
+		public static final int HALL_EFFECT_SENSOR = 0,
 				ELEVATOR_TALON = 7;
 		public static final int[] ELEVATOR_SOLENOID = {0, 1};
 	}

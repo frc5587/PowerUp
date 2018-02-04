@@ -38,14 +38,16 @@ public class LEDElevatorHeight extends Command {
     @Override
     protected void execute() {
         LEDControl.Color color;
+        elevator.sendDebugInfo();
+        elevator.sendInfo();
         if(elevator.isZeroed()) {
             color = LEDControl.Color.GREEN;
-            elevator.resetEncoderPosition(Elevator.inchesToEncoder(48));
+            elevator.resetEncoderPosition(Constants.Elevator.hallHeight);
         }
         else
             color = LEDControl.Color.BLUE;
 
-        System.out.println(color + " " + elevator.getElevatorHeightIn());
+        //System.out.println(color + " " + elevator.getElevatorHeightIn());
         ledControl.sendColorWithHeight(color, elevator.getElevatorHeightIn());
     }
 
