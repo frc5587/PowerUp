@@ -16,9 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.subsystems.Elevator;
+import org.frc5587.robot2018.subsystems.Grabber;
 import org.frc5587.robot2018.subsystems.LEDControl;
 
-import org.frc5587.robot2018.subsystems.Drive;
+//import org.frc5587.robot2018.subsystems.Drive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,14 +29,17 @@ import org.frc5587.robot2018.subsystems.Drive;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final Drive kDrive = new Drive();
+	// public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
 	// public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
+	public static final Grabber grabber = new Grabber();
 	public static final OI m_oi = new OI();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+	Command elevatorHeight;
 
 	CameraServer cam;
 
@@ -57,7 +61,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Encoder Velocity Native", 0);
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
-		new LEDElevatorHeight().start();
+		elevatorHeight = new LEDElevatorHeight();
 	}
 
 	/**
@@ -66,7 +70,9 @@ public class Robot extends TimedRobot {
 	 * the robot is disabled.
 	 */
 	@Override
-	public void disabledInit() { }
+	public void disabledInit() {
+		System.out.println("Disabled starting. . .");
+	}
 
 	@Override
 	public void disabledPeriodic() {

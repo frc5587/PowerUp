@@ -30,6 +30,12 @@ public class RobotMap {
 				ELEVATOR_TALON = 7;
 		public static final int[] ELEVATOR_SOLENOID = {0, 1};
 	}
+
+	public static class Grabber {
+	    public static final int[] EXPANDER_SOLENOID = {0, 1};
+	    public static final int LEFT_TALON = 0, RIGHT_TALON = 1;
+    }
+
 	public static class Drive{
 		public static int leftMaster = 1;
 		public static int rightMaster = 2;
