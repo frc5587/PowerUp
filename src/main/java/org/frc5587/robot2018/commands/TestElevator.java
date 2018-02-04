@@ -3,6 +3,8 @@ package org.frc5587.robot2018.commands;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
+
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,15 +17,29 @@ public class TestElevator extends Command{
 
     }
     protected void execute(){
-        if(OI.xb.getAButton()){
+        System.out.println(OI.xb.getStartButton());
+        if(OI.xb.getBumper(Hand.kLeft)){
             elevator.setPower(.5);
         }
-        else if(OI.xb.getBButton()){
+        else if(OI.xb.getBumper(Hand.kRight)){
             elevator.setPower(-.5);
         }
-        SmartDashboard.putNumber("Encoder Position Native", elevator.getEncoderPosition());
-        SmartDashboard.putNumber("Encoder Velocity Native", elevator.getEncoderVelocity());
-        SmartDashboard.putNumber("Elevator Height Inches", elevator.getElevatorHeightIn());
+        else{
+            elevator.stop();
+        }
+
+        if(OI.xb.getBackButtonPressed()){
+            System.out.println("Up");
+            elevator.triggerPistons(true);
+        }
+        else if(OI.xb.getStartButtonPressed()){
+            System.out.println("Down");
+            elevator.triggerPistons(false);
+        }
+        else{
+
+        }
+        elevator.sendInfo();
     }
     protected boolean isFinished(){
         return false;

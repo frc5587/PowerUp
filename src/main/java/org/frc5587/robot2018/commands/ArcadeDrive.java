@@ -18,9 +18,9 @@ import org.frc5587.robot2018.subsystems.Drive;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class CurveDrive extends Command {
+public class ArcadeDrive extends Command {
 	Drive kDrive;
-	public CurveDrive() {
+	public ArcadeDrive() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.kDrive);
 		this.kDrive = Robot.kDrive;
@@ -36,10 +36,7 @@ public class CurveDrive extends Command {
 	protected void execute() {
 		double throttle = -OI.xb.getY(Hand.kLeft);
 		double curve = OI.xb.getX(Hand.kRight);
-		boolean isQuickTurn = OI.xb.getStickButtonPressed(Hand.kRight);
-		double quickTurnCurve = .7 * (OI.xb.getTriggerAxis(Hand.kLeft) + -OI.xb.getTriggerAxis(Hand.kRight));
-		curve = isQuickTurn ? quickTurnCurve : curve;
-		kDrive.curvatureDrive(throttle, curve, isQuickTurn);
+		kDrive.arcadeDrive(throttle, curve);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

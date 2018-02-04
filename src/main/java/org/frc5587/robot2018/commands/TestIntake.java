@@ -31,7 +31,7 @@ public class TestIntake extends Command{
             new SetGrabberMotors(Grabber.MotorSpeed.OFF).start();
         }
 
-        if(OI.xb.getBButton()){
+        if(OI.xb.getBButtonPressed()){
             if(pistonState)
                 new TriggerGrabberPistons(DoubleSolenoid.Value.kForward).start();
             else
