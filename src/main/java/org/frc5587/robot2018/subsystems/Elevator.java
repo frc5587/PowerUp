@@ -107,8 +107,16 @@ public class Elevator extends Subsystem {
         return elevatorTalon.getSelectedSensorPosition(0);
     }
 
-    public void resetEncoderPosition() {
-        elevatorTalon.setSelectedSensorPosition(496, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
+    /**
+     * Gets the current velocity of the elevatorTalon's encoder position
+     * @return the current raw sensor units of elevatorTalon's encoder per 100ms
+     */
+    public int getEncoderVelocity() {
+        return elevatorTalon.getSelectedSensorVelocity(0);
+    }
+
+    public void resetEncoderPosition(int height) {
+        elevatorTalon.setSelectedSensorPosition(height, Constants.ElevatorTalon.kPIDLoopIdx, Constants.ElevatorTalon.kTimeoutMs);
     }
 
     /**
@@ -126,6 +134,14 @@ public class Elevator extends Subsystem {
      */
     public boolean isDoneMoving(){
         return (getEncoderPosition() - setpoint ) <= Constants.ElevatorTalon.kDeadband;
+    }
+
+    public void setPower(double percent){
+        elevatorTalon.set(ControlMode.PercentOutput, percent);
+    }
+
+    public void stop(){
+        elevatorTalon.set(ControlMode.PercentOutput, 0);
     }
 
     @Override

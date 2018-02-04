@@ -52,6 +52,11 @@ public class Robot extends TimedRobot {
 //		cam = CameraServer.getInstance();
 //		cam.startAutomaticCapture("LifeCam", 0);
 
+		//Smartdashboard stuff
+		SmartDashboard.putNumber("Encoder Position Native", 0);
+        SmartDashboard.putNumber("Encoder Velocity Native", 0);
+        SmartDashboard.putNumber("Elevator Height Inches", 0);
+
 		new LEDElevatorHeight().start();
 	}
 
@@ -115,6 +120,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		new TestElevator().start();
 	}
 
 	/**

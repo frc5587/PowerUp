@@ -27,10 +27,9 @@ public class RobotMap {
 
 	public static class Elevator {
 		public static final int HALL_EFFECT_SENSOR = 9,
-				ELEVATOR_TALON = 2;
+				ELEVATOR_TALON = 7;
 		public static final int[] ELEVATOR_SOLENOID = {0, 1};
 	}
-
 	public static class Drive{
 		public static int leftMaster = 1;
 		public static int rightMaster = 2;

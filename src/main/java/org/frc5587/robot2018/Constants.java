@@ -12,14 +12,21 @@ public class Constants {
 
         // The tolerance for the target position (see Elevator.isDone())
         public static final double kDeadband = 10;
-
+        //PID Constants
         public static final double kF = 2.495,
-                kP = 0.0,
-                kI = 0.0,
-                kD = 0.0;
-        public static final int minPercentOut = 0,
-                maxPercentOut = 1,
-                maxVelocity = 300,
-                maxAcceleration = 600;
+            kP = 0.0,
+            kI = 0.0,
+            kD = 0.0;
+        //Safety limits for testing
+        public static final double minPercentOut = 0,
+            maxPercentOut = .5;
+        //System Constraints
+        public static final int maxVelocity = 300, //measured in native units/100ms
+            maxAcceleration = 600; //measured in native units/100ms/sec
+        //Unit Conversion
+        public static final int ticksPerInch = 874;
+
+        //Hall effect sensor height in native units MEASURED FROM BOTTOM OF INTAKE
+        public static final int hallHeight = 0;
     }
 }
