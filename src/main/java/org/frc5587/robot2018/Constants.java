@@ -2,7 +2,7 @@ package org.frc5587.robot2018;
 
 public class Constants {
 
-    public class ElevatorTalon {
+    public class Elevator {
         // Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3.
         public static final int kSlotIdx = 0;
         // Talon SRX/Victor SPX will supported multiple (cascaded) PID loops. For now we just want the primary one
@@ -27,6 +27,6 @@ public class Constants {
         public static final int ticksPerInch = 874;
 
         //Hall effect sensor height in native units MEASURED FROM BOTTOM OF INTAKE
-        public static final int hallHeight = 0;
+        public static final int hallHeight = 25326;
     }
 }
