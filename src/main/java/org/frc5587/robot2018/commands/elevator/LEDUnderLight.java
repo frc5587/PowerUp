@@ -1,4 +1,4 @@
-package org.frc5587.robot2018.commands;
+package org.frc5587.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.*;

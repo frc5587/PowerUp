@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
+import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
+import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
 import org.frc5587.robot2018.subsystems.LEDControl;
-
-//import org.frc5587.robot2018.subsystems.Drive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,9 +29,9 @@ import org.frc5587.robot2018.subsystems.LEDControl;
  * project.
  */
 public class Robot extends TimedRobot {
-	// public static final Drive kDrive = new Drive();
+	public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
-	// public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
+	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
 	public static final Grabber grabber = new Grabber();
 	public static final OI m_oi = new OI();
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		// compressor.setClosedLoopControl(true); // TODO: migrate to function
+		compressor.setClosedLoopControl(true); // TODO: migrate to function
 		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
@@ -92,7 +92,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		new FirePistons().start();
 		m_autonomousCommand = m_chooser.getSelected();
 
 		/*
@@ -126,7 +125,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		new TestElevator().start();
+		new TestIntake().start();
 	}
 
 	/**

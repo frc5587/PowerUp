@@ -1,4 +1,4 @@
-package org.frc5587.robot2018.commands;
+package org.frc5587.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
@@ -40,7 +40,7 @@ public class LEDElevatorHeight extends Command {
         LEDControl.Color color;
         if(elevator.isZeroed()) {
             color = LEDControl.Color.GREEN;
-            elevator.resetEncoderPosition();
+            elevator.resetEncoderPosition(Elevator.inchesToEncoder(48));
         }
         else
             color = LEDControl.Color.BLUE;

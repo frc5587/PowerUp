@@ -12,7 +12,7 @@ public class TestElevator extends Command{
         elevator = Robot.elevator;
     }
     protected void initialize(){
-        
+
     }
     protected void execute(){
         if(OI.xb.getAButton()){
@@ -33,5 +33,5 @@ public class TestElevator extends Command{
     }
     protected void interrupted() {
         end();
-	}
+    }
 }

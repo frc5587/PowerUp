@@ -128,6 +128,10 @@ public class Elevator extends Subsystem {
         return getEncoderPosition() / 874.0f;
     }
 
+    public static int inchesToEncoder(float inches) {
+        return (int)((double)inches * 874);
+    }
+
     /**
      * Approximates whether or not the elevatorTalon is done going to a Magic Motion setpoint
      * @return the talon's current progress in tracking to a Magic Motion setpoint

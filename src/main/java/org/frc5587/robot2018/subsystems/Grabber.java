@@ -35,6 +35,7 @@ public class Grabber extends Subsystem {
         // TODO: Implement real left and right speeds for the different MotorSpeed constants
         OFF            (new double[]{0.0, 0.0}),
         INTAKE         (new double[]{0.5, 0.5}),
+        EJECT          (new double[]{-0.5, -0.5}),
         PASS_THROUGH   (new double[]{-0.1, -0.1}),
         RIGHT_ASSIST   (new double[]{0.5, 0.7}),
         LEFT_ASSIST    (new double[]{0.7, 0.5});
@@ -46,7 +47,7 @@ public class Grabber extends Subsystem {
         }
 
         public double getLeft() {
-            return speeds[0];
+            return -speeds[0];
         }
 
         public double getRight() {
