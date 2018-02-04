@@ -10,7 +10,7 @@ package org.frc5587.robot2018.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.frc5587.lib.TitanDrive;
 import org.frc5587.lib.TitanDrive.DriveSignal;
-
+import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
 import org.frc5587.robot2018.commands.CurveDrive;
 
@@ -27,23 +27,6 @@ public class Drive extends Subsystem {
 	VictorSPX leftSlave, rightSlave;
 	TitanDrive driveHelper;
 
-	double kMaxVelocity = 0.0;
-
-	//PIDF Constants
-	double[] leftPIDs = {
-		0.0,	//kP
-		0.0,	//kI
-		0.0,	//kD
-		0.0 	//kF
-	};
-
-	double[] rightPIDs = {
-		0.0,	//kP
-		0.0,	//kI
-		0.0,	//kD
-		0.0		//kF
-	};
-
 	public Drive(){
 		driveHelper = new TitanDrive();
 		//initialize Talons
@@ -57,13 +40,13 @@ public class Drive extends Subsystem {
 		rightSlave.setInverted(true);
 
 		//Set the slaves to mimic the masters
-		leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-		rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+		leftSlave.follow(leftMaster);
+		rightSlave.follow(rightMaster);
 
 		//Enable Voltage Compensation
-		rightMaster.configVoltageCompSaturation(12.0, 0);
+		rightMaster.configVoltageCompSaturation(Constants.Drive.kVCompSaturation, Constants.Drive.kTimeoutMs);
 		rightMaster.enableVoltageCompensation(true);
-		leftMaster.configVoltageCompSaturation(12.0, 0);
+		leftMaster.configVoltageCompSaturation(Constants.Drive.kVCompSaturation, Constants.Drive.kTimeoutMs);
 		leftMaster.enableVoltageCompensation(true);
 	}
 
@@ -71,16 +54,16 @@ public class Drive extends Subsystem {
 	 * Send PIDF constants to master talons
 	 * @param slotIdx Which slot to push values to
 	 */
-	private void fillPIDFSlot(int slotIdx){
-		leftMaster.config_kP(slotIdx, leftPIDs[0], 0);
-		leftMaster.config_kI(slotIdx, leftPIDs[1], 0);
-		leftMaster.config_kD(slotIdx, leftPIDs[2], 0);
-		leftMaster.config_kF(slotIdx, leftPIDs[3], 0);
+	private void fillPIDFSlot(){
+		leftMaster.config_kP(0, Constants.Drive.leftPIDs[0], Constants.Drive.kTimeoutMs);
+		leftMaster.config_kP(0, Constants.Drive.leftPIDs[2], Constants.Drive.kTimeoutMs);
+		leftMaster.config_kP(0, Constants.Drive.leftPIDs[3], Constants.Drive.kTimeoutMs);
+		leftMaster.config_kP(0, Constants.Drive.leftPIDs[4], Constants.Drive.kTimeoutMs);
 
-		rightMaster.config_kP(slotIdx, rightPIDs[0], 0);
-		rightMaster.config_kI(slotIdx, rightPIDs[1], 0);
-		rightMaster.config_kD(slotIdx, rightPIDs[2], 0);
-		rightMaster.config_kF(slotIdx, rightPIDs[3], 0);
+		rightMaster.config_kP(0, Constants.Drive.rightPIDs[0], Constants.Drive.kTimeoutMs);
+		rightMaster.config_kI(0, Constants.Drive.rightPIDs[1], Constants.Drive.kTimeoutMs);
+		rightMaster.config_kD(0, Constants.Drive.rightPIDs[2], Constants.Drive.kTimeoutMs);
+		rightMaster.config_kF(0, Constants.Drive.rightPIDs[3], Constants.Drive.kTimeoutMs);
 	}
 
 	public void vbusCurve(double throttle, double curve, boolean isQuickTurn){
@@ -100,15 +83,15 @@ public class Drive extends Subsystem {
 	public void velocityCurve(double throttle, double curve, boolean isQuickTurn){
 		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
 		
-		leftMaster.set(ControlMode.Velocity, d.left * kMaxVelocity);
-		rightMaster.set(ControlMode.Velocity, d.right * kMaxVelocity);
+		leftMaster.set(ControlMode.Velocity, d.left * Constants.Drive.kMaxVelocity);
+		rightMaster.set(ControlMode.Velocity, d.right * Constants.Drive.kMaxVelocity);
 	}
 
 	public void velocityArcade(double throttle, double turn){
 		DriveSignal d = driveHelper.arcadeDrive(throttle, turn);
 
-		leftMaster.set(ControlMode.Velocity, d.left * kMaxVelocity);
-		rightMaster.set(ControlMode.Velocity, d.right * kMaxVelocity);
+		leftMaster.set(ControlMode.Velocity, d.left * Constants.Drive.kMaxVelocity);
+		rightMaster.set(ControlMode.Velocity, d.right * Constants.Drive.kMaxVelocity);
 	}
 
 	public double getLeftPosition(){
@@ -125,8 +108,5 @@ public class Drive extends Subsystem {
 	}
 
 	public void initDefaultCommand() {
-		// Set the default command for a subsystem here.
-		// setDefaultCommand(new MySpecialCommand());
-		setDefaultCommand(new CurveDrive());
 	}
 }
