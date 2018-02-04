@@ -9,17 +9,17 @@ import org.frc5587.robot2018.subsystems.LEDControl;
 
 
 public class LEDElevatorHeight extends Command {
-    private char color = DriverStation.getInstance().getAlliance().toString().charAt(0);
     private Elevator elevator;
     private LEDControl ledControl;
 
     public LEDElevatorHeight() {
+        System.out.println("Starting LEDElevatorHeight");
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(Robot.elevator);
         requires(Robot.ledControl);
         this.elevator = Robot.elevator;
         this.ledControl = Robot.ledControl;
+        this.setRunWhenDisabled(true);
     }
 
 
@@ -38,10 +38,14 @@ public class LEDElevatorHeight extends Command {
     @Override
     protected void execute() {
         LEDControl.Color color;
-        if(elevator.isDoneMoving())
+        if(elevator.isZeroed()) {
             color = LEDControl.Color.GREEN;
+            elevator.resetEncoderPosition();
+        }
         else
             color = LEDControl.Color.BLUE;
+
+        System.out.println(color + " " + elevator.getElevatorHeightIn());
         ledControl.sendColorWithHeight(color, elevator.getElevatorHeightIn());
     }
 
