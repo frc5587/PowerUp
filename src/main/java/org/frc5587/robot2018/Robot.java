@@ -7,18 +7,19 @@
 
 package org.frc5587.robot2018;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import org.frc5587.robot2018.commands.*;
+import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
 import org.frc5587.robot2018.subsystems.Drive;
-import org.frc5587.robot2018.subsystems.ExampleSubsystem;
-import org.frc5587.robot2018.commands.CurveDrive;
-import org.frc5587.robot2018.commands.ExampleCommand;
-import org.frc5587.robot2018.commands.auto.DriveStraight;
+import org.frc5587.robot2018.subsystems.Elevator;
+import org.frc5587.robot2018.subsystems.Grabber;
+import org.frc5587.robot2018.subsystems.LEDControl;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,12 +29,17 @@ import org.frc5587.robot2018.commands.auto.DriveStraight;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static OI m_oi;
+	public static final Drive kDrive = new Drive();
+	public static final Elevator elevator = new Elevator();
+	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
+	public static final LEDControl ledControl = new LEDControl();
+	public static final Grabber grabber = new Grabber();
+	public static final OI m_oi = new OI();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-	public static Drive kDrive;
+	Command elevatorHeight;
 
 	CameraServer cam;
 
@@ -43,16 +49,19 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		kDrive = new Drive();
-		m_oi = new OI();
-		m_chooser.addDefault("Default Auto", new DriveStraight(10));
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
+		compressor.setClosedLoopControl(true); // TODO: migrate to function
 		
+		m_chooser.addDefault("Default Auto", null);
+		SmartDashboard.putData("Auto mode", m_chooser);
+//		cam = CameraServer.getInstance();
+//		cam.startAutomaticCapture("LifeCam", 0);
 
-		cam = CameraServer.getInstance();
-		cam.startAutomaticCapture("LifeCam", 0);
+		//Smartdashboard stuff
+		SmartDashboard.putNumber("Encoder Position Native", 0);
+        SmartDashboard.putNumber("Encoder Velocity Native", 0);
+        SmartDashboard.putNumber("Elevator Height Inches", 0);
 
+		elevatorHeight = new LEDElevatorHeight();
 	}
 
 	/**
@@ -62,7 +71,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		System.out.println("Disabled starting. . .");
+		elevatorHeight.start();
 	}
 
 	@Override
@@ -108,6 +118,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		System.out.println("Teleop starting... ");
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -115,6 +126,9 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		new TestIntake().start();
+		new TestElevator().start();
+		new ArcadeDrive().start();
 	}
 
 	/**

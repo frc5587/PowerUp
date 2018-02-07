@@ -45,14 +45,14 @@ public class Drive extends Subsystem {
 
 	public Drive(){
 		//initialize Talons
-		leftMaster = new WPI_TalonSRX(RobotMap.leftMaster);
-		rightMaster = new WPI_TalonSRX(RobotMap.rightMaster);
-		leftSlave = new VictorSPX(RobotMap.leftSlave);
-		rightSlave = new VictorSPX(RobotMap.rightSlave);
+		leftMaster = new WPI_TalonSRX(RobotMap.Drive.leftMaster);
+		rightMaster = new WPI_TalonSRX(RobotMap.Drive.rightMaster);
+		leftSlave = new VictorSPX(RobotMap.Drive.leftSlave);
+		rightSlave = new VictorSPX(RobotMap.Drive.rightSlave);
 
 		//Set the slaves to mimic the masters
-		leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-		rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+		leftSlave.follow(leftMaster);
+		rightSlave.follow(rightMaster);
 
 		vbusDrive = new DifferentialDrive(leftMaster, rightMaster);
 	}
@@ -74,8 +74,7 @@ public class Drive extends Subsystem {
 	}
 
 	public void curvatureDrive(double throttle, double curve, boolean isQuickTurn){
-		double turn = isQuickTurn? -curve: curve;
-		vbusDrive.curvatureDrive(throttle, Math.signum(throttle)*turn, isQuickTurn && throttle < .1);
+		vbusDrive.curvatureDrive(throttle, Math.signum(throttle)*curve, isQuickTurn && throttle < .1);
 	}
 
 	public void arcadeDrive(double throttle, double curve){
@@ -98,6 +97,6 @@ public class Drive extends Subsystem {
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
 		// setDefaultCommand(new MySpecialCommand());
-		setDefaultCommand(new CurveDrive());
+		//setDefaultCommand(new CurveDrive());
 	}
 }
