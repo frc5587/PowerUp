@@ -2,23 +2,19 @@ package org.frc5587.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.subsystems.Elevator;
 
 
-/**
- * PURPOSE
- *
- * @author Brendan Doney
- * @version 1.0
- * @since 2/1/18
- */
-public class InitiateMotionMagic extends Command {
+public class ElevatorToSetpoint extends Command {
     private double setPoint;
+    private Elevator elevator;
 
-    public InitiateMotionMagic(double setPoint) {
+    public ElevatorToSetpoint(double setPoint) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(Robot.elevator);
         this.setPoint = setPoint;
+        elevator = Robot.elevator;
     }
 
 
@@ -28,15 +24,15 @@ public class InitiateMotionMagic extends Command {
      */
     @Override
     protected void initialize() {
-        Robot.elevator.createSetpoint(setPoint);
+        elevator.createSetpoint(setPoint);
     }
 
     protected void execute(){
-        Robot.elevator.sendDebugInfo();
+        elevator.sendDebugInfo();
     }
 
     protected boolean isFinished(){
-        return false;//Robot.elevator.isDone();
+        return false;//elevator.isDone();
     }
 
     /**
@@ -46,6 +42,7 @@ public class InitiateMotionMagic extends Command {
      * command.
      */
     protected void end() {
+        elevator.stopMotor();
     }
 
 
