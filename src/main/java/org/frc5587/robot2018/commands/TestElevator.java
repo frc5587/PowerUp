@@ -19,10 +19,10 @@ public class TestElevator extends Command{
     protected void execute(){
         System.out.println(OI.xb.getStartButton());
         if(OI.xb.getBumper(Hand.kLeft)){
-            elevator.setPower(.5);
+            elevator.setPower(-.4);
         }
         else if(OI.xb.getBumper(Hand.kRight)){
-            elevator.setPower(-.5);
+            elevator.setPower(.7);
         }
         else{
             elevator.stop();

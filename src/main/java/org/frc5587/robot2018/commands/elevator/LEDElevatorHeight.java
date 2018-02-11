@@ -1,6 +1,5 @@
 package org.frc5587.robot2018.commands.elevator;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.Robot;
@@ -11,6 +10,7 @@ import org.frc5587.robot2018.subsystems.LEDControl;
 public class LEDElevatorHeight extends Command {
     private Elevator elevator;
     private LEDControl ledControl;
+    private LEDControl.Color lastColor;
 
     public LEDElevatorHeight() {
         System.out.println("Starting LEDElevatorHeight");
@@ -28,7 +28,10 @@ public class LEDElevatorHeight extends Command {
      * this Command is run after being started.
      */
     @Override
-    protected void initialize() { }
+    protected void initialize() { 
+        // Assign lastColor so it is never equal to null
+        lastColor = getColor();
+    }
 
 
     /**
@@ -37,18 +40,28 @@ public class LEDElevatorHeight extends Command {
      */
     @Override
     protected void execute() {
-        LEDControl.Color color;
         elevator.sendDebugInfo();
         elevator.sendInfo();
-        if(elevator.isZeroed()) {
-            color = LEDControl.Color.GREEN;
-            elevator.resetEncoderPosition(Constants.Elevator.hallHeight);
-        }
-        else
-            color = LEDControl.Color.BLUE;
 
-        //System.out.println(color + " " + elevator.getElevatorHeightIn());
-        ledControl.sendColorWithHeight(color, elevator.getElevatorHeightIn());
+        LEDControl.Color color = getColor();
+        if(color != lastColor) {
+            lastColor = color;
+            ledControl.sendColorWithHeight(color, elevator.getElevatorHeightIn());   
+        }
+    }
+
+    /**
+     * Returns a value of LEDControl.Color that should be displayed by the Arduino, based
+     * on whether the elevator is zeroed
+     */
+    private LEDControl.Color getColor() {
+        if(elevator.isZeroed()) {
+            elevator.resetEncoderPosition(Constants.Elevator.hallHeight);
+            return LEDControl.Color.GREEN;
+        }
+        else {
+            return LEDControl.Color.BLUE;
+        }
     }
 
 

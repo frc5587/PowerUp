@@ -1,15 +1,13 @@
-package org.frc5587.robot2018.commands.grabber;
+package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.subsystems.Grabber;
 
-
-public class DisableGrabberMotors extends InstantCommand {
-    public DisableGrabberMotors() {
+public class FirePistons extends InstantCommand {
+    public FirePistons() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(Robot.grabber);
+        requires(Robot.elevator);
     }
 
 
@@ -19,9 +17,8 @@ public class DisableGrabberMotors extends InstantCommand {
      */
     @Override
     protected void initialize() {
-        Robot.grabber.setTalon(Grabber.MotorSpeed.OFF);
+        Robot.elevator.triggerPistons(true);
     }
-
 
     /**
      * Called once when the command ended peacefully; that is it is called once
@@ -30,9 +27,7 @@ public class DisableGrabberMotors extends InstantCommand {
      * command.
      */
     @Override
-    protected void end() {
-
-    }
+    protected void end() { }
 
 
     /**

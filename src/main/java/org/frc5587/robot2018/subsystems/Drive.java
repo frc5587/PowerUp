@@ -53,16 +53,16 @@ public class Drive extends Subsystem {
 	 * Send PIDF constants to master talons
 	 * @param slotIdx Which slot to push values to
 	 */
-	private void fillPIDFSlot(){
-		leftMaster.config_kP(0, Constants.Drive.leftPIDs[0], Constants.Drive.kTimeoutMs);
-		leftMaster.config_kP(0, Constants.Drive.leftPIDs[2], Constants.Drive.kTimeoutMs);
-		leftMaster.config_kP(0, Constants.Drive.leftPIDs[3], Constants.Drive.kTimeoutMs);
-		leftMaster.config_kP(0, Constants.Drive.leftPIDs[4], Constants.Drive.kTimeoutMs);
+	private void fillPIDFSlot(int slotIdx){
+		leftMaster.config_kP(slotIdx, Constants.Drive.leftPIDs[0], 0);
+		leftMaster.config_kI(slotIdx, Constants.Drive.leftPIDs[1], 0);
+		leftMaster.config_kD(slotIdx, Constants.Drive.leftPIDs[2], 0);
+		leftMaster.config_kF(slotIdx, Constants.Drive.leftPIDs[3], 0);
 
-		rightMaster.config_kP(0, Constants.Drive.rightPIDs[0], Constants.Drive.kTimeoutMs);
-		rightMaster.config_kI(0, Constants.Drive.rightPIDs[1], Constants.Drive.kTimeoutMs);
-		rightMaster.config_kD(0, Constants.Drive.rightPIDs[2], Constants.Drive.kTimeoutMs);
-		rightMaster.config_kF(0, Constants.Drive.rightPIDs[3], Constants.Drive.kTimeoutMs);
+		rightMaster.config_kP(slotIdx, Constants.Drive.rightPIDs[0], 0);
+		rightMaster.config_kI(slotIdx, Constants.Drive.rightPIDs[1], 0);
+		rightMaster.config_kD(slotIdx, Constants.Drive.rightPIDs[2], 0);
+		rightMaster.config_kF(slotIdx, Constants.Drive.rightPIDs[3], 0);
 	}
 
 	public void vbusCurve(double throttle, double curve, boolean isQuickTurn){

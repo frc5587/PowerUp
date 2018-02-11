@@ -2,6 +2,7 @@ package org.frc5587.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -62,8 +63,8 @@ public class Elevator extends Subsystem {
         // set the peak and nominal outputs
         elevatorTalon.configNominalOutputForward(Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configNominalOutputReverse(-Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentOut, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentOut, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentFw, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentBw, Constants.Elevator.kTimeoutMs);
 
         // set closed loop gains in set slot
         elevatorTalon.selectProfileSlot(Constants.Elevator.kSlotIdx, Constants.Elevator.kPIDLoopIdx);
@@ -106,6 +107,14 @@ public class Elevator extends Subsystem {
     public void createSetpoint(double targetPos) {
         setpoint = targetPos;
         elevatorTalon.set(ControlMode.MotionMagic, targetPos);
+    }
+    
+    /**
+     * Sets the elevatorTalon to brake mode
+     */
+    public void stopMotor() {
+        elevatorTalon.set(ControlMode.PercentOutput, 0.0);
+        elevatorTalon.setNeutralMode(NeutralMode.Brake);
     }
 
     /**

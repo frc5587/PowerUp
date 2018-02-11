@@ -33,9 +33,7 @@ public class SetGrabberMotors extends InstantCommand {
      * command.
      */
     @Override
-    protected void end() {
-
-    }
+    protected void end() { }
 
 
     /**

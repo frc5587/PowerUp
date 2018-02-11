@@ -41,7 +41,8 @@ public class Constants {
             kD = 0.0;
         //Safety limits for testing
         public static final double minPercentOut = 0,
-            maxPercentOut = .5;
+            maxPercentBw = .4,
+            maxPercentFw = .7;
         //System Constraints
         public static final int maxVelocity = 300, //measured in native units/100ms
             maxAcceleration = 600; //measured in native units/100ms/sec

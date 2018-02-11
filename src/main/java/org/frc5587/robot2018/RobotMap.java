@@ -28,11 +28,11 @@ public class RobotMap {
 	public static class Elevator {
 		public static final int HALL_EFFECT_SENSOR = 0,
 				ELEVATOR_TALON = 7;
-		public static final int[] ELEVATOR_SOLENOID = {0, 1};
+		public static final int[] ELEVATOR_SOLENOID = {2, 3};
 	}
 
 	public static class Grabber {
-	    public static final int[] EXPANDER_SOLENOID = {2, 3};
+	    public static final int[] EXPANDER_SOLENOID = {0, 1};
 	    public static final int LEFT_TALON = 6, RIGHT_TALON = 5;
     }
 
