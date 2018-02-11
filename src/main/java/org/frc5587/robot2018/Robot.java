@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
+import org.frc5587.robot2018.commands.grabber.LEDIntakeStatus;
+//import org.frc5587.robot2018.commands.grabber.SetGrabberMotors;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -31,9 +33,9 @@ import org.frc5587.robot2018.subsystems.LEDControl;
 public class Robot extends TimedRobot {
 	public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
-	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
+	//public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
-	public static final Grabber grabber = new Grabber();
+	//public static final Grabber grabber = new Grabber();
 	public static final OI m_oi = new OI();
 
 	Command m_autonomousCommand;
@@ -49,7 +51,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		compressor.setClosedLoopControl(true); // TODO: migrate to function
+		//compressor.setClosedLoopControl(true); // TODO: migrate to function
 		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
@@ -61,7 +63,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Encoder Velocity Native", 0);
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
-		elevatorHeight = new LEDElevatorHeight();
+        //elevatorHeight = new LEDElevatorHeight();
 	}
 
 	/**
@@ -72,7 +74,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
-		elevatorHeight.start();
+		//elevatorHeight.start();
+		new LEDIntakeStatus().start();
+		//new SetGrabberMotors(Grabber.MotorSpeed.OFF).start();
 	}
 
 	@Override
@@ -126,9 +130,9 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		new TestIntake().start();
-		new TestElevator().start();
-		new ArcadeDrive().start();
+		//new TestIntake().start();
+		//new TestElevator().start();
+		//new ArcadeDrive().start();
 	}
 
 	/**

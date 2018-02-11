@@ -33,6 +33,12 @@ public class LEDControl extends Subsystem {
         arduino.writeBulk(combinedArray);
     }
 
+    public void sendCubeStatusWithColor(char cubeStatus, Color color) {
+        byte[] cubeStatusToSend = toByteArray(cubeStatus);
+        byte[] combinedArray = combineArrays(cubeStatusToSend, new byte[]{(byte) color.getChar()});
+        arduino.writeBulk(combinedArray);
+    }
+
     /**
      * Combines two arrays into one, such that all of the elements of a1 come before the elements of a2
      * @param a1 an array of type byte

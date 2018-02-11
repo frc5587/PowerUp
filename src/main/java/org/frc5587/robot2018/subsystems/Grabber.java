@@ -2,6 +2,8 @@ package org.frc5587.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.frc5587.robot2018.RobotMap;
@@ -10,11 +12,15 @@ import org.frc5587.robot2018.RobotMap;
 public class Grabber extends Subsystem {
     private TalonSRX leftTalon, rightTalon;
     private DoubleSolenoid expandSolenoid;
+    public MotorSpeed currentSpeed;
+    private DigitalOutput breakBeam;
 
     public Grabber() {
         leftTalon = new TalonSRX(RobotMap.Grabber.LEFT_TALON);
         rightTalon = new TalonSRX(RobotMap.Grabber.RIGHT_TALON);
         expandSolenoid = new DoubleSolenoid(RobotMap.Grabber.EXPANDER_SOLENOID[0], RobotMap.Grabber.EXPANDER_SOLENOID[1]);
+        breakBeam = new DigitalOutput(RobotMap.Grabber.RECEIVER);
+        currentSpeed = MotorSpeed.OFF;
     }
 
     public void setTalon(MotorSpeed motorSpeed) {
@@ -23,7 +29,7 @@ public class Grabber extends Subsystem {
     }
 
     public void setPistons(DoubleSolenoid.Value valueToSet) {
-        expandSolenoid.set(valueToSet);
+        //expandSolenoid.set(valueToSet);
     }
 
     public void initDefaultCommand() {
@@ -54,5 +60,7 @@ public class Grabber extends Subsystem {
             return speeds[1];
         }
     }
+
+    public boolean hasCube(){return breakBeam.get();}
 }
 
