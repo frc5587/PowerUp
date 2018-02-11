@@ -63,8 +63,8 @@ public class Elevator extends Subsystem {
         // set the peak and nominal outputs
         elevatorTalon.configNominalOutputForward(Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configNominalOutputReverse(-Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentOut, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentOut, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentFw, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentBw, Constants.Elevator.kTimeoutMs);
 
         // set closed loop gains in set slot
         elevatorTalon.selectProfileSlot(Constants.Elevator.kSlotIdx, Constants.Elevator.kPIDLoopIdx);
