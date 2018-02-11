@@ -12,7 +12,6 @@ import org.frc5587.lib.TitanDrive;
 import org.frc5587.lib.TitanDrive.DriveSignal;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
-import org.frc5587.robot2018.commands.CurveDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -108,5 +107,8 @@ public class Drive extends Subsystem {
 	}
 
 	public void initDefaultCommand() {
+		// Set the default command for a subsystem here.
+		// setDefaultCommand(new MySpecialCommand());
+		//setDefaultCommand(new CurveDrive());
 	}
 }
