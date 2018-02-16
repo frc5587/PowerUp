@@ -7,6 +7,7 @@
 
 package org.frc5587.robot2018;
 
+import org.frc5587.lib.DeadbandXboxController;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -42,5 +43,5 @@ public class OI {
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
 
-	public static XboxController xb = new XboxController(0);
+	public static XboxController xb = new DeadbandXboxController(0);
 }
