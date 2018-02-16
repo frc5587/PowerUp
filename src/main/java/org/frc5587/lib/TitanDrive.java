@@ -35,8 +35,8 @@ public class TitanDrive{
      * @param squaredInputs Enabling makes the motor curve smoother closer to zero, bur removes linearity
      */
     public DriveSignal arcadeDrive(double throttle, double turn, boolean squaredInputs){
-        throttle = applyDeadband(limit(throttle), kDeadband);
-        turn = applyDeadband(limit(turn), kDeadband);
+        throttle = applyDeadband(MathHelper.limit(throttle, -1.0, 1.0), kDeadband);
+        turn = applyDeadband(MathHelper.limit(turn, -1.0, 1.0), kDeadband);
 
         if (squaredInputs) {
             throttle = Math.copySign(throttle * throttle, throttle);
@@ -71,8 +71,8 @@ public class TitanDrive{
     }
 
     public DriveSignal curvatureDrive(double throttle, double curve, boolean isQuickTurn) {
-        throttle = applyDeadband(limit(throttle), kDeadband);
-        curve = applyDeadband(limit(curve), kDeadband);
+        throttle = applyDeadband(MathHelper.limit(throttle, -1.0, 1.0), kDeadband);
+        curve = applyDeadband(MathHelper.limit(curve, -1.0, 1.0), kDeadband);
 
         double angularPower;
         boolean overPower;
@@ -118,18 +118,6 @@ public class TitanDrive{
         }
         
         return new DriveSignal(left, right);
-    }
-    /**
-     * Limit motor values to the -1.0 to +1.0 range.
-     */
-    protected double limit(double value) {
-        if (value > 1.0) {
-        return 1.0;
-        }
-        if (value < -1.0) {
-        return -1.0;
-        }
-        return value;
     }
 
     /**
