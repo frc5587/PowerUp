@@ -17,29 +17,23 @@ public class TestElevator extends Command{
 
     }
     protected void execute(){
-        System.out.println(OI.xb.getStartButton());
         if(OI.xb.getBumper(Hand.kLeft)){
-            elevator.setPower(-.4);
+            elevator.setPower(-.3);
         }
-        else if(OI.xb.getBumper(Hand.kRight)){
-            elevator.setPower(.7);
+        else if(OI.xb.getTriggerAxis(Hand.kLeft) > .05){
+            elevator.setPower(OI.xb.getTriggerAxis(Hand.kLeft));
         }
         else{
             elevator.stop();
         }
 
         if(OI.xb.getBackButtonPressed()){
-            System.out.println("Up");
             elevator.triggerPistons(true);
         }
         else if(OI.xb.getStartButtonPressed()){
-            System.out.println("Down");
             elevator.triggerPistons(false);
         }
-        else{
-
-        }
-        elevator.sendInfo();
+        else{}
     }
     protected boolean isFinished(){
         return false;

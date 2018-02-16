@@ -2,6 +2,8 @@ package org.frc5587.robot2018;
 
 public class Constants {
 
+    public static boolean compressorEnabled = true;
+
     public static final class Drive {
         // set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action fails
         public static final int kTimeoutMs = 10;
@@ -41,15 +43,15 @@ public class Constants {
             kD = 0.0;
         //Safety limits for testing
         public static final double minPercentOut = 0,
-            maxPercentBw = .4,
-            maxPercentFw = .7;
+            maxPercentBw = .3,
+            maxPercentFw = 1;
         //System Constraints
         public static final int maxVelocity = 300, //measured in native units/100ms
             maxAcceleration = 600; //measured in native units/100ms/sec
         //Unit Conversion
-        public static final int ticksPerInch = 874;
+        public static final int ticksPerInch = 1748;
 
         //Hall effect sensor height in native units MEASURED FROM BOTTOM OF INTAKE
-        public static final int hallHeight = 25326;
+        public static final int hallHeight = 50652;
     }
 }

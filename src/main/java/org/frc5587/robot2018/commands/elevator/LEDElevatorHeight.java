@@ -40,9 +40,6 @@ public class LEDElevatorHeight extends Command {
      */
     @Override
     protected void execute() {
-        elevator.sendDebugInfo();
-        elevator.sendInfo();
-
         LEDControl.Color color = getColor();
         if(color != lastColor) {
             lastColor = color;
@@ -56,7 +53,6 @@ public class LEDElevatorHeight extends Command {
      */
     private LEDControl.Color getColor() {
         if(elevator.isZeroed()) {
-            elevator.resetEncoderPosition(Constants.Elevator.hallHeight);
             return LEDControl.Color.GREEN;
         }
         else {

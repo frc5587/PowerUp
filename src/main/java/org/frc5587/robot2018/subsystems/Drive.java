@@ -47,6 +47,10 @@ public class Drive extends Subsystem {
 		rightMaster.enableVoltageCompensation(true);
 		leftMaster.configVoltageCompSaturation(Constants.Drive.kVCompSaturation, Constants.Drive.kTimeoutMs);
 		leftMaster.enableVoltageCompensation(true);
+
+		rightMaster.configPeakOutputForward(1, Constants.Drive.kTimeoutMs);
+		rightMaster.configPeakOutputReverse(-1, Constants.Drive.kTimeoutMs);
+
 	}
 
 	/**

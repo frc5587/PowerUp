@@ -86,9 +86,11 @@ public class Elevator extends Subsystem {
         double pos = elevatorTalon.getSelectedSensorPosition(0);
         double vel = elevatorTalon.getSelectedSensorVelocity(0);
         double voltage = elevatorTalon.getMotorOutputVoltage();
+        double current = elevatorTalon.getOutputCurrent();
         SmartDashboard.putNumber("Elevator Height", pos);
         SmartDashboard.putNumber("Elevator Speed", vel);
         SmartDashboard.putNumber("Elevator Voltage", voltage);
+        SmartDashboard.putNumber("Elevator Current", current);
     }
 
     /**

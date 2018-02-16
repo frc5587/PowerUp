@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
+import org.frc5587.robot2018.commands.elevator.ResetElevator;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -51,12 +52,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		compressor.setClosedLoopControl(true); // TODO: migrate to function
+		compressor.setClosedLoopControl(Constants.compressorEnabled); // TODO: migrate to function
 		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
-//		cam = CameraServer.getInstance();
-//		cam.startAutomaticCapture("LifeCam", 0);
+		cam = CameraServer.getInstance();
+		cam.startAutomaticCapture("LifeCam", 0);
 
 		//Smartdashboard stuff
 		SmartDashboard.putNumber("Encoder Position Native", 0);
@@ -64,6 +65,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
 		elevatorHeight = new LEDElevatorHeight();
+		new ResetElevator().start();
 	}
 
 	/**
