@@ -19,6 +19,7 @@ import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
+import org.frc5587.robot2018.subsystems.Table;
 import org.frc5587.robot2018.subsystems.LEDControl;
 
 /**
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
 	public static final LEDControl ledControl = new LEDControl();
 	public static final Grabber grabber = new Grabber();
 	public static final OI m_oi = new OI();
+	public static final Table table = new Table();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
