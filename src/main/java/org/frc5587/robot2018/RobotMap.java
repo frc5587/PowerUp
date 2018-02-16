@@ -43,4 +43,8 @@ public class RobotMap {
 		public static int leftSlave = 3;
 		public static int rightSlave = 4;
 	}
+
+	public static class Table{
+		public static int tableTalon = 6;
+	}
 }
