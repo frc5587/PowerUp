@@ -1,7 +1,9 @@
 package org.frc5587.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -16,10 +18,17 @@ public class LEDControl extends Subsystem {
      * The Arduino sketch only accepts the chars for yellow, red, and blue
      * @param aColor lowercase letter representing color to change the LEDs to
      */
-    public void sendColor(Color aColor){ //Parameter Alliance Color
-        byte[] color = {(byte) aColor.getChar()};
-        arduino.writeBulk(color);
-    }
+    public void sendColor(DriverStation.Alliance aColor){ //Parameter Alliance Color
+        switch (aColor) {
+            case Blue:
+                arduino.writeBulk(new byte[] {(byte) 'b'});
+            case Red:
+                arduino.writeBulk(new byte[] {(byte) 'r'});
+            }
+        }
+
+        //arduino.writeBulk();
+
 
     /**
      * Send a value of LEDControl.Color with a float representing the elevator's current height from the ground over I2C

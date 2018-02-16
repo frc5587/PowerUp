@@ -9,6 +9,7 @@ package org.frc5587.robot2018;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -52,7 +53,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		//compressor.setClosedLoopControl(true); // TODO: migrate to function
-		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
 //		cam = CameraServer.getInstance();
@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
         //elevatorHeight = new LEDElevatorHeight();
+
 	}
 
 	/**
@@ -74,6 +75,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
+		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 		//elevatorHeight.start();
 		new LEDIntakeStatus().start();
 		//new SetGrabberMotors(Grabber.MotorSpeed.OFF).start();
