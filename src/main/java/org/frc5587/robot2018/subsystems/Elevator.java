@@ -161,6 +161,9 @@ public class Elevator extends Subsystem {
     }
 
     public void setPower(double percent){
+        if(-1.0 > percent || percent < 1.0) {
+            throw new Error("Percentage for the elevatorTalon not within the range -1.0 < x < 1.0");
+        }
         elevatorTalon.set(ControlMode.PercentOutput, percent);
     }
 

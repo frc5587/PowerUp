@@ -3,44 +3,51 @@ package org.frc5587.robot2018.commands;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
-
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TestElevator extends Command{
-    Elevator elevator;
-    public TestElevator(){
+public class TestElevator extends Command {
+    private Elevator elevator;
+    private boolean elevatorPistonsOn = false;
+
+    public TestElevator() {
         elevator = Robot.elevator;
     }
-    protected void initialize(){
+
+    protected void initialize() {
 
     }
-    protected void execute(){
-        if(OI.xb.getBumper(Hand.kLeft)){
-            elevator.setPower(-.3);
-        }
-        else if(OI.xb.getTriggerAxis(Hand.kLeft) > .05){
-            elevator.setPower(OI.xb.getTriggerAxis(Hand.kLeft));
-        }
-        else{
+
+    protected void execute() {
+        // Control elevator movement with bumpers
+        // TODO: Cycle positions of elevator using Motion Magic
+        if (OI.xb.getBumper(Hand.kLeft)) {
+            elevator.setPower(-0.3);
+        } else if (OI.xb.getBumper(Hand.kRight)) {
+            elevator.setPower(0.3);
+        } else {
             elevator.stop();
         }
 
-        if(OI.xb.getBackButtonPressed()){
-            elevator.triggerPistons(true);
+        // Toggle position of the elevator pistons using the start button
+        if (OI.xb.getStartButtonPressed()) {
+            if (elevatorPistonsOn) {
+                elevator.triggerPistons(true);
+            } else {
+                elevator.triggerPistons(false);
+            }
+            elevatorPistonsOn = !elevatorPistonsOn;
         }
-        else if(OI.xb.getStartButtonPressed()){
-            elevator.triggerPistons(false);
-        }
-        else{}
     }
-    protected boolean isFinished(){
+
+    protected boolean isFinished() {
         return false;
     }
-    protected void end(){
+
+    protected void end() {
         elevator.stop();
     }
+
     protected void interrupted() {
         end();
     }

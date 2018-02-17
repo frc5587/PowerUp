@@ -3,54 +3,61 @@ package org.frc5587.robot2018.commands;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.commands.grabber.SetGrabberMotors;
-import org.frc5587.robot2018.commands.grabber.TriggerGrabberPistons;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
 import org.frc5587.robot2018.subsystems.Grabber.MotorSpeed;
 
-public class TestIntake extends Command{
+public class TestIntake extends Command {
     Elevator elevator;
-    boolean pistonState = false;
     MotorSpeed speed = MotorSpeed.OFF;
     Grabber grabber;
 
-    public TestIntake(){
+    public TestIntake() {
         elevator = Robot.elevator;
         grabber = Robot.grabber;
     }
-    protected void initialize(){
-        
+
+    protected void initialize() {
+
     }
-    protected void execute(){
-        if(OI.xb.getAButton()){
+
+    protected void execute() {
+        // Grabber Intake and Eject bound to the Y axis of the right joystick
+        if (OI.xb.getY(Hand.kRight) > 0) {
             speed = Grabber.MotorSpeed.INTAKE;
-        }
-        else if(OI.xb.getYButton()) {
+        } else if (OI.xb.getY(Hand.kRight) < 0) {
             speed = Grabber.MotorSpeed.EJECT;
-        }
-        else{
+        } else {
             speed = Grabber.MotorSpeed.OFF;
         }
         grabber.setTalon(speed);
 
-        if(OI.xb.getBumperPressed(Hand.kRight)){
-            if(pistonState)
-                new TriggerGrabberPistons(DoubleSolenoid.Value.kForward).start();
-            else
-                new TriggerGrabberPistons(DoubleSolenoid.Value.kReverse).start();
-            pistonState = !pistonState;
+        // Piston bound to triggers (both do the same thing)
+        if (OI.xb.getTriggerAxis(Hand.kRight) > .05 || OI.xb.getTriggerAxis(Hand.kLeft) > .05) {
+            if (grabber.pistonsOn()) {
+                setPistons(DoubleSolenoid.Value.kForward);
+            }
+        } else {
+            if (!grabber.pistonsOn()) {
+                setPistons(DoubleSolenoid.Value.kReverse);
+            }
         }
-
     }
-    protected boolean isFinished(){
+
+    private void setPistons(DoubleSolenoid.Value value) {
+        grabber.setPistons(value);
+    }
+
+    protected boolean isFinished() {
         return false;
     }
-    protected void end() { }
+
+    protected void end() {
+    }
+
     protected void interrupted() {
         end();
-	}
+    }
 }

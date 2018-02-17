@@ -3,6 +3,7 @@ package org.frc5587.robot2018.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.frc5587.robot2018.RobotMap;
 
@@ -30,6 +31,10 @@ public class Grabber extends Subsystem {
     public void initDefaultCommand() {
         // TODO: Set the default command, if any, for a subsystem here. Example:
         //    setDefaultCommand(new MySpecialCommand());
+    }
+
+    public boolean pistonsOn() {
+        return expandSolenoid.get() == Value.kForward;
     }
 
     public enum MotorSpeed {

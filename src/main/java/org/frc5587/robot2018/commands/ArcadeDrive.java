@@ -9,8 +9,6 @@ package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Drive;
@@ -35,7 +33,7 @@ public class ArcadeDrive extends Command {
 	@Override
 	protected void execute() {
 		double throttle = -OI.xb.getY(Hand.kLeft);
-		double curve = OI.xb.getX(Hand.kRight);
+		double curve = OI.xb.getX(Hand.kLeft);
 		kDrive.vbusArcade(throttle, curve);
 	}
 
