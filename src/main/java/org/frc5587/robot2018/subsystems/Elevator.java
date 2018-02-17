@@ -34,11 +34,8 @@ public class Elevator extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    public void triggerPistons(boolean enable) {
-        if(enable)
-            tiltDoubleSol.set(DoubleSolenoid.Value.kForward);
-        else
-            tiltDoubleSol.set(DoubleSolenoid.Value.kReverse);
+    public void triggerPistons(DoubleSolenoid.Value val) {
+        tiltDoubleSol.set(val);
     }
 
     /**

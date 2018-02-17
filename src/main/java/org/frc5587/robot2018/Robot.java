@@ -57,14 +57,14 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
 
-		cam = CameraServer.getInstance();
+		//cam = CameraServer.getInstance();
 		//cam.startAutomaticCapture("LifeCam", 0);
 
 		//Smartdashboard stuff
         SmartDashboard.putNumber("Encoder Velocity Native", 0);
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
-		elevatorHeight = new LEDElevatorHeight();
+		new LEDElevatorHeight().start();
 		new ResetElevator().start();
 	}
 
@@ -76,7 +76,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
-		elevatorHeight.start();
 	}
 
 	@Override
@@ -133,6 +132,7 @@ public class Robot extends TimedRobot {
 		new TestIntake().start();
 		new TestElevator().start();
 		new ArcadeDrive().start();
+		new StopElevatorPistons().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(Constants.Elevator.switchHeight));
 		SmartDashboard.putData("scale height", new ElevatorToSetpoint(Constants.Elevator.scaleHeight));
 		SmartDashboard.putData("intake height", new ElevatorToSetpoint(Constants.Elevator.intakeHeight));

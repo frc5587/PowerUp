@@ -3,6 +3,8 @@ package org.frc5587.robot2018.commands;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -32,10 +34,11 @@ public class TestElevator extends Command {
 
         // Toggle position of the elevator pistons using the start button
         if (OI.xb.getStartButtonPressed()) {
+            System.out.println(elevatorPistonsOn);
             if (elevatorPistonsOn) {
-                elevator.triggerPistons(true);
+                elevator.triggerPistons(Value.kForward);
             } else {
-                elevator.triggerPistons(false);
+                elevator.triggerPistons(Value.kReverse);
             }
             elevatorPistonsOn = !elevatorPistonsOn;
         }
