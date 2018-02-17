@@ -12,6 +12,8 @@ public class Constants {
 
         public static final double kVCompSaturation = 12.0;
 
+        public static int minBufferCount = 10;
+
         //PIDF Constants
         public static final double[] leftPIDs = {
             0.0,	//kP

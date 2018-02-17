@@ -28,13 +28,17 @@ public class MotionProfileFiller extends Command{
     }
     
     public void initialize(){
-
+        drive.queuePoints(profiles);
         fillBuffer(true);
     }
 
+    public void execute(){
+        drive.updateStatus();
+    }
 
     public boolean isFinished(){
-        return false;
+        boolean finished = drive.getStatuses()[0].isLast && drive.getStatuses()[1].isLast;
+        return finished;
     }
 
     public static TrajectoryPoint[][] deserializeProfile(String filename, boolean zeroTalonDistance){

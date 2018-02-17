@@ -92,6 +92,16 @@ public class Drive extends Subsystem {
 		rightMaster.getMotionProfileStatus(statuses[1]);
 	}
 
+	public MotionProfileStatus[] getStatuses(){
+		return statuses;
+	}
+
+	public boolean isMPReady(){
+		boolean leftReady = getStatuses()[0].btmBufferCnt > Constants.Drive.minBufferCount;
+		boolean rightReady = getStatuses()[0].btmBufferCnt > Constants.Drive.minBufferCount;
+		return leftReady && rightReady;
+	}
+
 	public void queuePoints(TrajectoryPoint[][] trajectories){
 		for(TrajectoryPoint point : trajectories[0]){
 			leftMaster.pushMotionProfileTrajectory(point);
@@ -99,6 +109,11 @@ public class Drive extends Subsystem {
 		for(TrajectoryPoint point : trajectories[1]){
 			rightMaster.pushMotionProfileTrajectory(point);
 		}
+	}
+
+	public void setProfileMode(SetValueMotionProfile mpMode){
+		leftMaster.set(ControlMode.MotionProfile, mpMode.value);
+		rightMaster.set(ControlMode.MotionProfile, mpMode.value);
 	}
 
 	/**
@@ -148,12 +163,15 @@ public class Drive extends Subsystem {
 	public double getLeftPosition(){
 		return leftMaster.getSelectedSensorPosition(0);
 	}
+	
 	public double getRightPosition(){
 		return rightMaster.getSelectedSensorPosition(0);
 	}
+
 	public double getLeftVelocity(){
 		return leftMaster.getSelectedSensorPosition(0);
 	}
+
 	public double getRightVelocity(){
 		return rightMaster.getSelectedSensorPosition(0);
 	}
