@@ -27,7 +27,7 @@ public class TestElevator extends Command {
         } else if (OI.xb.getBumper(Hand.kRight)) {
             elevator.setPower(1);
         } else {
-            elevator.stop();
+            elevator.holdWithVoltage();
         }
 
         // Toggle position of the elevator pistons using the start button
