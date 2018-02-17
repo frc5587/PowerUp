@@ -1,7 +1,6 @@
 package org.frc5587.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
-import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.LEDControl;

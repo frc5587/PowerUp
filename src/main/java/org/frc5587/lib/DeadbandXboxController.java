@@ -15,6 +15,13 @@ public class DeadbandXboxController extends XboxController {
         super(port);
     }
 
+     /**
+    * Construct an instance of a joystick. The joystick index is the USB port on the drivers
+    * station.
+    *
+    * @param port The port on the Driver Station that the joystick is plugged into.
+    * @param deadbandCutoff amount of deadband to apply to each axis
+    */
     public DeadbandXboxController(final int port, final double deadbandCutoff) {
         super(port);
         this.deadbandCutoff = deadbandCutoff;

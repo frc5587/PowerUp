@@ -1,6 +1,5 @@
 package org.frc5587.robot2018.commands.elevator;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.frc5587.robot2018.Robot;
 
