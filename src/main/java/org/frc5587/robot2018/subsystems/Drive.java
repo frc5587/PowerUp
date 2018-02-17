@@ -7,13 +7,19 @@
 
 package org.frc5587.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.frc5587.lib.TitanDrive;
 import org.frc5587.lib.TitanDrive.DriveSignal;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
 
+import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
+import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -25,6 +31,8 @@ public class Drive extends Subsystem {
 	TalonSRX leftMaster, rightMaster;
 	VictorSPX leftSlave, rightSlave;
 	TitanDrive driveHelper;
+
+	MotionProfileStatus[] statuses = {new MotionProfileStatus(), new MotionProfileStatus()};
 
 	public Drive(){
 		driveHelper = new TitanDrive();
@@ -51,6 +59,46 @@ public class Drive extends Subsystem {
 		rightMaster.configPeakOutputForward(1, Constants.Drive.kTimeoutMs);
 		rightMaster.configPeakOutputReverse(-1, Constants.Drive.kTimeoutMs);
 
+	}
+
+	public class ProcessProfileRunnable implements java.lang.Runnable {
+	    public void run(){
+			leftMaster.processMotionProfileBuffer();
+			rightMaster.processMotionProfileBuffer();
+		}
+	}
+
+	public Notifier profileNotifer = new Notifier(new ProcessProfileRunnable());
+
+	public void resetMP(){
+		leftMaster.clearMotionProfileHasUnderrun(Constants.Drive.kTimeoutMs);
+		leftMaster.clearMotionProfileTrajectories();
+		leftMaster.changeMotionControlFramePeriod(10);
+		leftMaster.configMotionProfileTrajectoryPeriod(10, Constants.Drive.kTimeoutMs);
+		leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.Drive.kTimeoutMs);
+		leftMaster.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
+
+
+		rightMaster.clearMotionProfileHasUnderrun(Constants.Drive.kTimeoutMs);
+		rightMaster.clearMotionProfileTrajectories();
+		rightMaster.changeMotionControlFramePeriod(10);
+		rightMaster.configMotionProfileTrajectoryPeriod(10, Constants.Drive.kTimeoutMs);
+		rightMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.Drive.kTimeoutMs);
+		rightMaster.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
+	}
+
+	public void updateStatus(){
+		leftMaster.getMotionProfileStatus(statuses[0]);
+		rightMaster.getMotionProfileStatus(statuses[1]);
+	}
+
+	public void queuePoints(TrajectoryPoint[][] trajectories){
+		for(TrajectoryPoint point : trajectories[0]){
+			leftMaster.pushMotionProfileTrajectory(point);
+		}
+		for(TrajectoryPoint point : trajectories[1]){
+			rightMaster.pushMotionProfileTrajectory(point);
+		}
 	}
 
 	/**
