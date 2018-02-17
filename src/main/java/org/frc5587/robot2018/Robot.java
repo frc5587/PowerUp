@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
-import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
+import org.frc5587.robot2018.commands.elevator.*;
+import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -55,15 +56,16 @@ public class Robot extends TimedRobot {
 		
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
+
 		cam = CameraServer.getInstance();
-		cam.startAutomaticCapture("LifeCam", 0);
+		//cam.startAutomaticCapture("LifeCam", 0);
 
 		//Smartdashboard stuff
-		SmartDashboard.putNumber("Encoder Position Native", 0);
         SmartDashboard.putNumber("Encoder Velocity Native", 0);
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
 		elevatorHeight = new LEDElevatorHeight();
+		new ResetElevator().start();
 	}
 
 	/**
@@ -131,6 +133,9 @@ public class Robot extends TimedRobot {
 		new TestIntake().start();
 		new TestElevator().start();
 		new ArcadeDrive().start();
+		SmartDashboard.putData("switch height", new ElevatorToSetpoint(Constants.Elevator.switchHeight));
+		SmartDashboard.putData("scale height", new ElevatorToSetpoint(Constants.Elevator.scaleHeight));
+		SmartDashboard.putData("intake height", new ElevatorToSetpoint(Constants.Elevator.intakeHeight));
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class LEDElevatorHeight extends Command {
         LEDControl.Color color = getColor();
         if(color != lastColor) {
             lastColor = color;
-            ledControl.sendColorWithHeight(color, elevator.getElevatorHeightIn());   
+            ledControl.sendColorWithHeight(color, (float)elevator.getElevatorHeightIn());   
         }
     }
 

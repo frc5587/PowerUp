@@ -18,7 +18,7 @@ public class Elevator extends Subsystem {
     private TalonSRX elevatorTalon;
     private DoubleSolenoid tiltDoubleSol;
 
-    private double setpoint = 0;
+    private double setpoint;
 
     public Elevator() {
         System.out.println("Elevator starting... ");
@@ -27,6 +27,8 @@ public class Elevator extends Subsystem {
         System.out.println("Elevator done starting... ");
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
         configureTalon();
+
+        setpoint = getEncoderPosition();
     }
 
     // Put methods for controlling this subsystem
@@ -76,7 +78,7 @@ public class Elevator extends Subsystem {
         elevatorTalon.configMotionCruiseVelocity(Constants.Elevator.maxVelocity, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configMotionAcceleration(Constants.Elevator.maxAcceleration, Constants.Elevator.kTimeoutMs);
         // zero the sensor
-        elevatorTalon.setSelectedSensorPosition(0, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
+        //elevatorTalon.setSelectedSensorPosition(0, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
     }
 
     /**
@@ -87,28 +89,34 @@ public class Elevator extends Subsystem {
         double vel = elevatorTalon.getSelectedSensorVelocity(0);
         double voltage = elevatorTalon.getMotorOutputVoltage();
         double current = elevatorTalon.getOutputCurrent();
-        SmartDashboard.putNumber("Elevator Height", pos);
-        SmartDashboard.putNumber("Elevator Speed", vel);
+        SmartDashboard.putNumber("Elevator Height STU", pos);
+        SmartDashboard.putNumber("Elevator Speed STU", vel);
         SmartDashboard.putNumber("Elevator Voltage", voltage);
         SmartDashboard.putNumber("Elevator Current", current);
+    }
+
+    public void sendMotionMagicDebugInfo(){
+        double pos = elevatorTalon.getActiveTrajectoryPosition();
+        double vel = elevatorTalon.getActiveTrajectoryVelocity();
+        SmartDashboard.putNumber("MM position", pos);
+        SmartDashboard.putNumber("MM velocity", vel);
     }
 
     /**
      * Sends information about the elevatorTalon's current status to SmartDashboard
      */
     public void sendInfo(){
-        SmartDashboard.putNumber("Encoder Position Native", getEncoderPosition());
-        SmartDashboard.putNumber("Encoder Velocity Native", getEncoderVelocity());
         SmartDashboard.putNumber("Elevator Height Inches", getElevatorHeightIn());
     }
 
     /**
      * Starts Motion Magic on elevatorTalon for a given setpoint
-     * @param targetPos the setpoint to use Motion Magic with
+     * @param targetPos the setpoint to use Motion Magic with in inches
      */
     public void createSetpoint(double targetPos) {
-        setpoint = targetPos;
-        elevatorTalon.set(ControlMode.MotionMagic, targetPos);
+        setpoint = inchesToEncoder(targetPos);
+        System.out.println(setpoint);
+        elevatorTalon.set(ControlMode.MotionMagic, setpoint);
     }
     
     /**
@@ -117,6 +125,10 @@ public class Elevator extends Subsystem {
     public void stopMotor() {
         elevatorTalon.set(ControlMode.PercentOutput, 0.0);
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void holdWithVoltage(){
+        elevatorTalon.set(ControlMode.PercentOutput, 0.2);
     }
 
     /**
@@ -143,13 +155,12 @@ public class Elevator extends Subsystem {
      * Returns how many inches from the ground the elevator currently is
      * @return elevator's current height in inches
      */
-    public float getElevatorHeightIn() {
-        // 874 native encoder units per inch of movement
-        return getEncoderPosition() / 874.0f;
+    public double getElevatorHeightIn() {
+        return getEncoderPosition() / Constants.Elevator.stuPerInch;
     }
 
-    public static int inchesToEncoder(float inches) {
-        return (int)((double)inches * 874);
+    public static int inchesToEncoder(double inches) {
+        return (int)(inches * Constants.Elevator.stuPerInch);
     }
 
     /**
@@ -157,11 +168,12 @@ public class Elevator extends Subsystem {
      * @return the talon's current progress in tracking to a Magic Motion setpoint
      */
     public boolean isDoneMoving(){
-        return (getEncoderPosition() - setpoint ) <= Constants.Elevator.kDeadband;
+        SmartDashboard.putNumber("Is done moving", Math.abs(getEncoderPosition() - setpoint ));
+        return Math.abs(getEncoderPosition() - setpoint ) <= Constants.Elevator.kDeadband;
     }
 
     public void setPower(double percent){
-        if(-1.0 > percent || percent < 1.0) {
+        if(percent < -1.0 || percent > 1.0) {
             throw new Error("Percentage for the elevatorTalon not within the range -1.0 < x < 1.0");
         }
         elevatorTalon.set(ControlMode.PercentOutput, percent);

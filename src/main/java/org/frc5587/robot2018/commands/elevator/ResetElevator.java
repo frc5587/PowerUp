@@ -45,6 +45,8 @@ public class ResetElevator extends Command {
         else{
             if(elevator.isZeroed()){
                 elevator.resetEncoderPosition(Constants.Elevator.hallHeight);
+                alreadyTriggered = true;
+                System.out.println("Recentered to Hall Sensor");
             }
         }
     }

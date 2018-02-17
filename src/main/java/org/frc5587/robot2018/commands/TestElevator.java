@@ -12,6 +12,7 @@ public class TestElevator extends Command {
 
     public TestElevator() {
         elevator = Robot.elevator;
+        requires(elevator);
     }
 
     protected void initialize() {
@@ -22,9 +23,9 @@ public class TestElevator extends Command {
         // Control elevator movement with bumpers
         // TODO: Cycle positions of elevator using Motion Magic
         if (OI.xb.getBumper(Hand.kLeft)) {
-            elevator.setPower(-0.3);
+            elevator.setPower(-1);
         } else if (OI.xb.getBumper(Hand.kRight)) {
-            elevator.setPower(0.3);
+            elevator.setPower(1);
         } else {
             elevator.stop();
         }

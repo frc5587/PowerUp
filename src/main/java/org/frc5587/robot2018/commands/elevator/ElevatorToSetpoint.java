@@ -9,6 +9,10 @@ public class ElevatorToSetpoint extends Command {
     private double setPoint;
     private Elevator elevator;
 
+    /**
+     * 
+     * @param setPoint Height to go to in inches
+     */
     public ElevatorToSetpoint(double setPoint) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -24,15 +28,17 @@ public class ElevatorToSetpoint extends Command {
      */
     @Override
     protected void initialize() {
+        System.out.println("Starting Elevator MotionMagic");
         elevator.createSetpoint(setPoint);
     }
 
     protected void execute(){
         elevator.sendDebugInfo();
+        elevator.sendMotionMagicDebugInfo();
     }
 
     protected boolean isFinished(){
-        return false;//elevator.isDone();
+        return elevator.isDoneMoving();
     }
 
     /**
@@ -42,7 +48,8 @@ public class ElevatorToSetpoint extends Command {
      * command.
      */
     protected void end() {
-        elevator.stopMotor();
+        elevator.holdWithVoltage();
+        System.out.println("Elevator MotionMagic Finished");
     }
 
 
