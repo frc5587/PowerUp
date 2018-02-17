@@ -19,6 +19,7 @@ import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
 import org.frc5587.robot2018.commands.grabber.LEDIntakeStatus;
 //import org.frc5587.robot2018.commands.grabber.SetGrabberMotors;
+import org.frc5587.robot2018.commands.grabber.SetGrabberMotors;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -35,9 +36,9 @@ import org.frc5587.robot2018.subsystems.LEDControl;
 public class Robot extends TimedRobot {
 	public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
-	//public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
+	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
-	//public static final Grabber grabber = new Grabber();
+	public static final Grabber grabber = new Grabber();
 	public static final OI m_oi = new OI();
 	public static final Table table = new Table();
 
@@ -54,7 +55,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		//compressor.setClosedLoopControl(true); // TODO: migrate to function
+		compressor.setClosedLoopControl(true); // TODO: migrate to function
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
 //		cam = CameraServer.getInstance();
@@ -78,9 +79,9 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
 		ledControl.sendColor(DriverStation.getInstance().getAlliance());
-		//elevatorHeight.start();
+		elevatorHeight.start();
 		new LEDIntakeStatus().start();
-		//new SetGrabberMotors(Grabber.MotorSpeed.OFF).start();
+		new SetGrabberMotors(Grabber.MotorSpeed.OFF).start();
 	}
 
 	@Override
@@ -135,8 +136,8 @@ public class Robot extends TimedRobot {
 			m_autonomousCommand.cancel();
 		}
 		//new TestIntake().start();
-		//new TestElevator().start();
-		//new ArcadeDrive().start();
+		new TestElevator().start();
+		new ArcadeDrive().start();
 	}
 
 	/**
