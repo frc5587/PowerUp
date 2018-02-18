@@ -1,17 +1,24 @@
 package org.frc5587.robot2018.commands.grabber;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.RobotMap;
 import org.frc5587.robot2018.subsystems.Grabber;
 
 
-public class SetGrabberMotors extends InstantCommand {
-    Grabber.MotorSpeed motorSpeed;
 
+public class SetGrabberMotors extends Command {
+    private Grabber grabber;
+    private Grabber.MotorSpeed motorSpeed;
+    private final Grabber.MotorSpeed[] DISABLED_SPEEDS = {Grabber.MotorSpeed.INTAKE, Grabber.MotorSpeed.LEFT_ASSIST, Grabber.MotorSpeed.RIGHT_ASSIST};
+
+    Timer timer;
     public SetGrabberMotors(Grabber.MotorSpeed motorSpeed) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(Robot.grabber);
+        this.grabber = Robot.grabber;
         this.motorSpeed = motorSpeed;
     }
 
@@ -22,9 +29,23 @@ public class SetGrabberMotors extends InstantCommand {
      */
     @Override
     protected void initialize() {
-        Robot.grabber.setTalon(motorSpeed);
+        grabber.setTalon(motorSpeed);
+        grabber.currentSpeed = motorSpeed;
+        timer = new Timer();
     }
 
+    @Override
+    protected void execute(){
+        for(Grabber.MotorSpeed speed : DISABLED_SPEEDS) {
+            if(grabber.hasCube()&& grabber.currentSpeed == speed){
+                timer.start();
+                if(timer.get() <= 1) {
+                    grabber.setTalon(Grabber.MotorSpeed.OFF);
+                }
+                timer.reset();
+            }
+        }
+    }
 
     /**
      * Called once when the command ended peacefully; that is it is called once
@@ -33,7 +54,7 @@ public class SetGrabberMotors extends InstantCommand {
      * command.
      */
     @Override
-    protected void end() { }
+    protected boolean isFinished() {return false;}
 
 
     /**

@@ -2,7 +2,7 @@ package org.frc5587.robot2018;
 
 public class Constants {
 
-    public static boolean compressorEnabled = false;
+    public static boolean compressorEnabled = true;
 
     public static final class Drive {
         // set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action fails
@@ -11,6 +11,8 @@ public class Constants {
         public static final double kMaxVelocity = 0.0;
 
         public static final double kVCompSaturation = 12.0;
+
+        public static int minBufferCount = 10;
 
         //PIDF Constants
         public static final double[] leftPIDs = {

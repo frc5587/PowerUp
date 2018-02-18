@@ -9,6 +9,7 @@ package org.frc5587.robot2018;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -16,6 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.elevator.*;
+import org.frc5587.robot2018.commands.drive.*;
+import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
+import org.frc5587.robot2018.commands.grabber.*;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -57,14 +61,14 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", null);
 		SmartDashboard.putData("Auto mode", m_chooser);
 
-		cam = CameraServer.getInstance();
+		//cam = CameraServer.getInstance();
 		//cam.startAutomaticCapture("LifeCam", 0);
 
 		//Smartdashboard stuff
         SmartDashboard.putNumber("Encoder Velocity Native", 0);
         SmartDashboard.putNumber("Elevator Height Inches", 0);
 
-		elevatorHeight = new LEDElevatorHeight();
+		new LEDElevatorHeight().start();
 		new ResetElevator().start();
 	}
 
@@ -76,7 +80,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
-		elevatorHeight.start();
+		
+		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 	}
 
 	@Override
@@ -130,9 +135,10 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		new TestIntake().start();
+		//new TestIntake().start();
 		new TestElevator().start();
 		new ArcadeDrive().start();
+		new StopElevatorPistons().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH.getHeight()));
 		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE.getHeight()));
 		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE.getHeight()));

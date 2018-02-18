@@ -47,11 +47,8 @@ public class Elevator extends Subsystem {
         currentHeight.startCommand();
     }
 
-    public void triggerPistons(boolean enable) {
-        if(enable)
-            tiltDoubleSol.set(DoubleSolenoid.Value.kForward);
-        else
-            tiltDoubleSol.set(DoubleSolenoid.Value.kReverse);
+    public void triggerPistons(DoubleSolenoid.Value val) {
+        tiltDoubleSol.set(val);
     }
 
     /**

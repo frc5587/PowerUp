@@ -1,13 +1,13 @@
-package org.frc5587.robot2018.commands;
+package org.frc5587.robot2018.commands.elevator;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.frc5587.robot2018.Robot;
 
-public class FirePistons extends InstantCommand {
-    public FirePistons() {
+public class StopElevatorPistons extends InstantCommand {
+    public StopElevatorPistons() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(Robot.elevator);
     }
 
 
@@ -17,7 +17,7 @@ public class FirePistons extends InstantCommand {
      */
     @Override
     protected void initialize() {
-        Robot.elevator.triggerPistons(true);
+        Robot.elevator.triggerPistons(Value.kOff);
     }
 
     /**
