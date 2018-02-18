@@ -37,8 +37,11 @@ public class Grabber extends Subsystem {
         return expandSolenoid.get() == Value.kForward;
     }
 
+    public DoubleSolenoid.Value getPistonState() {
+        return expandSolenoid.get();
+    }
+
     public enum MotorSpeed {
-        // TODO: Implement real left and right speeds for the different MotorSpeed constants
         OFF            (new double[]{0.0, 0.0}),
         INTAKE         (new double[]{-0.5, -0.5}),
         EJECT          (new double[]{0.5, 0.5}),

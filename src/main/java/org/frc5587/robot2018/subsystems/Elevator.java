@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
+import org.frc5587.robot2018.commands.elevator.ElevatorToSetpoint;
 
 public class Elevator extends Subsystem {
 
@@ -19,20 +20,32 @@ public class Elevator extends Subsystem {
     private DoubleSolenoid tiltDoubleSol;
 
     private double setpoint;
+    private HeightLevels currentHeight;
 
     public Elevator() {
         System.out.println("Elevator starting... ");
         tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
         hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
-        System.out.println("Elevator done starting... ");
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
         configureTalon();
 
         setpoint = getEncoderPosition();
+        // Robot starts a intake height by default, although it doesn't particularly matter in operation
+        currentHeight = HeightLevels.INTAKE;
+        System.out.println("Elevator done starting... ");
     }
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
+
+    public HeightLevels getHeightLevel() {
+        return currentHeight;
+    }
+
+    public void setMotors(HeightLevels newLevel) {
+        currentHeight = newLevel;
+        currentHeight.startCommand();
+    }
 
     public void triggerPistons(boolean enable) {
         if(enable)
@@ -128,7 +141,7 @@ public class Elevator extends Subsystem {
     }
 
     public void holdWithVoltage(){
-        elevatorTalon.set(ControlMode.PercentOutput, 0.2);
+        elevatorTalon.set(ControlMode.PercentOutput, 0.3);
     }
 
     /**
@@ -147,8 +160,8 @@ public class Elevator extends Subsystem {
         return elevatorTalon.getSelectedSensorVelocity(0);
     }
 
-    public void resetEncoderPosition(int height) {
-        elevatorTalon.setSelectedSensorPosition(height, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
+    public void resetEncoderPosition() {
+        elevatorTalon.setSelectedSensorPosition(Constants.Elevator.hallHeight, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
     }
 
     /**
@@ -185,8 +198,52 @@ public class Elevator extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        // TODO: Set the default command, if any, for a subsystem here. Example:
-        //    setDefaultCommand(new MySpecialCommand());
+    }
+
+    public enum HeightLevels {
+        // The order that the values are presented is the order the bumpers will cycle through
+        INTAKE  (Constants.Elevator.intakeHeight),
+        SWITCH  (Constants.Elevator.switchHeight),
+        SCALE   (Constants.Elevator.scaleHeight);
+        
+
+        private double height;
+ 
+        HeightLevels(double height) {
+            this.height = height;
+        }
+
+        public void startCommand() {
+            new ElevatorToSetpoint(height).start();
+        }
+
+        public double getHeight() {
+            return height;
+        }
+
+        public static HeightLevels getNextValue(HeightLevels previousValue) {
+            return getValueForStep(previousValue, 1);
+        }
+
+        public static HeightLevels getPreviousValue(HeightLevels previousValue) {
+            return getValueForStep(previousValue, -1);
+        }
+
+        public static HeightLevels getValueForStep(HeightLevels previousValue, int step) {
+            int i;
+            HeightLevels[] allValues = HeightLevels.values();
+            for (i = 0; i < allValues.length; i++) {
+                if (allValues[i].equals(previousValue)) {
+                    break;
+                }
+            }
+
+            i += step; // Change to reflect next desired element in array
+            if (i >= allValues.length || i < 0) {
+                return previousValue;
+            } else {
+                return allValues[i];
+            }
+        }
     }
 }
-

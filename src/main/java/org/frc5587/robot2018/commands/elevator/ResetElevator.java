@@ -5,28 +5,23 @@ import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
 
-
 public class ResetElevator extends Command {
     private Elevator elevator;
     private boolean alreadyTriggered = false;
 
     public ResetElevator() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        this.elevator = Robot.elevator;
         this.setRunWhenDisabled(true);
+        this.elevator = Robot.elevator;
     }
-
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
      */
     @Override
-    protected void initialize() { 
+    protected void initialize() {
         // Assign lastColor so it is never equal to null
     }
-
 
     /**
      * The execute method is called repeatedly when this Command is
@@ -37,14 +32,13 @@ public class ResetElevator extends Command {
         elevator.sendDebugInfo();
         elevator.sendInfo();
 
-        if(alreadyTriggered){
-            if(elevator.getEncoderPosition() < Constants.Elevator.hallHeight/2f){
+        if (alreadyTriggered) {
+            if (elevator.getEncoderPosition() < Constants.Elevator.hallHeight / 2f) {
                 alreadyTriggered = false;
             }
-        }
-        else{
-            if(elevator.isZeroed()){
-                elevator.resetEncoderPosition(Constants.Elevator.hallHeight);
+        } else {
+            if (elevator.isZeroed()) {
+                elevator.resetEncoderPosition();
                 alreadyTriggered = true;
                 System.out.println("Recentered to Hall Sensor");
             }
@@ -70,10 +64,8 @@ public class ResetElevator extends Command {
      */
     @Override
     protected boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
-
 
     /**
      * Called once when the command ended peacefully; that is it is called once
@@ -85,7 +77,6 @@ public class ResetElevator extends Command {
     protected void end() {
 
     }
-
 
     /**
      * <p>

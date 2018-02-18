@@ -15,7 +15,7 @@ public class TestIntake extends Command {
     Grabber grabber;
 
     public TestIntake() {
-        elevator = Robot.elevator;
+        requires(Robot.grabber);
         grabber = Robot.grabber;
     }
 
@@ -36,18 +36,10 @@ public class TestIntake extends Command {
 
         // Piston bound to triggers (both do the same thing)
         if (OI.xb.getTriggerAxis(Hand.kRight) > .05 || OI.xb.getTriggerAxis(Hand.kLeft) > .05) {
-            if (grabber.pistonsOn()) {
-                setPistons(DoubleSolenoid.Value.kForward);
-            }
+            grabber.setPistons(DoubleSolenoid.Value.kForward);
         } else {
-            if (!grabber.pistonsOn()) {
-                setPistons(DoubleSolenoid.Value.kReverse);
-            }
+            grabber.setPistons(DoubleSolenoid.Value.kReverse);
         }
-    }
-
-    private void setPistons(DoubleSolenoid.Value value) {
-        grabber.setPistons(value);
     }
 
     protected boolean isFinished() {

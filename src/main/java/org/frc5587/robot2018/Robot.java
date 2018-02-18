@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.elevator.*;
-import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
 import org.frc5587.robot2018.subsystems.Table;
+import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 import org.frc5587.robot2018.subsystems.LEDControl;
 
 /**
@@ -133,9 +133,9 @@ public class Robot extends TimedRobot {
 		new TestIntake().start();
 		new TestElevator().start();
 		new ArcadeDrive().start();
-		SmartDashboard.putData("switch height", new ElevatorToSetpoint(Constants.Elevator.switchHeight));
-		SmartDashboard.putData("scale height", new ElevatorToSetpoint(Constants.Elevator.scaleHeight));
-		SmartDashboard.putData("intake height", new ElevatorToSetpoint(Constants.Elevator.intakeHeight));
+		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH.getHeight()));
+		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE.getHeight()));
+		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE.getHeight()));
 	}
 
 	/**
