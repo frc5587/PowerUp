@@ -75,7 +75,7 @@ public class Pathgen{
      * Load profile from file
      * @param name Filename of profile, don't append .csv extension
      */
-    public Trajectory getTrajectoryFromFile(String name){
+    public static Trajectory getTrajectoryFromFile(String name){
         File myFile = new File(DIRECTORY + name + ".csv");
         Trajectory trajectory = Pathfinder.readFromCSV(myFile);
         return trajectory;

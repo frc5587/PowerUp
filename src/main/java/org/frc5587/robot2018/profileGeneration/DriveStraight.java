@@ -10,9 +10,8 @@ public class DriveStraight{
 		Pathgen p = Robot.pathgen;
 	    Waypoint[] points = {
 	    	new Waypoint(0, 0, 0),
-			new Waypoint(36, 0, Pathfinder.d2r(-45)),
-			new Waypoint(72, -36, Pathfinder.d2r(-45))
+			new Waypoint(36, 0, 0)
 	    };
-	    p.createNew("DriveStraight", points);
+		p.createNew("DriveStraight", points);
 	}
 }

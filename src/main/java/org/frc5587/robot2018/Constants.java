@@ -16,6 +16,15 @@ public class Constants {
 
         public static final int stuPerInch = 215;
 
+        public static final int stuPerRev = 4050;
+
+        public static final int wheelDiameter = 6;
+
+        //Safety limits
+        public static final double minPercentOut = 0,
+            maxPercentBw = .4,
+            maxPercentFw = .4; 
+
         //PIDF Constants
         public static final double[] leftPIDs = {
             0.01,	//kP
@@ -29,6 +38,16 @@ public class Constants {
             0.01,	//kD
             0.5    //kF
         };
+
+        public static final double[] pathfinderPIDVA = {
+            0.02,    //kP
+            0.0,    //kI
+            0.0,    //kD
+            0.339,    //kV
+            0.01     //kA
+        };
+
+		public static double gyrokP = 0.03;
     }
     public class Elevator {
         // Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3.
@@ -45,7 +64,7 @@ public class Constants {
             kP = 0.02,
             kI = 0.0,
             kD = 0.0;
-        //Safety limits for testing
+        //Safety limits
         public static final double minPercentOut = 0,
             maxPercentBw = .6,
             maxPercentFw = 1;

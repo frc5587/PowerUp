@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
-		//new DriveStraight();
+		new DriveStraight();
 	}
 
 	/**
@@ -76,13 +76,12 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
-		
-		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 	}
 
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 	}
 
 	/**
@@ -98,8 +97,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		new MotionProfileFiller("DriveStraight", true).start();
-		new MotionProfileRunner().start();
+		//new MotionProfileFiller("DriveStraight", true).start();
+		//new MotionProfileRunner().start();
+		new GyroCompMPRunner("DriveStraight").start();
 	}
 
 	/**

@@ -7,6 +7,7 @@
 
 package org.frc5587.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.kauailabs.navx.frc.AHRS;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 /**
@@ -34,11 +36,18 @@ public class Drive extends Subsystem {
 	TalonSRX leftMaster, rightMaster;
 	VictorSPX leftSlave, rightSlave;
 	TitanDrive driveHelper;
-
+	AHRS navx;
 	MotionProfileStatus[] statuses = {new MotionProfileStatus(), new MotionProfileStatus()};
 
 	public Drive(){
 		driveHelper = new TitanDrive();
+
+		try{
+			navx = new AHRS(I2C.Port.kMXP);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		//initialize Talons
 		leftMaster = new TalonSRX(RobotMap.Drive.leftMaster);
 		rightMaster = new TalonSRX(RobotMap.Drive.rightMaster);
@@ -56,14 +65,21 @@ public class Drive extends Subsystem {
 		leftSlave.follow(leftMaster);
 		rightSlave.follow(rightMaster);
 
+
 		//Enable Voltage Compensation
 		rightMaster.configVoltageCompSaturation(Constants.Drive.kVCompSaturation, Constants.Drive.kTimeoutMs);
 		rightMaster.enableVoltageCompensation(true);
 		leftMaster.configVoltageCompSaturation(Constants.Drive.kVCompSaturation, Constants.Drive.kTimeoutMs);
 		leftMaster.enableVoltageCompensation(true);
 
-		rightMaster.configPeakOutputForward(1, Constants.Drive.kTimeoutMs);
-		rightMaster.configPeakOutputReverse(-1, Constants.Drive.kTimeoutMs);
+		leftMaster.configPeakOutputForward(Constants.Drive.maxPercentFw, Constants.Drive.kTimeoutMs);
+		leftMaster.configPeakOutputReverse(-Constants.Drive.maxPercentBw, Constants.Drive.kTimeoutMs);
+		rightMaster.configPeakOutputForward(Constants.Drive.maxPercentFw, Constants.Drive.kTimeoutMs);
+		rightMaster.configPeakOutputReverse(-Constants.Drive.maxPercentBw, Constants.Drive.kTimeoutMs);
+		leftSlave.configPeakOutputForward(Constants.Drive.maxPercentFw, Constants.Drive.kTimeoutMs);
+		leftSlave.configPeakOutputReverse(-Constants.Drive.maxPercentBw, Constants.Drive.kTimeoutMs);
+		rightSlave.configPeakOutputForward(Constants.Drive.maxPercentFw, Constants.Drive.kTimeoutMs);
+		rightSlave.configPeakOutputReverse(-Constants.Drive.maxPercentBw, Constants.Drive.kTimeoutMs);
 
 		fillPIDFSlot(0);
 	}
@@ -174,6 +190,11 @@ public class Drive extends Subsystem {
 		rightMaster.set(ControlMode.PercentOutput, d.right);
 	}
 
+	public void vbusLR(double left, double right){
+		leftMaster.set(ControlMode.PercentOutput, left);
+		rightMaster.set(ControlMode.PercentOutput, right);
+	}
+
 	public void velocityCurve(double throttle, double curve, boolean isQuickTurn){
 		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
 		
@@ -193,26 +214,29 @@ public class Drive extends Subsystem {
 		rightMaster.set(ControlMode.PercentOutput, 0.0);
 	}
 
-	public double getLeftPosition(){
+	public int getLeftPosition(){
 		return leftMaster.getSelectedSensorPosition(0);
 	}
 	
-	public double getRightPosition(){
+	public int getRightPosition(){
 		return rightMaster.getSelectedSensorPosition(0);
 	}
 
-	public double getLeftVelocity(){
+	public int getLeftVelocity(){
 		return leftMaster.getSelectedSensorVelocity(0);
 	}
 
-	public double getRightVelocity(){
+	public int getRightVelocity(){
 		return rightMaster.getSelectedSensorVelocity(0);
+	}
+
+	public double getHeading(){
+		return navx.getAngle();
 	}
 
 	public void resetEncoders(){
 		leftMaster.setSelectedSensorPosition(0, 0, Constants.Drive.kTimeoutMs);
 		rightMaster.setSelectedSensorPosition(0, 0, Constants.Drive.kTimeoutMs);
-
 	}
 
 	public void sendDebugInfo(){
@@ -220,6 +244,7 @@ public class Drive extends Subsystem {
 		SmartDashboard.putNumber("Right Distance", getRightPosition());
 		SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
 		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+		SmartDashboard.putNumber("Heading", getHeading());
 	}
 
 	public void sendMPDebugInfo(){
