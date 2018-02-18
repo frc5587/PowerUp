@@ -12,20 +12,22 @@ public class Constants {
 
         public static final double kVCompSaturation = 12.0;
 
-        public static int minBufferCount = 10;
+        public static final int minBufferCount = 10;
+
+        public static final int stuPerInch = 215;
 
         //PIDF Constants
         public static final double[] leftPIDs = {
-            0.0,	//kP
+            0.01,	//kP
             0.0,	//kI
-            0.0,	//kD
-            0.0 	//kF
+            0.01,	//kD
+            0.5 	//kF
         };
         public static final double[] rightPIDs = {
-            0.0,	//kP
+            0.01,	//kP
             0.0,	//kI
-            0.0,	//kD
-            0.0		//kF
+            0.01,	//kD
+            0.5    //kF
         };
     }
     public class Elevator {

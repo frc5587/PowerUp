@@ -9,6 +9,8 @@ package org.frc5587.robot2018.subsystems;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.frc5587.lib.TitanDrive;
 import org.frc5587.lib.TitanDrive.DriveSignal;
 import org.frc5587.robot2018.Constants;
@@ -18,6 +20,7 @@ import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -46,6 +49,9 @@ public class Drive extends Subsystem {
 		rightMaster.setInverted(true);
 		rightSlave.setInverted(true);
 
+		leftMaster.setSensorPhase(true);
+		rightMaster.setSensorPhase(true);
+
 		//Set the slaves to mimic the masters
 		leftSlave.follow(leftMaster);
 		rightSlave.follow(rightMaster);
@@ -59,6 +65,7 @@ public class Drive extends Subsystem {
 		rightMaster.configPeakOutputForward(1, Constants.Drive.kTimeoutMs);
 		rightMaster.configPeakOutputReverse(-1, Constants.Drive.kTimeoutMs);
 
+		fillPIDFSlot(0);
 	}
 
 	public class ProcessProfileRunnable implements java.lang.Runnable {
@@ -102,6 +109,12 @@ public class Drive extends Subsystem {
 		return leftReady && rightReady;
 	}
 
+	public boolean isMPDone(){
+		boolean leftDone = getStatuses()[0].isLast;
+		boolean rightDone = getStatuses()[0].isLast;
+		return leftDone && rightDone;
+	}
+
 	public void queuePoints(TrajectoryPoint[][] trajectories){
 		for(TrajectoryPoint point : trajectories[0]){
 			leftMaster.pushMotionProfileTrajectory(point);
@@ -132,6 +145,21 @@ public class Drive extends Subsystem {
 		rightMaster.config_kF(slotIdx, Constants.Drive.rightPIDs[3], 0);
 	}
 
+	public void enableBrakeMode(boolean enabled){
+		if(enabled){
+			leftMaster.setNeutralMode(NeutralMode.Brake);
+			rightMaster.setNeutralMode(NeutralMode.Brake);
+			leftSlave.setNeutralMode(NeutralMode.Brake);
+			rightSlave.setNeutralMode(NeutralMode.Brake);
+		}
+		else{
+			leftMaster.setNeutralMode(NeutralMode.Coast);
+			rightMaster.setNeutralMode(NeutralMode.Coast);
+			leftSlave.setNeutralMode(NeutralMode.Coast);
+			rightSlave.setNeutralMode(NeutralMode.Coast);
+		}
+	}
+
 	public void vbusCurve(double throttle, double curve, boolean isQuickTurn){
 		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
 		
@@ -160,6 +188,11 @@ public class Drive extends Subsystem {
 		rightMaster.set(ControlMode.Velocity, d.right * Constants.Drive.kMaxVelocity);
 	}
 
+	public void stop(){
+		leftMaster.set(ControlMode.PercentOutput, 0.0);
+		rightMaster.set(ControlMode.PercentOutput, 0.0);
+	}
+
 	public double getLeftPosition(){
 		return leftMaster.getSelectedSensorPosition(0);
 	}
@@ -169,11 +202,31 @@ public class Drive extends Subsystem {
 	}
 
 	public double getLeftVelocity(){
-		return leftMaster.getSelectedSensorPosition(0);
+		return leftMaster.getSelectedSensorVelocity(0);
 	}
 
 	public double getRightVelocity(){
-		return rightMaster.getSelectedSensorPosition(0);
+		return rightMaster.getSelectedSensorVelocity(0);
+	}
+
+	public void resetEncoders(){
+		leftMaster.setSelectedSensorPosition(0, 0, Constants.Drive.kTimeoutMs);
+		rightMaster.setSelectedSensorPosition(0, 0, Constants.Drive.kTimeoutMs);
+
+	}
+
+	public void sendDebugInfo(){
+		SmartDashboard.putNumber("Left Distance", getLeftPosition());
+		SmartDashboard.putNumber("Right Distance", getRightPosition());
+		SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
+		SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+	}
+
+	public void sendMPDebugInfo(){
+		SmartDashboard.putNumber("Left Expected Pos", leftMaster.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Right Expected Pos", rightMaster.getActiveTrajectoryPosition());
+		SmartDashboard.putNumber("Left Expected Vel", leftMaster.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("Right Expected Vel", rightMaster.getActiveTrajectoryVelocity());
 	}
 
 	public void initDefaultCommand() {
