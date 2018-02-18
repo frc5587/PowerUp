@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.22"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
     id 'org.hidetake.ssh' version "2.9.0"
 }
 
@@ -25,6 +25,7 @@ deploy {
 }
 
 /* ssh stuff copied from 449 */
+
 remotes {
     rio {
         host = 'roboRIO-5587-frc.local'
