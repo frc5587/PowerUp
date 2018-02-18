@@ -9,10 +9,8 @@ import org.frc5587.robot2018.subsystems.LEDControl;
 public class LEDElevatorHeight extends Command {
     private Elevator elevator;
     private LEDControl ledControl;
-    private LEDControl.Color lastColor;
 
     public LEDElevatorHeight() {
-        System.out.println("Starting LEDElevatorHeight");
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(Robot.ledControl);
@@ -28,8 +26,6 @@ public class LEDElevatorHeight extends Command {
      */
     @Override
     protected void initialize() { 
-        // Assign lastColor so it is never equal to null
-        lastColor = getColor();
     }
 
 
@@ -39,26 +35,8 @@ public class LEDElevatorHeight extends Command {
      */
     @Override
     protected void execute() {
-        LEDControl.Color color = getColor();
-        if(color != lastColor) {
-            lastColor = color;
-            ledControl.sendColorWithHeight(color, (float)elevator.getElevatorHeightIn());   
-        }
+        ledControl.sendHeight((int)elevator.getElevatorHeightIn());
     }
-
-    /**
-     * Returns a value of LEDControl.Color that should be displayed by the Arduino, based
-     * on whether the elevator is zeroed
-     */
-    private LEDControl.Color getColor() {
-        if(elevator.isZeroed()) {
-            return LEDControl.Color.GREEN;
-        }
-        else {
-            return LEDControl.Color.BLUE;
-        }
-    }
-
 
     /**
      * <p>
