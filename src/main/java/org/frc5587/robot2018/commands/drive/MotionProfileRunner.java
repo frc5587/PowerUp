@@ -17,6 +17,7 @@ public class MotionProfileRunner extends Command{
 
     public void initialize(){
         drive.setProfileMode(SetValueMotionProfile.Disable);
+        drive.enableBrakeMode(true);
     }
 
     public void execute(){
@@ -26,17 +27,21 @@ public class MotionProfileRunner extends Command{
         else{
             drive.setProfileMode(SetValueMotionProfile.Enable);
         }
+        drive.sendDebugInfo();
+        drive.sendMPDebugInfo();
     }
 
     public boolean isFinished(){
-        return false;
+        return drive.isMPDone();
     }
 
     public void end(){
         drive.resetMP();
+        drive.stop();
+        drive.enableBrakeMode(false);
     }
 
     public void interrupted(){
-
+        end();
     }
 }

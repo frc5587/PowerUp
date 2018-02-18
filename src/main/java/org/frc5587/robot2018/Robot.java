@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.frc5587.lib.Pathgen;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
 import org.frc5587.robot2018.commands.grabber.*;
+import org.frc5587.robot2018.profileGeneration.DriveStraight;
 import org.frc5587.robot2018.subsystems.Drive;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -42,11 +44,8 @@ public class Robot extends TimedRobot {
 	public static final Grabber grabber = new Grabber();
 	public static final OI m_oi = new OI();
 	public static final Table table = new Table();
+	public static final Pathgen pathgen = new Pathgen(24, .010, 50, 50, 50);
 
-	Command m_autonomousCommand;
-	SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-	Command elevatorHeight;
 
 	CameraServer cam;
 
@@ -57,19 +56,16 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		compressor.setClosedLoopControl(Constants.compressorEnabled); // TODO: migrate to function
-		
-		m_chooser.addDefault("Default Auto", null);
-		SmartDashboard.putData("Auto mode", m_chooser);
+
+
+		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 
 		//cam = CameraServer.getInstance();
 		//cam.startAutomaticCapture("LifeCam", 0);
 
-		//Smartdashboard stuff
-        SmartDashboard.putNumber("Encoder Velocity Native", 0);
-        SmartDashboard.putNumber("Elevator Height Inches", 0);
-
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
+		//new DriveStraight();
 	}
 
 	/**
@@ -102,19 +98,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
-
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
-		// schedule the autonomous command (example)
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.start();
-		}
+		new MotionProfileFiller("DriveStraight", true).start();
+		new MotionProfileRunner().start();
 	}
 
 	/**
@@ -132,10 +117,8 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.cancel();
-		}
-		//new TestIntake().start();
+
+		new TestIntake().start();
 		new TestElevator().start();
 		new ArcadeDrive().start();
 		new StopElevatorPistons().start();

@@ -36,9 +36,9 @@ public class TestIntake extends Command {
 
         // Piston bound to triggers (both do the same thing)
         if (OI.xb.getTriggerAxis(Hand.kRight) > .05 || OI.xb.getTriggerAxis(Hand.kLeft) > .05) {
-            grabber.setPistons(DoubleSolenoid.Value.kForward);
-        } else {
             grabber.setPistons(DoubleSolenoid.Value.kReverse);
+        } else {
+            grabber.setPistons(DoubleSolenoid.Value.kForward);
         }
     }
 
