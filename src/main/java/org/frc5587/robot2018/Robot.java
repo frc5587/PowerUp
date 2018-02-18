@@ -7,27 +7,23 @@
 
 package org.frc5587.robot2018;
 
+import org.frc5587.robot2018.commands.auto.SetStartPos;
+import org.frc5587.robot2018.commands.elevator.*;
+import org.frc5587.robot2018.commands.drive.*;
+import org.frc5587.robot2018.commands.*;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.lib.Pathgen;
-import org.frc5587.robot2018.commands.*;
-import org.frc5587.robot2018.commands.elevator.*;
-import org.frc5587.robot2018.commands.drive.*;
-import org.frc5587.robot2018.commands.elevator.LEDElevatorHeight;
-import org.frc5587.robot2018.commands.grabber.*;
 import org.frc5587.robot2018.profileGeneration.DriveStraight;
-import org.frc5587.robot2018.subsystems.Drive;
-import org.frc5587.robot2018.subsystems.Elevator;
-import org.frc5587.robot2018.subsystems.Grabber;
-import org.frc5587.robot2018.subsystems.Table;
 import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
-import org.frc5587.robot2018.subsystems.LEDControl;
+import org.frc5587.robot2018.subsystems.*;
+import openrio.powerup.MatchData;
+import openrio.powerup.MatchData.OwnedSide;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -46,7 +42,8 @@ public class Robot extends TimedRobot {
 	public static final Table table = new Table();
 	public static final Pathgen pathgen = new Pathgen(24, .010, 50, 50, 50);
 
-
+	public static StartPosition startPos;
+	private SendableChooser<SetStartPos> positionChooser;
 	CameraServer cam;
 
 	/**
@@ -56,7 +53,11 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		compressor.setClosedLoopControl(Constants.compressorEnabled); // TODO: migrate to function
-
+		positionChooser = new SendableChooser<>();
+		for (StartPosition pos : StartPosition.values()) {
+			positionChooser.addObject(pos.name(), new SetStartPos(pos));
+		}
+		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 
@@ -97,9 +98,37 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		positionChooser.getSelected().start();
+		OwnedSide nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
+
+		switch (startPos) {
+		case LEFT:
+			if (nearSwitchSide == OwnedSide.LEFT) {
+				System.out.println("Switch is close on left side");
+			} else {
+				System.out.println("Switch is far away while we are starting on left");
+			}
+			break;
+		case RIGHT:
+			if (nearSwitchSide == OwnedSide.RIGHT) {
+				System.out.println("Switch is close on right side");
+			} else {
+				System.out.println("Switch is far away while we are starting on right");
+			}
+			break;
+		case CENTER:
+			if (nearSwitchSide == OwnedSide.LEFT) {
+				System.out.println("Switch is on left side");
+			} else {
+				System.out.println("Switch is on right side");
+			}
+			break;
+		default:
+			new GyroCompMPRunner("DriveStraight").start();
+			break;
+		}
 		//new MotionProfileFiller("DriveStraight", true).start();
 		//new MotionProfileRunner().start();
-		new GyroCompMPRunner("DriveStraight").start();
 	}
 
 	/**
@@ -140,5 +169,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+
+	public enum StartPosition {
+		LEFT, CENTER, RIGHT, TEST;
 	}
 }
