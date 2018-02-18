@@ -41,7 +41,6 @@ public class TestElevator extends Command {
 
         // Toggle position of the elevator pistons using the start button
         if (OI.xb.getStartButtonPressed()) {
-            System.out.println(elevatorPistonsOn);
             if (elevatorPistonsOn) {
                 elevator.triggerPistons(Value.kForward);
             } else {

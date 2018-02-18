@@ -19,12 +19,19 @@ public class LEDControl extends Subsystem {
      * @param aColor lowercase letter representing color to change the LEDs to
      */
     public void sendColor(DriverStation.Alliance aColor) { //Parameter Alliance Color
+        byte[] colorByte;
         switch (aColor) {
         case Blue:
-            arduino.writeBulk(new byte[] { (byte) 'b' });
+            colorByte = new byte[] { (byte) 'b' };
+            break;
         case Red:
-            arduino.writeBulk(new byte[] { (byte) 'r' });
+            colorByte = new byte[] { (byte) 'r' };
+            break;
+        default:
+            colorByte = new byte[] { (byte) 'w' };
         }
+        byte[] combinedArray = combineArrays(new byte[] { (byte) 'u' }, colorByte);
+        arduino.writeBulk(combinedArray);
     }
 
     //arduino.writeBulk();
