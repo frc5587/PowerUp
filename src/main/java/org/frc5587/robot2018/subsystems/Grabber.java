@@ -31,7 +31,7 @@ public class Grabber extends Subsystem {
     }
 
     public void setPistons(DoubleSolenoid.Value valueToSet) {
-        //expandSolenoid.set(valueToSet);
+        expandSolenoid.set(valueToSet);
     }
 
     public void initDefaultCommand() {

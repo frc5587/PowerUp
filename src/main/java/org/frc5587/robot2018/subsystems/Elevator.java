@@ -138,7 +138,7 @@ public class Elevator extends Subsystem {
     }
 
     public void holdWithVoltage(){
-        elevatorTalon.set(ControlMode.PercentOutput, 0.3);
+        elevatorTalon.set(ControlMode.PercentOutput, 0.2);
     }
 
     /**
@@ -166,7 +166,7 @@ public class Elevator extends Subsystem {
      * @return elevator's current height in inches
      */
     public double getElevatorHeightIn() {
-        return getEncoderPosition() / Constants.Elevator.stuPerInch;
+        return getEncoderPosition() / (double)Constants.Elevator.stuPerInch;
     }
 
     public static int inchesToEncoder(double inches) {
