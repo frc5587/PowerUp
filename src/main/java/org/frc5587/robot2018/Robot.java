@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		compressor.setClosedLoopControl(Constants.compressorEnabled); // TODO: migrate to function
+		compressor.setClosedLoopControl(Constants.compressorEnabled);
 		positionChooser = new SendableChooser<>();
 		for (StartPosition pos : StartPosition.values()) {
 			positionChooser.addObject(pos.name(), new SetStartPos(pos));
@@ -151,9 +151,9 @@ public class Robot extends TimedRobot {
 		new TestElevator().start();
 		new ArcadeDrive().start();
 		new StopElevatorPistons().start();
-		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH.getHeight()));
-		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE.getHeight()));
-		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE.getHeight()));
+		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));
+		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE));
+		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE));
 	}
 
 	/**

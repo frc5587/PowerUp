@@ -42,9 +42,11 @@ public class Elevator extends Subsystem {
         return currentHeight;
     }
 
-    public void setMotors(HeightLevels newLevel) {
-        currentHeight = newLevel;
-        currentHeight.startCommand();
+    /**
+     * @param currentHeight the currentHeight to set
+     */
+    public void setCurrentHeight(HeightLevels currentHeight) {
+        this.currentHeight = currentHeight;
     }
 
     public void triggerPistons(DoubleSolenoid.Value val) {
@@ -123,8 +125,9 @@ public class Elevator extends Subsystem {
      * Starts Motion Magic on elevatorTalon for a given setpoint
      * @param targetPos the setpoint to use Motion Magic with in inches
      */
-    public void createSetpoint(double targetPos) {
-        setpoint = inchesToEncoder(targetPos);
+    public void createSetpoint(HeightLevels newLevel) {
+        currentHeight = newLevel;
+        setpoint = inchesToEncoder(currentHeight.getHeight());
         System.out.println(setpoint);
         elevatorTalon.set(ControlMode.MotionMagic, setpoint);
     }
@@ -208,10 +211,6 @@ public class Elevator extends Subsystem {
  
         HeightLevels(double height) {
             this.height = height;
-        }
-
-        public void startCommand() {
-            new ElevatorToSetpoint(height).start();
         }
 
         public double getHeight() {

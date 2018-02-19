@@ -79,7 +79,7 @@ public class Constants {
         public static final int hallHeight = 30150;
 
         //Height to place on scale in inches
-        public static final double scaleHeight = 74;
+        public static final double scaleHeight = 73;
         public static final double intakeHeight = 0;
         public static final double switchHeight = 25;
     }

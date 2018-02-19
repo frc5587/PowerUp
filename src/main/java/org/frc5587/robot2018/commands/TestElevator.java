@@ -18,17 +18,19 @@ public class TestElevator extends Command {
     }
 
     protected void initialize() {
-        
+
     }
 
     protected void execute() {
         // Control elevator movement with bumpers
         if (OI.xb.getBumperPressed(Hand.kLeft)) {
-            elevator.setMotors(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
+            elevator.createSetpoint(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
         } else if (OI.xb.getBumperPressed(Hand.kRight)) {
-            elevator.setMotors(HeightLevels.getNextValue(elevator.getHeightLevel()));
+            elevator.createSetpoint(HeightLevels.getNextValue(elevator.getHeightLevel()));
         } else {
-            elevator.holdWithVoltage();
+            if (elevator.isDoneMoving()) {
+                elevator.holdWithVoltage();
+            }
         }
 
         // if (OI.xb.getBumper(Hand.kLeft)) {

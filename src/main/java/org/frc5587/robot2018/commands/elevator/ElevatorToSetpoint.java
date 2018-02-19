@@ -4,19 +4,20 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.commands.TestElevator;
 import org.frc5587.robot2018.subsystems.Elevator;
+import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 
 public class ElevatorToSetpoint extends Command {
-    private double setPoint;
+    private HeightLevels newLevel;
     private Elevator elevator;
 
     /**
      * 
      * @param setPoint Height to go to in inches
      */
-    public ElevatorToSetpoint(double setPoint) {
+    public ElevatorToSetpoint(HeightLevels newLevel) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
-        this.setPoint = setPoint;
+        this.newLevel = newLevel;
         elevator = Robot.elevator;
     }
 
@@ -27,7 +28,7 @@ public class ElevatorToSetpoint extends Command {
     @Override
     protected void initialize() {
         System.out.println("Starting Elevator MotionMagic");
-        elevator.createSetpoint(setPoint);
+        elevator.createSetpoint(newLevel);
     }
 
     protected void execute() {
