@@ -11,7 +11,7 @@ import org.frc5587.robot2018.commands.climber.Climb;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
-import org.frc5587.robot2018.commands.auto.DriveVoltage;
+import org.frc5587.robot2018.commands.auto.LeftStartLeftSwitchInside;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
 		case LEFT:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is close on left side");
-				autonomousCommand = new GyroCompMPRunner("LeftStartLeftSwitchInside");
+				autonomousCommand = new LeftStartLeftSwitchInside();
 			} else if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is far away while we are starting on left");
 				autonomousCommand = new GyroCompMPRunner("TurnLeft");
