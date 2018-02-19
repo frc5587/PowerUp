@@ -18,8 +18,8 @@ public class Grabber extends Subsystem {
 
     public Grabber() {
         leftTalon = new TalonSRX(RobotMap.Grabber.LEFT_TALON);
-        leftTalon.setInverted(true);
         rightTalon = new TalonSRX(RobotMap.Grabber.RIGHT_TALON);
+        rightTalon.setInverted(true);
         expandSolenoid = new DoubleSolenoid(RobotMap.Grabber.EXPANDER_SOLENOID[0], RobotMap.Grabber.EXPANDER_SOLENOID[1]);
         breakBeam = new DigitalOutput(RobotMap.Grabber.RECEIVER);
         currentSpeed = MotorSpeed.OFF;

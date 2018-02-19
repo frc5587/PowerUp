@@ -23,7 +23,6 @@ public class Elevator extends Subsystem {
     private HeightLevels currentHeight;
 
     public Elevator() {
-        System.out.println("Elevator starting... ");
         tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
         hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
@@ -32,7 +31,6 @@ public class Elevator extends Subsystem {
         setpoint = getEncoderPosition();
         // Robot starts a intake height by default, although it doesn't particularly matter in operation
         currentHeight = HeightLevels.INTAKE;
-        System.out.println("Elevator done starting... ");
     }
 
     // Put methods for controlling this subsystem
@@ -91,6 +89,7 @@ public class Elevator extends Subsystem {
         elevatorTalon.configMotionAcceleration(Constants.Elevator.maxAcceleration, Constants.Elevator.kTimeoutMs);
         // zero the sensor
         //elevatorTalon.setSelectedSensorPosition(0, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configVoltageCompSaturation(Constants.Elevator.vCompSaturation, Constants.Elevator.kTimeoutMs);
     }
 
     /**
@@ -141,7 +140,7 @@ public class Elevator extends Subsystem {
     }
 
     public void holdWithVoltage(){
-        elevatorTalon.set(ControlMode.PercentOutput, 0.2);
+        elevatorTalon.set(ControlMode.PercentOutput, Constants.Elevator.holdPercent);
     }
 
     /**
