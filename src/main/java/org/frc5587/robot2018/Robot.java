@@ -8,6 +8,7 @@
 package org.frc5587.robot2018;
 
 import org.frc5587.robot2018.commands.auto.SetStartPos;
+import org.frc5587.robot2018.commands.climber.Climb;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
@@ -38,8 +39,9 @@ public class Robot extends TimedRobot {
 	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
 	public static final LEDControl ledControl = new LEDControl();
 	public static final Grabber grabber = new Grabber();
+	public static final Climber climber = new Climber();
+
 	public static final OI m_oi = new OI();
-	public static final Table table = new Table();
 	public static final Pathgen pathgen = new Pathgen(24, .010, 50, 50, 50);
 
 	public static StartPosition startPos;
@@ -149,6 +151,7 @@ public class Robot extends TimedRobot {
 
 		new TestIntake().start();
 		new TestElevator().start();
+		new Climb().start();
 		new ArcadeDrive().start();
 		new StopElevatorPistons().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));
