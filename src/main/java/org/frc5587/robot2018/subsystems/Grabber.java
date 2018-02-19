@@ -50,8 +50,8 @@ public class Grabber extends Subsystem {
     public enum MotorSpeed {
         OFF            (new double[]{0.0, 0.0}),
         INTAKE         (new double[]{-0.5, -0.5}),
-        EJECT          (new double[]{0.5, 0.5}),
-        PASS_THROUGH   (new double[]{-0.1, -0.1}),
+        EJECT          (new double[]{0.7, 0.7}),
+        PASS_THROUGH   (new double[]{-0.2, -0.2}),
         RIGHT_ASSIST   (new double[]{-0.5, -0.7}),
         LEFT_ASSIST    (new double[]{-0.7, -0.5});
 
@@ -69,7 +69,9 @@ public class Grabber extends Subsystem {
             return speeds[1];
         }
     }
-
-    public boolean hasCube(){return breakBeam.get();}
+    
+    public boolean hasCube(){
+        return breakBeam.get();
+    }
 }
 
