@@ -78,7 +78,16 @@ public class GyroCompMPRunner extends Command{
 
     public class ProfileLooper implements Runnable{
         @Override
-            public void run() {
+        public void run() {
+            if(!lEncoderFollower.isFinished()){
+                SmartDashboard.putNumber("Left Expected Pos", lEncoderFollower.getSegment().position);
+                SmartDashboard.putNumber("Left Expected Vel", lEncoderFollower.getSegment().velocity);
+            }
+            if(!rEncoderFollower.isFinished()){
+                SmartDashboard.putNumber("Right Expected Pos", rEncoderFollower.getSegment().position);
+                SmartDashboard.putNumber("Right Expected Vel", rEncoderFollower.getSegment().velocity);
+            }
+
             double left = lEncoderFollower.calculate(drive.getLeftPosition());
             double right = rEncoderFollower.calculate(drive.getRightPosition());
 
@@ -89,10 +98,6 @@ public class GyroCompMPRunner extends Command{
             double turn = Constants.Drive.gyrokP * angleDifference;            
 
             drive.vbusLR(left + turn, right - turn);
-            SmartDashboard.putNumber("Left Expected Pos", lEncoderFollower.getSegment().position);
-            SmartDashboard.putNumber("Right Expected Pos", rEncoderFollower.getSegment().position);
-            SmartDashboard.putNumber("Left Expected Vel", lEncoderFollower.getSegment().velocity);
-            SmartDashboard.putNumber("Right Expected Vel", rEncoderFollower.getSegment().velocity);
         }
     }
 }

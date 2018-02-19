@@ -7,10 +7,10 @@
 
 package org.frc5587.robot2018;
 
-import org.frc5587.robot2018.commands.auto.SetStartPos;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.lib.Pathgen;
-import org.frc5587.robot2018.profileGeneration.DriveStraight;
+import org.frc5587.robot2018.profileGeneration.*;
 import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 import org.frc5587.robot2018.subsystems.*;
 import openrio.powerup.MatchData;
@@ -42,9 +42,12 @@ public class Robot extends TimedRobot {
 	public static final Table table = new Table();
 	public static final Pathgen pathgen = new Pathgen(24, .010, 50, 50, 50);
 
-	public static StartPosition startPos;
-	private SendableChooser<SetStartPos> positionChooser;
 	CameraServer cam;
+	private SendableChooser<StartPosition> positionChooser;
+	OwnedSide nearSwitchSide = OwnedSide.UNKNOWN;
+	OwnedSide scaleSide = OwnedSide.UNKNOWN;
+
+	Command autonomousCommand;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -55,7 +58,7 @@ public class Robot extends TimedRobot {
 		compressor.setClosedLoopControl(Constants.compressorEnabled);
 		positionChooser = new SendableChooser<>();
 		for (StartPosition pos : StartPosition.values()) {
-			positionChooser.addObject(pos.name(), new SetStartPos(pos));
+			positionChooser.addObject(pos.name(), pos);
 		}
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
@@ -66,7 +69,7 @@ public class Robot extends TimedRobot {
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
-		new DriveStraight();
+		//new GenerateMPs();
 	}
 
 	/**
@@ -83,6 +86,8 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		ledControl.sendColor(DriverStation.getInstance().getAlliance());
+		nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
+		scaleSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
 	}
 
 	/**
@@ -98,37 +103,48 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		positionChooser.getSelected().start();
-		OwnedSide nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
+		System.out.println("Autonomous Starting...");
 
-		switch (startPos) {
+		switch (positionChooser.getSelected()) {
 		case LEFT:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is close on left side");
-			} else {
+				autonomousCommand = new GyroCompMPRunner("DriveStraight");
+			} else if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is far away while we are starting on left");
+			}
+			else {
+				System.out.println("Switch is unknown");
 			}
 			break;
 		case RIGHT:
 			if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is close on right side");
-			} else {
+				autonomousCommand = new GyroCompMPRunner("DriveStraight");
+			} else if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is far away while we are starting on right");
+			}
+			else {
+				System.out.println("Switch is unknown");
 			}
 			break;
 		case CENTER:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is on left side");
-			} else {
+			} else if (nearSwitchSide == OwnedSide.RIGHT){
 				System.out.println("Switch is on right side");
+			}
+			else {
+				System.out.println("Switch is unknown");
 			}
 			break;
 		default:
-			new GyroCompMPRunner("DriveStraight").start();
 			break;
 		}
-		//new MotionProfileFiller("DriveStraight", true).start();
-		//new MotionProfileRunner().start();
+		if(autonomousCommand != null){
+			autonomousCommand.start();
+			System.out.println("Starting Command: " + autonomousCommand.toString());
+		}
 	}
 
 	/**
@@ -146,6 +162,9 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		if(autonomousCommand != null){
+			autonomousCommand.cancel();
+		}
 
 		new TestIntake().start();
 		new TestElevator().start();
