@@ -22,32 +22,40 @@ public class Constants {
 
         //Safety limits
         public static final double minPercentOut = 0,
-            maxPercentBw = .4,
-            maxPercentFw = .4; 
+            maxPercentBw = 1,
+            maxPercentFw = 1; 
 
         //PIDF Constants
         public static final double[] leftPIDs = {
             0.01,	//kP
             0.0,	//kI
             0.01,	//kD
-            0.5 	//kF
+            0.000327 * 1023 	//kF
         };
         public static final double[] rightPIDs = {
             0.01,	//kP
             0.0,	//kI
             0.01,	//kD
-            0.5    //kF
+            0.000317 * 1023    //kF
         };
 
-        public static final double[] pathfinderPIDVA = {
-            0.02,    //kP
+        public static final double[] pathfinderPIDVALeft = {
+            0.04,    //kP
             0.0,    //kI
             0.0,    //kD
-            0.339,    //kV
-            0.01     //kA
+            0.000327 * stuPerInch / 10f,    //kV
+            0.0001 * stuPerInch / 10f   //kA
+        };
+        public static final double[] pathfinderPIDVARight = {
+            0.04,    //kP
+            0.0,    //kI
+            0.0,    //kD
+            0.000317 * stuPerInch / 10f,    //kV
+            0.0001 * stuPerInch / 10f     //kA
         };
 
-		public static double gyrokP = 0.03;
+
+		public static double gyrokP = 0.00;
     }
     public class Elevator {
         // Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3.
@@ -56,6 +64,11 @@ public class Constants {
         public static final int kPIDLoopIdx = 0;
         // set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action fails
         public static final int kTimeoutMs = 10;
+
+
+        public static final double vCompSaturation = 12.0;
+
+        public static final double holdPercent = 0.25;
 
         // The tolerance for the target position (see Elevator.isDone())
         public static final double kDeadband = 400;
@@ -79,8 +92,8 @@ public class Constants {
         public static final int hallHeight = 30150;
 
         //Height to place on scale in inches
-        public static final double scaleHeight = 73;
-        public static final double intakeHeight = 0;
+        public static final double scaleHeight = 75;
+        public static final double intakeHeight = 1;
         public static final double switchHeight = 25;
     }
 }

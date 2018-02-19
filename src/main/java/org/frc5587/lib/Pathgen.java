@@ -34,7 +34,7 @@ public class Pathgen{
         this.jMax = jMax;
         this.config = new Trajectory.Config(
             Trajectory.FitMethod.HERMITE_CUBIC, 
-            Trajectory.Config.SAMPLES_HIGH, this.dt,
+            Trajectory.Config.SAMPLES_FAST, this.dt,
             this.vMax, 
             this.aMax, 
             this.jMax

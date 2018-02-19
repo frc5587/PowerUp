@@ -11,6 +11,8 @@ import org.frc5587.robot2018.commands.climber.Climb;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
+import org.frc5587.robot2018.commands.auto.DriveVoltage;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.Compressor;
@@ -42,7 +44,7 @@ public class Robot extends TimedRobot {
 	public static final Climber climber = new Climber();
 
 	public static final OI m_oi = new OI();
-	public static final Pathgen pathgen = new Pathgen(24, .010, 50, 50, 50);
+	public static final Pathgen pathgen = new Pathgen(30, .010, 84, 100, 100);
 
 	CameraServer cam;
 	private SendableChooser<StartPosition> positionChooser;
@@ -65,13 +67,15 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
+		//SmartDashboard.putData("Generate Profiles", new GenerateMPs());
 
 		//cam = CameraServer.getInstance();
 		//cam.startAutomaticCapture("LifeCam", 0);
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
-		//new GenerateMPs();
+		new GenerateMPs();
+
 	}
 
 	/**
@@ -82,6 +86,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
+		kDrive.enableBrakeMode(false);
 	}
 
 	@Override
@@ -90,6 +95,7 @@ public class Robot extends TimedRobot {
 		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 		nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
 		scaleSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
+		SmartDashboard.putBoolean("HasCube", grabber.hasCube());
 	}
 
 	/**
@@ -106,14 +112,16 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Autonomous Starting...");
+		kDrive.resetEncoders();
 
 		switch (positionChooser.getSelected()) {
 		case LEFT:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is close on left side");
-				autonomousCommand = new GyroCompMPRunner("DriveStraight");
+				autonomousCommand = new GyroCompMPRunner("LeftStartLeftSwitchInside");
 			} else if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is far away while we are starting on left");
+				autonomousCommand = new GyroCompMPRunner("TurnLeft");
 			}
 			else {
 				System.out.println("Switch is unknown");
@@ -125,6 +133,7 @@ public class Robot extends TimedRobot {
 				autonomousCommand = new GyroCompMPRunner("DriveStraight");
 			} else if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is far away while we are starting on right");
+				autonomousCommand = new GyroCompMPRunner("TurnRight");
 			}
 			else {
 				System.out.println("Switch is unknown");
@@ -141,6 +150,8 @@ public class Robot extends TimedRobot {
 			}
 			break;
 		default:
+			System.out.println("Testin stuff");
+			autonomousCommand = new GyroCompMPRunner("LeftS");
 			break;
 		}
 		if(autonomousCommand != null){
