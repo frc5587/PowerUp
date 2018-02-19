@@ -28,7 +28,7 @@ public class ElevatorToSetpoint extends Command {
     @Override
     protected void initialize() {
         System.out.println("Starting Elevator MotionMagic");
-        elevator.createSetpoint(newLevel);
+        elevator.goToHeight(newLevel);
     }
 
     protected void execute() {

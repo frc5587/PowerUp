@@ -123,9 +123,9 @@ public class Elevator extends Subsystem {
 
     /**
      * Starts Motion Magic on elevatorTalon for a given setpoint
-     * @param targetPos the setpoint to use Motion Magic with in inches
+     * @param newLevel the setpoint to use Motion Magic with
      */
-    public void createSetpoint(HeightLevels newLevel) {
+    public void goToHeight(HeightLevels newLevel) {
         currentHeight = newLevel;
         setpoint = inchesToEncoder(currentHeight.getHeight());
         System.out.println(setpoint);

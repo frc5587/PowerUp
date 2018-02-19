@@ -25,10 +25,10 @@ public class TestIntake extends Command {
 
     protected void execute() {
         // Grabber Intake and Eject bound to the Y axis of the right joystick
-        if (OI.xb.getY(Hand.kRight) > 0) {
-            speed = Grabber.MotorSpeed.INTAKE;
-        } else if (OI.xb.getY(Hand.kRight) < 0) {
+        if (OI.xb.getYButton()) {
             speed = Grabber.MotorSpeed.EJECT;
+        } else if (OI.xb.getAButton()) {
+            speed = Grabber.MotorSpeed.INTAKE;
         } else {
             speed = Grabber.MotorSpeed.OFF;
         }
