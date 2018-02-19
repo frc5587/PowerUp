@@ -1,16 +1,19 @@
-package org.frc5587.robot2018.commands.elevator;
+package org.frc5587.robot2018.commands.grabber;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.RobotMap;
 import org.frc5587.robot2018.subsystems.LEDControl;
 
+public class LEDIntakeStatus extends Command {
 
-public class HandZeroElevator extends Command {
-    public HandZeroElevator() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        requires(Robot.elevator);
-        requires(Robot.ledControl);
+    private DigitalInput breakBeam;
+    public LEDIntakeStatus() {
+        this.setRunWhenDisabled(true);
+        breakBeam = new DigitalInput(RobotMap.Grabber.RECEIVER);
     }
 
 
@@ -19,7 +22,9 @@ public class HandZeroElevator extends Command {
      * this Command is run after being started.
      */
     @Override
-    protected void initialize() { }
+    protected void initialize() {
+
+    }
 
 
     /**
@@ -28,16 +33,12 @@ public class HandZeroElevator extends Command {
      */
     @Override
     protected void execute() {
-        if(Robot.elevator.isZeroed()) {
-            System.out.println("Elevator calibrated");
-            Command ledCommand = new LEDUnderLight();
-            ledCommand.start();
-            // Scheduler.getInstance().add(new LEDUnderLight()); // TODO: Define in Robot.java and start that instance of the command from here
+        if(breakBeam.get()){
+            Robot.ledControl.sendCubeStatusWithColor('t',LEDControl.Color.GREEN);
+        }else if(!breakBeam.get()){
+            Robot.ledControl.sendCubeStatusWithColor('f',LEDControl.Color.RED);
         }
-        else
-            Robot.ledControl.sendColor(LEDControl.Color.YELLOW);
     }
-
 
     /**
      * <p>

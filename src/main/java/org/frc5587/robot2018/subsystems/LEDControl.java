@@ -1,7 +1,9 @@
 package org.frc5587.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -16,10 +18,23 @@ public class LEDControl extends Subsystem {
      * The Arduino sketch only accepts the chars for yellow, red, and blue
      * @param aColor lowercase letter representing color to change the LEDs to
      */
-    public void sendColor(Color aColor){ //Parameter Alliance Color
-        byte[] color = {(byte) aColor.getChar()};
-        arduino.writeBulk(color);
+    public void sendColor(DriverStation.Alliance aColor) { //Parameter Alliance Color
+        byte[] colorByte;
+        switch (aColor) {
+        case Blue:
+            colorByte = new byte[] { (byte) 'b' };
+            break;
+        case Red:
+            colorByte = new byte[] { (byte) 'r' };
+            break;
+        default:
+            colorByte = new byte[] { (byte) 'w' };
+        }
+        byte[] combinedArray = combineArrays(new byte[] { (byte) 'u' }, colorByte);
+        arduino.writeBulk(combinedArray);
     }
+
+    //arduino.writeBulk();
 
     /**
      * Send a value of LEDControl.Color with a float representing the elevator's current height from the ground over I2C
@@ -28,8 +43,20 @@ public class LEDControl extends Subsystem {
      * @param heightInInches a float describing the current height of the elevator in inches
      */
     public void sendColorWithHeight(Color aColor, float heightInInches) {
-        byte[] heightArray = toByteArray(heightInInches);
-        byte[] combinedArray = combineArrays(new byte[]{(byte) aColor.getChar()}, heightArray);
+        byte[] heightArray = toByteArray((int) heightInInches);
+        byte[] combinedArray = combineArrays(new byte[] { (byte) aColor.getChar() }, heightArray);
+        arduino.writeBulk(combinedArray);
+    }
+
+    public void sendHeight(int height) {
+        byte[] heightArray = toByteArray(height);
+        byte[] combinedArray = combineArrays(new byte[] { (byte) 'e' }, heightArray);
+        arduino.writeBulk(combinedArray);
+    }
+
+    public void sendCubeStatusWithColor(char cubeStatus, Color color) {
+        byte[] cubeStatusToSend = toByteArray(cubeStatus);
+        byte[] combinedArray = combineArrays(cubeStatusToSend, new byte[] { (byte) color.getChar() });
         arduino.writeBulk(combinedArray);
     }
 
@@ -50,24 +77,22 @@ public class LEDControl extends Subsystem {
      * @param f the float to convert to a byte array
      * @return the byte array describing the float
      */
-    private static byte[] toByteArray(float f) {
+    private static byte[] toByteArray(int i) {
         ByteBuffer buffer = ByteBuffer.allocate(4);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        buffer.putFloat(f);
+        buffer.putInt(i);
         return buffer.array();
     }
 
-    public void initDefaultCommand() { }
+    public void initDefaultCommand() {
+    }
 
     /**
      * Associates Color with a character, so a color to display on LEDs can be sent
      * to an arduino over I2C
      */
     public enum Color {
-        RED ('r'),
-        BLUE ('b'),
-        YELLOW ('y'),
-        GREEN ('g');
+        RED('r'), BLUE('b'), YELLOW('y'), GREEN('g');
 
         private char asChar;
 
@@ -80,4 +105,3 @@ public class LEDControl extends Subsystem {
         }
     }
 }
-

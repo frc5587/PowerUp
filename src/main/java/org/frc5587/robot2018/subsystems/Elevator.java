@@ -2,6 +2,7 @@ package org.frc5587.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
+import org.frc5587.robot2018.commands.elevator.ElevatorToSetpoint;
 
 public class Elevator extends Subsystem {
 
@@ -17,25 +19,38 @@ public class Elevator extends Subsystem {
     private TalonSRX elevatorTalon;
     private DoubleSolenoid tiltDoubleSol;
 
-    private double setpoint = 0;
+    private double setpoint;
+    private HeightLevels currentHeight;
 
     public Elevator() {
         System.out.println("Elevator starting... ");
         tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
         hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
-        System.out.println("Elevator done starting... ");
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
         configureTalon();
+
+        setpoint = getEncoderPosition();
+        // Robot starts a intake height by default, although it doesn't particularly matter in operation
+        currentHeight = HeightLevels.INTAKE;
+        System.out.println("Elevator done starting... ");
     }
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    public void triggerPistons(boolean enable) {
-        if(enable)
-            tiltDoubleSol.set(DoubleSolenoid.Value.kForward);
-        else
-            tiltDoubleSol.set(DoubleSolenoid.Value.kReverse);
+    public HeightLevels getHeightLevel() {
+        return currentHeight;
+    }
+
+    /**
+     * @param currentHeight the currentHeight to set
+     */
+    public void setCurrentHeight(HeightLevels currentHeight) {
+        this.currentHeight = currentHeight;
+    }
+
+    public void triggerPistons(DoubleSolenoid.Value val) {
+        tiltDoubleSol.set(val);
     }
 
     /**
@@ -62,8 +77,8 @@ public class Elevator extends Subsystem {
         // set the peak and nominal outputs
         elevatorTalon.configNominalOutputForward(Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configNominalOutputReverse(-Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentOut, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentOut, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentFw, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentBw, Constants.Elevator.kTimeoutMs);
 
         // set closed loop gains in set slot
         elevatorTalon.selectProfileSlot(Constants.Elevator.kSlotIdx, Constants.Elevator.kPIDLoopIdx);
@@ -75,7 +90,7 @@ public class Elevator extends Subsystem {
         elevatorTalon.configMotionCruiseVelocity(Constants.Elevator.maxVelocity, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configMotionAcceleration(Constants.Elevator.maxAcceleration, Constants.Elevator.kTimeoutMs);
         // zero the sensor
-        elevatorTalon.setSelectedSensorPosition(0, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
+        //elevatorTalon.setSelectedSensorPosition(0, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
     }
 
     /**
@@ -85,27 +100,48 @@ public class Elevator extends Subsystem {
         double pos = elevatorTalon.getSelectedSensorPosition(0);
         double vel = elevatorTalon.getSelectedSensorVelocity(0);
         double voltage = elevatorTalon.getMotorOutputVoltage();
-        SmartDashboard.putNumber("Elevator Height", pos);
-        SmartDashboard.putNumber("Elevator Speed", vel);
+        double current = elevatorTalon.getOutputCurrent();
+        SmartDashboard.putNumber("Elevator Height STU", pos);
+        SmartDashboard.putNumber("Elevator Speed STU", vel);
         SmartDashboard.putNumber("Elevator Voltage", voltage);
+        SmartDashboard.putNumber("Elevator Current", current);
+    }
+
+    public void sendMotionMagicDebugInfo(){
+        double pos = elevatorTalon.getActiveTrajectoryPosition();
+        double vel = elevatorTalon.getActiveTrajectoryVelocity();
+        SmartDashboard.putNumber("MM position", pos);
+        SmartDashboard.putNumber("MM velocity", vel);
     }
 
     /**
      * Sends information about the elevatorTalon's current status to SmartDashboard
      */
     public void sendInfo(){
-        SmartDashboard.putNumber("Encoder Position Native", getEncoderPosition());
-        SmartDashboard.putNumber("Encoder Velocity Native", getEncoderVelocity());
         SmartDashboard.putNumber("Elevator Height Inches", getElevatorHeightIn());
     }
 
     /**
      * Starts Motion Magic on elevatorTalon for a given setpoint
-     * @param targetPos the setpoint to use Motion Magic with
+     * @param newLevel the setpoint to use Motion Magic with
      */
-    public void createSetpoint(double targetPos) {
-        setpoint = targetPos;
-        elevatorTalon.set(ControlMode.MotionMagic, targetPos);
+    public void goToHeight(HeightLevels newLevel) {
+        currentHeight = newLevel;
+        setpoint = inchesToEncoder(currentHeight.getHeight());
+        System.out.println(setpoint);
+        elevatorTalon.set(ControlMode.MotionMagic, setpoint);
+    }
+    
+    /**
+     * Sets the elevatorTalon to brake mode
+     */
+    public void stopMotor() {
+        elevatorTalon.set(ControlMode.PercentOutput, 0.0);
+        elevatorTalon.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void holdWithVoltage(){
+        elevatorTalon.set(ControlMode.PercentOutput, 0.2);
     }
 
     /**
@@ -124,21 +160,20 @@ public class Elevator extends Subsystem {
         return elevatorTalon.getSelectedSensorVelocity(0);
     }
 
-    public void resetEncoderPosition(int height) {
-        elevatorTalon.setSelectedSensorPosition(height, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
+    public void resetEncoderPosition() {
+        elevatorTalon.setSelectedSensorPosition(Constants.Elevator.hallHeight, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
     }
 
     /**
      * Returns how many inches from the ground the elevator currently is
      * @return elevator's current height in inches
      */
-    public float getElevatorHeightIn() {
-        // 874 native encoder units per inch of movement
-        return getEncoderPosition() / 874.0f;
+    public double getElevatorHeightIn() {
+        return getEncoderPosition() / (double)Constants.Elevator.stuPerInch;
     }
 
-    public static int inchesToEncoder(float inches) {
-        return (int)((double)inches * 874);
+    public static int inchesToEncoder(double inches) {
+        return (int)(inches * Constants.Elevator.stuPerInch);
     }
 
     /**
@@ -146,10 +181,14 @@ public class Elevator extends Subsystem {
      * @return the talon's current progress in tracking to a Magic Motion setpoint
      */
     public boolean isDoneMoving(){
-        return (getEncoderPosition() - setpoint ) <= Constants.Elevator.kDeadband;
+        SmartDashboard.putNumber("Is done moving", Math.abs(getEncoderPosition() - setpoint ));
+        return Math.abs(getEncoderPosition() - setpoint ) <= Constants.Elevator.kDeadband;
     }
 
     public void setPower(double percent){
+        if(percent < -1.0 || percent > 1.0) {
+            throw new Error("Percentage for the elevatorTalon not within the range -1.0 < x < 1.0");
+        }
         elevatorTalon.set(ControlMode.PercentOutput, percent);
     }
 
@@ -159,8 +198,48 @@ public class Elevator extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-        // TODO: Set the default command, if any, for a subsystem here. Example:
-        //    setDefaultCommand(new MySpecialCommand());
+    }
+
+    public enum HeightLevels {
+        // The order that the values are presented is the order the bumpers will cycle through
+        INTAKE  (Constants.Elevator.intakeHeight),
+        SWITCH  (Constants.Elevator.switchHeight),
+        SCALE   (Constants.Elevator.scaleHeight);
+        
+
+        private double height;
+ 
+        HeightLevels(double height) {
+            this.height = height;
+        }
+
+        public double getHeight() {
+            return height;
+        }
+
+        public static HeightLevels getNextValue(HeightLevels previousValue) {
+            return getValueForStep(previousValue, 1);
+        }
+
+        public static HeightLevels getPreviousValue(HeightLevels previousValue) {
+            return getValueForStep(previousValue, -1);
+        }
+
+        public static HeightLevels getValueForStep(HeightLevels previousValue, int step) {
+            int i;
+            HeightLevels[] allValues = HeightLevels.values();
+            for (i = 0; i < allValues.length; i++) {
+                if (allValues[i].equals(previousValue)) {
+                    break;
+                }
+            }
+
+            i += step; // Change to reflect next desired element in array
+            if (i >= allValues.length || i < 0) {
+                return previousValue;
+            } else {
+                return allValues[i];
+            }
+        }
     }
 }
-

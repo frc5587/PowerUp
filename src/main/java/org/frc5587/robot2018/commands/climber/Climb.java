@@ -1,33 +1,27 @@
-package org.frc5587.robot2018.commands.elevator;
+package org.frc5587.robot2018.commands.climber;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
+import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.subsystems.Elevator;
-import org.frc5587.robot2018.subsystems.LEDControl;
+import org.frc5587.robot2018.subsystems.Climber;
 
+public class Climb extends Command {
+    Climber climber;
 
-public class LEDElevatorHeight extends Command {
-    private Elevator elevator;
-    private LEDControl ledControl;
-
-    public LEDElevatorHeight() {
+    public Climb() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        requires(Robot.ledControl);
-        this.elevator = Robot.elevator;
-        this.ledControl = Robot.ledControl;
-        this.setRunWhenDisabled(true);
+        requires(Robot.climber);
     }
-
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
      */
     @Override
-    protected void initialize() { 
-    }
+    protected void initialize() {
 
+    }
 
     /**
      * The execute method is called repeatedly when this Command is
@@ -35,14 +29,14 @@ public class LEDElevatorHeight extends Command {
      */
     @Override
     protected void execute() {
-        ledControl.sendHeight((int)elevator.getElevatorHeightIn());
+        climber.setClimbSpeed(OI.xb.getY(GenericHID.Hand.kRight));
     }
 
     /**
      * <p>
      * Returns whether this command is finished. If it is, then the command will be removed and
      * {@link #end()} will be called.
-     * </p><p>
+     * </p>
      * It may be useful for a team to reference the {@link #isTimedOut()}
      * method for time-sensitive commands.
      * </p><p>
@@ -57,10 +51,8 @@ public class LEDElevatorHeight extends Command {
      */
     @Override
     protected boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
-
 
     /**
      * Called once when the command ended peacefully; that is it is called once
@@ -72,7 +64,6 @@ public class LEDElevatorHeight extends Command {
     protected void end() {
 
     }
-
 
     /**
      * <p>

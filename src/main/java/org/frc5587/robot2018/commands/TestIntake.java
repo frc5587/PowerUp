@@ -1,50 +1,55 @@
 package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.commands.grabber.SetGrabberMotors;
-import org.frc5587.robot2018.commands.grabber.TriggerGrabberPistons;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
+import org.frc5587.robot2018.subsystems.Grabber.MotorSpeed;
 
-public class TestIntake extends Command{
+public class TestIntake extends Command {
     Elevator elevator;
-    boolean pistonState = false;
+    MotorSpeed speed = MotorSpeed.OFF;
+    Grabber grabber;
 
-    public TestIntake(){
-        elevator = Robot.elevator;
+    public TestIntake() {
+        requires(Robot.grabber);
+        grabber = Robot.grabber;
     }
-    protected void initialize(){
-        
-    }
-    protected void execute(){
-        if(OI.xb.getAButtonPressed()){
-            new SetGrabberMotors(Grabber.MotorSpeed.INTAKE).start();
-        }
-        else if(OI.xb.getXButtonPressed()) {
-            new SetGrabberMotors(Grabber.MotorSpeed.EJECT).start();
-        }
-        else if(OI.xb.getAButtonReleased() || OI.xb.getXButtonReleased()) {
-            new SetGrabberMotors(Grabber.MotorSpeed.OFF).start();
-        }
 
-        if(OI.xb.getBButtonPressed()){
-            if(pistonState)
-                new TriggerGrabberPistons(DoubleSolenoid.Value.kForward).start();
-            else
-                new TriggerGrabberPistons(DoubleSolenoid.Value.kReverse).start();
-            pistonState = !pistonState;
-        }
+    protected void initialize() {
 
     }
-    protected boolean isFinished(){
+
+    protected void execute() {
+        // Grabber Intake and Eject bound to the Y axis of the right joystick
+        if (OI.xb.getYButton()) {
+            speed = Grabber.MotorSpeed.EJECT;
+        } else if (OI.xb.getAButton()) {
+            speed = Grabber.MotorSpeed.INTAKE;
+        } else {
+            speed = Grabber.MotorSpeed.OFF;
+        }
+        grabber.setTalon(speed);
+
+        // Piston bound to triggers (both do the same thing)
+        if (OI.xb.getTriggerAxis(Hand.kRight) > .05 || OI.xb.getTriggerAxis(Hand.kLeft) > .05) {
+            grabber.setPistons(DoubleSolenoid.Value.kReverse);
+        } else {
+            grabber.setPistons(DoubleSolenoid.Value.kForward);
+        }
+    }
+
+    protected boolean isFinished() {
         return false;
     }
-    protected void end() { }
+
+    protected void end() {
+    }
+
     protected void interrupted() {
         end();
-	}
+    }
 }

@@ -2,7 +2,10 @@ package org.frc5587.robot2018.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.frc5587.robot2018.RobotMap;
 
@@ -10,11 +13,16 @@ import org.frc5587.robot2018.RobotMap;
 public class Grabber extends Subsystem {
     private TalonSRX leftTalon, rightTalon;
     private DoubleSolenoid expandSolenoid;
+    public MotorSpeed currentSpeed;
+    private DigitalOutput breakBeam;
 
     public Grabber() {
         leftTalon = new TalonSRX(RobotMap.Grabber.LEFT_TALON);
+        leftTalon.setInverted(true);
         rightTalon = new TalonSRX(RobotMap.Grabber.RIGHT_TALON);
         expandSolenoid = new DoubleSolenoid(RobotMap.Grabber.EXPANDER_SOLENOID[0], RobotMap.Grabber.EXPANDER_SOLENOID[1]);
+        breakBeam = new DigitalOutput(RobotMap.Grabber.RECEIVER);
+        currentSpeed = MotorSpeed.OFF;
     }
 
     public void setTalon(MotorSpeed motorSpeed) {
@@ -31,14 +39,21 @@ public class Grabber extends Subsystem {
         //    setDefaultCommand(new MySpecialCommand());
     }
 
+    public boolean pistonsOn() {
+        return expandSolenoid.get() == Value.kForward;
+    }
+
+    public DoubleSolenoid.Value getPistonState() {
+        return expandSolenoid.get();
+    }
+
     public enum MotorSpeed {
-        // TODO: Implement real left and right speeds for the different MotorSpeed constants
         OFF            (new double[]{0.0, 0.0}),
-        INTAKE         (new double[]{0.5, 0.5}),
-        EJECT          (new double[]{-0.5, -0.5}),
-        PASS_THROUGH   (new double[]{-0.1, -0.1}),
-        RIGHT_ASSIST   (new double[]{0.5, 0.7}),
-        LEFT_ASSIST    (new double[]{0.7, 0.5});
+        INTAKE         (new double[]{-0.5, -0.5}),
+        EJECT          (new double[]{0.7, 0.7}),
+        PASS_THROUGH   (new double[]{-0.2, -0.2}),
+        RIGHT_ASSIST   (new double[]{-0.5, -0.7}),
+        LEFT_ASSIST    (new double[]{-0.7, -0.5});
 
         private double[] speeds;
 
@@ -47,12 +62,16 @@ public class Grabber extends Subsystem {
         }
 
         public double getLeft() {
-            return -speeds[0];
+            return speeds[0];
         }
 
         public double getRight() {
             return speeds[1];
         }
+    }
+    
+    public boolean hasCube(){
+        return breakBeam.get();
     }
 }
 

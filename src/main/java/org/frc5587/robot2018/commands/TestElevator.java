@@ -3,50 +3,55 @@ package org.frc5587.robot2018.commands;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
-
+import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TestElevator extends Command{
-    Elevator elevator;
-    public TestElevator(){
+public class TestElevator extends Command {
+    private Elevator elevator;
+    private boolean elevatorPistonsOn = false;
+
+    public TestElevator() {
+        requires(Robot.elevator);
         elevator = Robot.elevator;
     }
-    protected void initialize(){
+
+    protected void initialize() {
 
     }
-    protected void execute(){
-        System.out.println(OI.xb.getStartButton());
-        if(OI.xb.getBumper(Hand.kLeft)){
-            elevator.setPower(.5);
-        }
-        else if(OI.xb.getBumper(Hand.kRight)){
-            elevator.setPower(-.5);
-        }
-        else{
-            elevator.stop();
+
+    protected void execute() {
+        // Control elevator movement with bumpers
+        if (OI.xb.getBumperPressed(Hand.kLeft)) {
+            elevator.goToHeight(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
+        } else if (OI.xb.getBumperPressed(Hand.kRight)) {
+            elevator.goToHeight(HeightLevels.getNextValue(elevator.getHeightLevel()));
+        } else {
+            if (elevator.isDoneMoving()) {
+                elevator.holdWithVoltage();
+            }
         }
 
-        if(OI.xb.getBackButtonPressed()){
-            System.out.println("Up");
-            elevator.triggerPistons(true);
+        // Toggle position of the elevator pistons using the start button
+        if (OI.xb.getStartButtonPressed()) {
+            if (elevatorPistonsOn) {
+                elevator.triggerPistons(Value.kForward);
+            } else {
+                elevator.triggerPistons(Value.kReverse);
+            }
+            elevatorPistonsOn = !elevatorPistonsOn;
         }
-        else if(OI.xb.getStartButtonPressed()){
-            System.out.println("Down");
-            elevator.triggerPistons(false);
-        }
-        else{
-
-        }
-        elevator.sendInfo();
     }
-    protected boolean isFinished(){
+
+    protected boolean isFinished() {
         return false;
     }
-    protected void end(){
+
+    protected void end() {
         elevator.stop();
     }
+
     protected void interrupted() {
         end();
     }

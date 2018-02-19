@@ -2,25 +2,24 @@ package org.frc5587.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.Robot;
+import org.frc5587.robot2018.commands.TestElevator;
+import org.frc5587.robot2018.subsystems.Elevator;
+import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 
+public class ElevatorToSetpoint extends Command {
+    private HeightLevels newLevel;
+    private Elevator elevator;
 
-/**
- * PURPOSE
- *
- * @author Brendan Doney
- * @version 1.0
- * @since 2/1/18
- */
-public class InitiateMotionMagic extends Command {
-    private double setPoint;
-
-    public InitiateMotionMagic(double setPoint) {
+    /**
+     * 
+     * @param setPoint Height to go to in inches
+     */
+    public ElevatorToSetpoint(HeightLevels newLevel) {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
         requires(Robot.elevator);
-        this.setPoint = setPoint;
+        this.newLevel = newLevel;
+        elevator = Robot.elevator;
     }
-
 
     /**
      * The initialize method is called just before the first time
@@ -28,15 +27,17 @@ public class InitiateMotionMagic extends Command {
      */
     @Override
     protected void initialize() {
-        Robot.elevator.createSetpoint(setPoint);
+        System.out.println("Starting Elevator MotionMagic");
+        elevator.goToHeight(newLevel);
     }
 
-    protected void execute(){
-        Robot.elevator.sendDebugInfo();
+    protected void execute() {
+        elevator.sendDebugInfo();
+        elevator.sendMotionMagicDebugInfo();
     }
 
-    protected boolean isFinished(){
-        return false;//Robot.elevator.isDone();
+    protected boolean isFinished() {
+        return elevator.isDoneMoving();
     }
 
     /**
@@ -46,8 +47,10 @@ public class InitiateMotionMagic extends Command {
      * command.
      */
     protected void end() {
+        elevator.holdWithVoltage();
+        new TestElevator().start();
+        System.out.println("Elevator MotionMagic Finished");
     }
-
 
     /**
      * <p>
