@@ -3,7 +3,6 @@ package org.frc5587.robot2018.commands.grabber;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.RobotMap;
 import org.frc5587.robot2018.subsystems.Grabber;
 
 

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.RobotMap;
-import org.frc5587.robot2018.commands.elevator.ElevatorToSetpoint;
 
 public class Elevator extends Subsystem {
 

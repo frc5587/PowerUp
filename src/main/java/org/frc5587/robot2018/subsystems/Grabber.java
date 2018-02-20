@@ -3,7 +3,6 @@ package org.frc5587.robot2018.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -14,14 +13,14 @@ public class Grabber extends Subsystem {
     private TalonSRX leftTalon, rightTalon;
     private DoubleSolenoid expandSolenoid;
     public MotorSpeed currentSpeed;
-    private DigitalOutput breakBeam;
+    private DigitalInput breakBeam;
 
     public Grabber() {
         leftTalon = new TalonSRX(RobotMap.Grabber.LEFT_TALON);
         rightTalon = new TalonSRX(RobotMap.Grabber.RIGHT_TALON);
         rightTalon.setInverted(true);
         expandSolenoid = new DoubleSolenoid(RobotMap.Grabber.EXPANDER_SOLENOID[0], RobotMap.Grabber.EXPANDER_SOLENOID[1]);
-        breakBeam = new DigitalOutput(RobotMap.Grabber.RECEIVER);
+        breakBeam = new DigitalInput(RobotMap.Grabber.RECEIVER);
         currentSpeed = MotorSpeed.OFF;
     }
 
