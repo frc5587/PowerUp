@@ -20,7 +20,7 @@ public class GenerateMPs{
 		);
 
 		p.createNew(
-			"LeftStartLeftSwitchOutside", 
+			"LeftToLeftSwitchOutside", 
 			new Waypoint[]{
 				new Waypoint(39, 268, Pathfinder.d2r(0)),
 				new Waypoint(144, 268, Pathfinder.d2r(0)),
@@ -29,7 +29,7 @@ public class GenerateMPs{
 		);
 
 		p.createNew(
-			"LeftStartLeftSwitchInside", 
+			"LeftToLeftSwitchFront", 
 			new Waypoint[]{
 				new Waypoint(39, 268, Pathfinder.d2r(0)),
 				new Waypoint(120, 200, Pathfinder.d2r(0)),
@@ -38,7 +38,7 @@ public class GenerateMPs{
 		);
 
 		p.createNew(
-			"RightStartRightSwitchOutside", 
+			"RightToRightSwitchOutside", 
 			new Waypoint[]{
 				new Waypoint(39, 46.5, Pathfinder.d2r(0)),
 				new Waypoint(144, 46.5, Pathfinder.d2r(0)),
@@ -47,7 +47,7 @@ public class GenerateMPs{
 		);
 
 		p.createNew(
-			"RightStartRightSwitchInside", 
+			"RightToRightSwitchFront", 
 			new Waypoint[]{
 				new Waypoint(39, 46.5, Pathfinder.d2r(0)),
 				new Waypoint(120, 114, Pathfinder.d2r(0)),
@@ -59,8 +59,18 @@ public class GenerateMPs{
 			"LeftToLeftScale", 
 			new Waypoint[]{
 				new Waypoint(39, 268, 0),
-				new Waypoint(300, 274, Pathfinder.d2r(0)),
-				new Waypoint(324, 258, Pathfinder.d2r(-89))
+				new Waypoint(210, 268, Pathfinder.d2r(0)),
+				new Waypoint(285, 204, Pathfinder.d2r(-20))
+			}
+		);
+
+		p.createNew(
+			"LeftToRightSwitchFront", 
+			new Waypoint[]{
+				new Waypoint(39, 268, Pathfinder.d2r(0)),
+				new Waypoint(80, 200, Pathfinder.d2r(-75)),
+				new Waypoint(100, 120, Pathfinder.d2r(-70)),
+				new Waypoint(158, 105, Pathfinder.d2r(15))
 			}
 		);
 

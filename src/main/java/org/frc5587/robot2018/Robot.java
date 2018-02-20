@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 	public static final Climber climber = new Climber();
 
 	public static final OI m_oi = new OI();
-	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 100, 100); //TODO: Change this and use different values for different profiles
+	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 80, 100); //TODO: Change this and use different values for different profiles
 
 	CameraServer cam;
 	private SendableChooser<StartPosition> positionChooser;
@@ -117,10 +117,10 @@ public class Robot extends TimedRobot {
 		case LEFT:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is close on left side");
-				autonomousCommand = new LeftStartLeftSwitchOutside();
+				autonomousCommand = new LeftToLeftSwitchOutside();
 			} else if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is far away while we are starting on left");
-				autonomousCommand = new GyroCompMPRunner("TurnLeft");
+				autonomousCommand = new LeftToRightSwitchFront();
 			}
 			else {
 				System.out.println("Switch is unknown");
@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
 		case RIGHT:
 			if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is close on right side");
-				autonomousCommand = new RightStartRightSwitchOutside();
+				autonomousCommand = new RightToRightSwitchOutside();
 			} else if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is far away while we are starting on right");
 				autonomousCommand = new GyroCompMPRunner("TurnRight");

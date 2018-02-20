@@ -7,10 +7,10 @@ import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class RightStartRightSwitchOutside extends CommandGroup{
-    public RightStartRightSwitchOutside() {
+public class LeftToRightSwitchFront extends CommandGroup{
+    public LeftToRightSwitchFront() {
         addParallel(new ElevatorToSetpoint(HeightLevels.SWITCH));
-        addSequential(new GyroCompMPRunner("RightStartRightSwitchOutside"), 5);
+        addSequential(new GyroCompMPRunner("LeftToRightSwitchFront"), 6);
         addSequential(new ShootCube());
     }
 }
