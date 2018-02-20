@@ -11,7 +11,7 @@ import org.frc5587.robot2018.commands.climber.Climb;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
-import org.frc5587.robot2018.commands.auto.LeftStartLeftSwitchInside;
+import org.frc5587.robot2018.commands.auto.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 	public static final Climber climber = new Climber();
 
 	public static final OI m_oi = new OI();
-	public static final Pathgen pathgen = new Pathgen(30, .010, 84, 100, 100);
+	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 100, 100); //TODO: Change this and use different values for different profiles
 
 	CameraServer cam;
 	private SendableChooser<StartPosition> positionChooser;
@@ -69,13 +69,12 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 		//SmartDashboard.putData("Generate Profiles", new GenerateMPs());
 
-		//cam = CameraServer.getInstance();
-		//cam.startAutomaticCapture("LifeCam", 0);
+		cam = CameraServer.getInstance();
+		cam.startAutomaticCapture("LifeCam", 0);
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
 		new GenerateMPs();
-
 	}
 
 	/**
@@ -118,7 +117,7 @@ public class Robot extends TimedRobot {
 		case LEFT:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is close on left side");
-				autonomousCommand = new LeftStartLeftSwitchInside();
+				autonomousCommand = new LeftStartLeftSwitchOutside();
 			} else if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is far away while we are starting on left");
 				autonomousCommand = new GyroCompMPRunner("TurnLeft");
@@ -130,7 +129,7 @@ public class Robot extends TimedRobot {
 		case RIGHT:
 			if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is close on right side");
-				autonomousCommand = new GyroCompMPRunner("DriveStraight");
+				autonomousCommand = new RightStartRightSwitchOutside();
 			} else if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is far away while we are starting on right");
 				autonomousCommand = new GyroCompMPRunner("TurnRight");
@@ -151,7 +150,7 @@ public class Robot extends TimedRobot {
 			break;
 		default:
 			System.out.println("Testin stuff");
-			autonomousCommand = new GyroCompMPRunner("LeftS");
+			autonomousCommand = new LeftToLeftScale();
 			break;
 		}
 		if(autonomousCommand != null){
@@ -183,7 +182,6 @@ public class Robot extends TimedRobot {
 		new TestElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
-		new StopElevatorPistons().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));
 		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE));
 		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE));
