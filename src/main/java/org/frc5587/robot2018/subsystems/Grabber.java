@@ -50,7 +50,7 @@ public class Grabber extends Subsystem {
         OFF            (new double[]{0.0, 0.0}),
         INTAKE         (new double[]{-0.5, -0.5}),
         EJECT          (new double[]{0.7, 0.7}),
-        PASS_THROUGH   (new double[]{-0.2, -0.2}),
+        PASS_THROUGH   (new double[]{-0.5, -0.5}),
         RIGHT_ASSIST   (new double[]{-0.5, -0.7}),
         LEFT_ASSIST    (new double[]{-0.7, -0.5});
 

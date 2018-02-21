@@ -68,13 +68,13 @@ public class Constants {
 
         public static final double vCompSaturation = 12.0;
 
-        public static final double holdPercent = 0.25;
+        public static final double holdPercent = 0.28;
 
         // The tolerance for the target position (see Elevator.isDone())
-        public static final double kDeadband = 400;
+        public static final double kDeadband = 200;
         //PID Constants
         public static final double kF = .67,
-            kP = 0.02,
+            kP = 0.03,
             kI = 0.0,
             kD = 0.0;
         //Safety limits
@@ -92,7 +92,7 @@ public class Constants {
         public static final int hallHeight = 34310;
 
         //Height to place on scale in inches
-        public static final double scaleHeight = 75;
+        public static final double scaleHeight = 77;
         public static final double intakeHeight = 1;
         public static final double switchHeight = 25;
     }
