@@ -4,17 +4,21 @@ import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
+
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class TestElevator extends Command {
+public class ControlElevator extends Command {
     private Elevator elevator;
+    private XboxController xb;
     private boolean elevatorPistonsOn = false;
 
-    public TestElevator() {
+    public ControlElevator() {
         requires(Robot.elevator);
         elevator = Robot.elevator;
+        xb = OI.xb;
     }
 
     protected void initialize() {
@@ -22,19 +26,21 @@ public class TestElevator extends Command {
     }
 
     protected void execute() {
-        // Control elevator movement with bumpers
-        if (OI.xb.getBumperPressed(Hand.kLeft)) {
-            elevator.goToHeight(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
-        } else if (OI.xb.getBumperPressed(Hand.kRight)) {
-            elevator.goToHeight(HeightLevels.getNextValue(elevator.getHeightLevel()));
+        if (xb.getBackButtonPressed()) {
+            elevator.goToHeight(HeightLevels.INTAKE);
         } else {
-            if (elevator.isDoneMoving()) {
+            // Control elevator movement with bumpers
+            if (xb.getBumperPressed(Hand.kLeft)) {
+                elevator.goToHeight(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
+            } else if (xb.getBumperPressed(Hand.kRight)) {
+                elevator.goToHeight(HeightLevels.getNextValue(elevator.getHeightLevel()));
+            } else if (elevator.isDoneMoving()) {
                 elevator.holdWithVoltage();
             }
         }
 
         // Toggle position of the elevator pistons using the start button
-        if (OI.xb.getStartButtonPressed()) {
+        if (xb.getStartButtonPressed()) {
             if (elevatorPistonsOn) {
                 elevator.triggerPistons(Value.kForward);
             } else {

@@ -89,7 +89,7 @@ public class Constants {
 
         //Hall effect sensor height in native units MEASURED FROM BOTTOM OF cube
         // 
-        public static final int hallHeight = 30150;
+        public static final int hallHeight = 34310;
 
         //Height to place on scale in inches
         public static final double scaleHeight = 75;

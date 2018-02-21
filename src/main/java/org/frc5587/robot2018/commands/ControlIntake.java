@@ -9,12 +9,12 @@ import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
 import org.frc5587.robot2018.subsystems.Grabber.MotorSpeed;
 
-public class TestIntake extends Command {
+public class ControlIntake extends Command {
     Elevator elevator;
     MotorSpeed speed = MotorSpeed.OFF;
     Grabber grabber;
 
-    public TestIntake() {
+    public ControlIntake() {
         requires(Robot.grabber);
         grabber = Robot.grabber;
     }
