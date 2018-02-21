@@ -1,17 +1,18 @@
 package org.frc5587.robot2018.profileGeneration;
 
 import org.frc5587.lib.Pathgen;
-import org.frc5587.robot2018.Robot;
 
 import jaci.pathfinder.*;
 
 public class GenerateMPs{
 	public GenerateMPs(){
-		Pathgen p = Robot.pathgen;
+		Pathgen fastPath = new Pathgen(30, 0.010, 84, 80, 160);
+		Pathgen medPath = new Pathgen(30, 0.010, 60, 80, 160);
+		Pathgen slowPath = new Pathgen(30, 0.010, 36, 60, 120);
 
 		System.out.println("MP Generation Starting ...");
 
-		p.createNew(
+		fastPath.createNew(
 			"DriveStraight", 
 			new Waypoint[]{
 				new Waypoint(0, 0, 0),
@@ -19,7 +20,7 @@ public class GenerateMPs{
 			}
 		);
 
-		p.createNew(
+		fastPath.createNew(
 			"LeftToLeftSwitchOutside", 
 			new Waypoint[]{
 				new Waypoint(39, 268, Pathfinder.d2r(0)),
@@ -28,7 +29,7 @@ public class GenerateMPs{
 			}
 		);
 
-		p.createNew(
+		fastPath.createNew(
 			"LeftToLeftSwitchFront", 
 			new Waypoint[]{
 				new Waypoint(39, 268, Pathfinder.d2r(0)),
@@ -37,7 +38,7 @@ public class GenerateMPs{
 			}
 		);
 
-		p.createNew(
+		fastPath.createNew(
 			"RightToRightSwitchOutside", 
 			new Waypoint[]{
 				new Waypoint(39, 46.5, Pathfinder.d2r(0)),
@@ -46,7 +47,7 @@ public class GenerateMPs{
 			}
 		);
 
-		p.createNew(
+		fastPath.createNew(
 			"RightToRightSwitchFront", 
 			new Waypoint[]{
 				new Waypoint(39, 46.5, Pathfinder.d2r(0)),
@@ -55,7 +56,7 @@ public class GenerateMPs{
 			}
 		);
 
-		p.createNew(
+		medPath.createNew(
 			"LeftToLeftScale", 
 			new Waypoint[]{
 				new Waypoint(39, 268, 0),
@@ -64,7 +65,40 @@ public class GenerateMPs{
 			}
 		);
 
-		p.createNew(
+		// fastPath.createNew(
+		// 	"LeftToRightScale", 
+		// 	new Waypoint[]{
+		// 		new Waypoint(39, 268, Pathfinder.d2r(0)),
+
+		// 	}
+		// );
+
+		// fastPath.createNew(
+		// 	"LeftToLeftScaleBackwards", 
+		// 	new Waypoint[]{
+		// 		new Waypoint(0, 268, Pathfinder.d2r(180)),
+		// 		new Waypoint(171, 268, Pathfinder.d2r(180)),
+		// 		new Waypoint(270, 204, Pathfinder.d2r(200))
+		// 	}
+		// );
+
+		// slowPath.createNew(
+		// 	"LeftScaleBackwardsToLeftSwitchBack_Finish", 
+		// 	new Waypoint[]{
+		// 		new Waypoint(270, 204, Pathfinder.d2r(200)),
+		// 		new Waypoint(295, 204, Pathfinder.d2r(180))
+		// 	}
+		// );
+
+		// slowPath.createNew(
+		// 	"LeftScaleBackwardsToLeftSwitchBack", 
+		// 	new Waypoint[]{
+		// 		new Waypoint(295, 204, Pathfinder.d2r(180)),
+		// 		new Waypoint(220, 200, Pathfinder.d2r(180))
+		// 	}
+		// );
+
+		medPath.createNew(
 			"LeftToRightSwitchFront", 
 			new Waypoint[]{
 				new Waypoint(39, 268, Pathfinder.d2r(0)),

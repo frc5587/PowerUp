@@ -22,7 +22,7 @@ public class SetElevatorPistons extends Command {
     }
 
     public boolean isFinished(){
-        return t.hasPeriodPassed(1.2);
+        return t.hasPeriodPassed(1.5);
     }
 
     public void end() {
