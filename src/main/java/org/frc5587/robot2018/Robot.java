@@ -178,8 +178,8 @@ public class Robot extends TimedRobot {
 			autonomousCommand.cancel();
 		}
 
-		new TestIntake().start();
-		new TestElevator().start();
+		new ControlIntake().start();
+		new ControlElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));
