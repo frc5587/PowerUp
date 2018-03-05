@@ -179,7 +179,8 @@ public class Robot extends TimedRobot {
 		}
 
 		new ControlIntake().start();
-		new ControlElevator().start();
+		//new ControlElevator().start();
+		new TestElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));

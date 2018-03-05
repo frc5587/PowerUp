@@ -204,7 +204,6 @@ public class Elevator extends Subsystem {
 
     public void stop(){
         elevatorTalon.neutralOutput();
-        elevatorVictorSPX.neutralOutput();
     }
 
     @Override
