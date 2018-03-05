@@ -17,7 +17,7 @@ public class ShootCubeBackwards extends Command{
     }
 
     public void initialize(){
-        grabber.setTalon(MotorSpeed.PASS_THROUGH);
+        grabber.setMotors(MotorSpeed.PASS_THROUGH);
         t.start();
     }
 
@@ -26,7 +26,7 @@ public class ShootCubeBackwards extends Command{
     }
 
     public void end(){
-        grabber.setTalon(MotorSpeed.OFF);
+        grabber.setMotors(MotorSpeed.OFF);
     }
 
     public void interrupted(){

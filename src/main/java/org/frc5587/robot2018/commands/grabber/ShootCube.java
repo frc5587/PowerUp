@@ -18,7 +18,7 @@ public class ShootCube extends Command{
 
     public void initialize(){
         System.out.println("Cube Shot");
-        grabber.setTalon(MotorSpeed.EJECT);
+        grabber.setMotors(MotorSpeed.EJECT);
         t.start();
     }
 
@@ -27,7 +27,7 @@ public class ShootCube extends Command{
     }
 
     public void end(){
-        grabber.setTalon(MotorSpeed.OFF);
+        grabber.setMotors(MotorSpeed.OFF);
     }
 
     public void interrupted(){

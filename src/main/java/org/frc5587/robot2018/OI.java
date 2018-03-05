@@ -9,7 +9,6 @@ package org.frc5587.robot2018;
 
 import org.frc5587.lib.DeadbandXboxController;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -45,5 +44,5 @@ public class OI {
 	// button.whenReleased(new ExampleCommand());
 
 	public static Joystick joystick = new Joystick(1);
-	public static XboxController xb = new DeadbandXboxController(0,.15);
+	public static DeadbandXboxController xb = new DeadbandXboxController(0);
 }

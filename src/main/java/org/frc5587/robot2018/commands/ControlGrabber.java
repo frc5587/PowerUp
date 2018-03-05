@@ -5,16 +5,14 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Grabber;
 import org.frc5587.robot2018.subsystems.Grabber.MotorSpeed;
 
-public class ControlIntake extends Command {
-    Elevator elevator;
+public class ControlGrabber extends Command {
     MotorSpeed speed = MotorSpeed.OFF;
     Grabber grabber;
 
-    public ControlIntake() {
+    public ControlGrabber() {
         requires(Robot.grabber);
         grabber = Robot.grabber;
     }
@@ -32,10 +30,10 @@ public class ControlIntake extends Command {
         } else {
             speed = Grabber.MotorSpeed.OFF;
         }
-        grabber.setTalon(speed);
+        grabber.setMotors(speed);
 
         // Piston bound to triggers (both do the same thing)
-        if (OI.xb.getTriggerAxis(Hand.kRight) > .05 || OI.xb.getTriggerAxis(Hand.kLeft) > .05) {
+        if (OI.xb.getTrigger(Hand.kRight)) {
             grabber.setPistons(DoubleSolenoid.Value.kReverse);
         } else {
             grabber.setPistons(DoubleSolenoid.Value.kForward);

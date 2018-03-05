@@ -18,7 +18,7 @@ public class GrabCube extends Command{
     }
 
     public void initialize(){
-        grabber.setTalon(MotorSpeed.INTAKE);
+        grabber.setMotors(MotorSpeed.INTAKE);
         grabber.setPistons(Value.kReverse);
         t.start();
     }
@@ -28,7 +28,7 @@ public class GrabCube extends Command{
     }
 
     public void end(){
-        grabber.setTalon(MotorSpeed.OFF);
+        grabber.setMotors(MotorSpeed.OFF);
         grabber.setPistons(Value.kForward);
     }
 
