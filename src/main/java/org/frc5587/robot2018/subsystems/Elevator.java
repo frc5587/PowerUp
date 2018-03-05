@@ -24,8 +24,8 @@ public class Elevator extends Subsystem {
     private HeightLevels currentHeight;
 
     public Elevator() {
-        //tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
-        //hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
+        tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
+        hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
         elevatorVictorSPX = new VictorSPX(RobotMap.Elevator.ELEVATOR_VICTORSPX);
         elevatorVictorSPX.follow(elevatorTalon);
