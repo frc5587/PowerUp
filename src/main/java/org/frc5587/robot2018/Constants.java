@@ -81,10 +81,10 @@ public class Constants {
         public static final double minPercentOut = 0,
                 maxPercentBw = .2,
                 maxPercentFw = .2;
-                
+
         //System Constraints
-        public static final int maxVelocity = 9300, //measured in native units/100ms
-                maxAcceleration = 10000; //measured in native units/100ms/sec
+        public static final int maxVelocity = 9300/5, //measured in native units/100ms
+                maxAcceleration = 10000/5; //measured in native units/100ms/sec
         
         //Unit Conversion
         public static final int stuPerInch = 940;

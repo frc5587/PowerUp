@@ -197,8 +197,8 @@ public class Elevator extends Subsystem {
         elevatorTalon.set(ControlMode.PercentOutput, percent);
     }
 
-    public void stop() {
-        elevatorTalon.set(ControlMode.PercentOutput, 0);
+    public void stop(){
+        elevatorTalon.neutralOutput();
     }
 
     @Override

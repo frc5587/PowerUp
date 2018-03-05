@@ -192,7 +192,8 @@ public class Robot extends TimedRobot {
 		}
 
 		new ControlGrabber().start();
-		new ControlElevator().start();
+		//new ControlElevator().start();
+		new TestElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
 		new CameraSwitching().start();
