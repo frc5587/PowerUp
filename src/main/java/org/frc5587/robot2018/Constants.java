@@ -68,22 +68,24 @@ public class Constants {
 
         public static final double vCompSaturation = 12.0;
 
-        public static final double holdPercent = 0.28;
+        public static final double holdPercent = 0.0;
 
         // The tolerance for the target position (see Elevator.isDone())
-        public static final double kDeadband = 200;
+        public static final double kDeadband = 400;
         //PID Constants
-        public static final double kF = .67,
-            kP = 0.03,
-            kI = 0.0,
-            kD = 0.0;
+        public static final double kF = .11,
+                kP = 0.05,
+                kI = 0.0,
+                kD = 0.0;
         //Safety limits
         public static final double minPercentOut = 0,
-            maxPercentBw = .6,
-            maxPercentFw = 1;
+                maxPercentBw = .2,
+                maxPercentFw = .2;
+                
         //System Constraints
-        public static final int maxVelocity = 2500, //measured in native units/100ms
-            maxAcceleration = 1600; //measured in native units/100ms/sec
+        public static final int maxVelocity = 9300, //measured in native units/100ms
+                maxAcceleration = 10000; //measured in native units/100ms/sec
+        
         //Unit Conversion
         public static final int stuPerInch = 940;
 
@@ -93,7 +95,7 @@ public class Constants {
 
         //Height to place on scale in inches
         public static final double scaleHeight = 77;
-        public static final double intakeHeight = 1;
+        public static final double intakeHeight = 0;
         public static final double switchHeight = 25;
     }
 }

@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -16,6 +17,7 @@ public class Elevator extends Subsystem {
 
     private DigitalInput hallEffect;
     private TalonSRX elevatorTalon;
+    private VictorSPX elevatorVictorSPX;
     private DoubleSolenoid tiltDoubleSol;
 
     private double setpoint;
@@ -25,6 +27,8 @@ public class Elevator extends Subsystem {
         tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
         hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
+        elevatorVictorSPX = new VictorSPX(RobotMap.Elevator.ELEVATOR_VICTORSPX);
+        
         configureTalon();
 
         setpoint = getEncoderPosition();
@@ -65,7 +69,15 @@ public class Elevator extends Subsystem {
         // Choose sensor type
         elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
         elevatorTalon.setSensorPhase(true);
-        elevatorTalon.setInverted(false);
+        elevatorTalon.setInverted(true);
+
+        //Configure follower
+        elevatorVictorSPX.follow(elevatorTalon);
+        elevatorVictorSPX.setInverted(false);
+
+        //Enable brake mode
+        elevatorTalon.setNeutralMode(NeutralMode.Brake);
+        elevatorVictorSPX.setNeutralMode(NeutralMode.Brake);
 
         // Set relevant frame periods to be at least as fast as periodic rate
         elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.Elevator.kTimeoutMs);
@@ -191,7 +203,8 @@ public class Elevator extends Subsystem {
     }
 
     public void stop(){
-        elevatorTalon.set(ControlMode.PercentOutput, 0);
+        elevatorTalon.neutralOutput();
+        elevatorVictorSPX.neutralOutput();
     }
 
     @Override

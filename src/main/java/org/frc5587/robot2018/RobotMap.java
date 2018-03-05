@@ -27,7 +27,9 @@ public class RobotMap {
 
 	public static class Elevator {
 		public static final int HALL_EFFECT_SENSOR = 0,
-				ELEVATOR_TALON = 7;
+				ELEVATOR_TALON = 7,
+				ELEVATOR_VICTORSPX = 8;
+
 		public static final int[] ELEVATOR_SOLENOID = {2, 3};
 	}
 
@@ -49,6 +51,6 @@ public class RobotMap {
 	}
 
 	public static class Climber {
-		public static int climberTalon = 8;
+		public static int climberTalon = 9;
 	}
 }
