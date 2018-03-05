@@ -46,12 +46,8 @@ public class RobotMap {
 		public static int rightSlave = 4;
 	}
 
-	public static class Table{
-		public static int tableTalon = 8;
-	}
-
 	public static class Climber {
-		public static int climberTalon = 9;
+		public static final int climberTalon = 9;
 	}
 
 	public static class Camera {

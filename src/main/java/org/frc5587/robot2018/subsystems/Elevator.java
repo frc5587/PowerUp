@@ -69,8 +69,8 @@ public class Elevator extends Subsystem {
         // Choose sensor type
         elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,
                 Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.setSensorPhase(true);
-        elevatorTalon.setInverted(false);
+        elevatorTalon.setSensorPhase(false);
+        elevatorTalon.setInverted(true);
         // Set relevant frame periods to be at least as fast as periodic rate
         elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.Elevator.kTimeoutMs);
         elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10,

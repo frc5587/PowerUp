@@ -18,10 +18,10 @@ public class TestElevator extends Command{
     }
     protected void execute(){
         if(OI.xb.getBumper(Hand.kLeft)){
-            elevator.setPower(-.3);
+            elevator.setPower(-.5);
         }
         else if(OI.xb.getBumper(Hand.kRight)){
-            elevator.setPower(.3);
+            elevator.setPower(.5);
         }
         else{
             elevator.stop();

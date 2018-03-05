@@ -80,7 +80,7 @@ public class Constants {
         //Safety limits
         public static final double minPercentOut = 0,
                 maxPercentBw = .2,
-                maxPercentFw = .2;
+                maxPercentFw = .5;
 
         //System Constraints
         public static final int maxVelocity = 9300/5, //measured in native units/100ms
