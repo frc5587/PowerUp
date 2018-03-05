@@ -16,6 +16,8 @@ import org.frc5587.robot2018.commands.auto.*;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -38,15 +40,18 @@ import openrio.powerup.MatchData.OwnedSide;
 public class Robot extends TimedRobot {
 	public static final Drive kDrive = new Drive();
 	public static final Elevator elevator = new Elevator();
-	public static final Compressor compressor = new Compressor(RobotMap.COMPRESSOR);
+	public static final Compressor compressor = new Compressor();
 	public static final LEDControl ledControl = new LEDControl();
 	public static final Grabber grabber = new Grabber();
 	public static final Climber climber = new Climber();
 
 	public static final OI m_oi = new OI();
-	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 80, 100); //TODO: Change this and use different values for different profiles
+	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 80, 100);
 
-	CameraServer cam;
+	public static CameraServer cameraServer;
+	public static UsbCamera driverCamera, grabberCamera;
+	public static CvSink driverCvSink, grabberCvSink;
+	
 	private SendableChooser<StartPosition> positionChooser;
 	OwnedSide nearSwitchSide = OwnedSide.UNKNOWN;
 	OwnedSide scaleSide = OwnedSide.UNKNOWN;
@@ -69,8 +74,16 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 		//SmartDashboard.putData("Generate Profiles", new GenerateMPs());
 
-		cam = CameraServer.getInstance();
-		cam.startAutomaticCapture("LifeCam", 0);
+		cameraServer = CameraServer.getInstance();
+		driverCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.DRIVER_CAMERA);
+		grabberCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.GRABBER_CAMERA);
+		driverCvSink = new CvSink("driverCamera");
+		driverCvSink.setSource(driverCamera);
+		driverCvSink.setEnabled(true);
+		grabberCvSink = new CvSink("grabberCamera");
+		grabberCvSink.setSource(grabberCamera);
+		grabberCvSink.setEnabled(true);
+		cameraServer.startAutomaticCapture(driverCamera);
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
@@ -178,11 +191,12 @@ public class Robot extends TimedRobot {
 			autonomousCommand.cancel();
 		}
 
-		new ControlIntake().start();
+		new ControlGrabber().start();
 		//new ControlElevator().start();
 		new TestElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
+		new CameraSwitching().start();
 		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));
 		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE));
 		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE));

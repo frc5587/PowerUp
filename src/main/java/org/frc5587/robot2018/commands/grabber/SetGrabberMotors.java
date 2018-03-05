@@ -28,7 +28,7 @@ public class SetGrabberMotors extends Command {
      */
     @Override
     protected void initialize() {
-        grabber.setTalon(motorSpeed);
+        grabber.setMotors(motorSpeed);
         grabber.currentSpeed = motorSpeed;
         timer = new Timer();
     }
@@ -39,7 +39,7 @@ public class SetGrabberMotors extends Command {
             if(grabber.hasCube()&& grabber.currentSpeed == speed){
                 timer.start();
                 if(timer.get() <= 1) {
-                    grabber.setTalon(Grabber.MotorSpeed.OFF);
+                    grabber.setMotors(Grabber.MotorSpeed.OFF);
                 }
                 timer.reset();
             }
