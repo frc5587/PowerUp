@@ -39,6 +39,8 @@ public class ControlElevator extends Command {
             }
         }
 
+        elevator.setPower(xb.getY(Hand.kLeft));
+
         // Toggle position of the elevator pistons using the start button
         if (xb.getStartButtonPressed()) {
             if (elevatorPistonsOn) {
