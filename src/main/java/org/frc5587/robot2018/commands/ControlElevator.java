@@ -26,6 +26,7 @@ public class ControlElevator extends Command {
     }
 
     protected void execute() {
+        System.out.println("Elevator Command Executing");
         if (xb.getBackButtonPressed()) {
             elevator.goToHeight(HeightLevels.INTAKE);
         } else {
@@ -48,6 +49,9 @@ public class ControlElevator extends Command {
             }
             elevatorPistonsOn = !elevatorPistonsOn;
         }
+
+        elevator.sendDebugInfo();
+        elevator.sendMotionMagicDebugInfo();
     }
 
     protected boolean isFinished() {

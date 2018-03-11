@@ -10,6 +10,9 @@ public class Climber extends Subsystem {
 
     public Climber() {
         climberTalon = new TalonSRX(RobotMap.Climber.climberTalon);
+        climberTalon.configContinuousCurrentLimit(50, 10);
+        climberTalon.configPeakCurrentLimit(60, 10);
+        climberTalon.configPeakCurrentDuration(200, 10);
     }
 
     public void initDefaultCommand() { }

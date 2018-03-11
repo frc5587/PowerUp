@@ -34,7 +34,7 @@ public class RobotMap {
 	}
 
 	public static class Grabber {
-	    public static final int[] EXPANDER_SOLENOID = {0, 1};
+	    public static final int[] EXPANDER_SOLENOID = {1, 0};
 	    public static final int LEFT = 6, RIGHT = 5;
 		public static final int RECEIVER = 2;
     }

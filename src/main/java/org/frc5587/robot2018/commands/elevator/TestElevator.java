@@ -1,4 +1,4 @@
-package org.frc5587.robot2018.commands;
+package org.frc5587.robot2018.commands.elevator;
 
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
@@ -17,11 +17,12 @@ public class TestElevator extends Command{
 
     }
     protected void execute(){
+        System.out.println("running");
         if(OI.xb.getBumper(Hand.kLeft)){
-            elevator.setPower(-.5);
+            elevator.setPower(-1);
         }
         else if(OI.xb.getBumper(Hand.kRight)){
-            elevator.setPower(.5);
+            elevator.setPower(1);
         }
         else{
             elevator.stop();
@@ -29,7 +30,6 @@ public class TestElevator extends Command{
 
         elevator.sendInfo();
         elevator.sendDebugInfo();
-        elevator.sendMotionMagicDebugInfo();
     }
     protected boolean isFinished(){
         return false;
