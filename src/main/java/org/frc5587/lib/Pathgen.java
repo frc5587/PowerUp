@@ -13,7 +13,7 @@ import java.io.File;
 public class Pathgen{
     double treadWidth, dt, vMax, aMax, jMax;
     Trajectory.Config config;
-    public static final String DIRECTORY = "/home/lvuser/";
+    public static final String DIRECTORY = "/home/lvuser/resources";
 
 
     /**
@@ -34,7 +34,8 @@ public class Pathgen{
         this.jMax = jMax;
         this.config = new Trajectory.Config(
             Trajectory.FitMethod.HERMITE_CUBIC, 
-            Trajectory.Config.SAMPLES_FAST, this.dt,
+            Trajectory.Config.SAMPLES_FAST, 
+            this.dt,
             this.vMax, 
             this.aMax, 
             this.jMax
@@ -50,8 +51,12 @@ public class Pathgen{
      */
     public void createNew(String filename, Waypoint[] points){
         Trajectory trajectory = Pathfinder.generate(points, config);
-        System.out.println("Writing to csv");
-        File myFile = new File(DIRECTORY + filename + ".csv");
+        System.out.println("Writing " + filename + " to csv");
+        File resourcesDir = new File(DIRECTORY);
+        if(!resourcesDir.exists()){
+            resourcesDir.mkdirs();
+        }
+        File myFile = new File(DIRECTORY + "/" + filename + ".csv");
         Pathfinder.writeToCSV(myFile, trajectory);
     }
 
@@ -76,7 +81,7 @@ public class Pathgen{
      * @param name Filename of profile, don't append .csv extension
      */
     public static Trajectory getTrajectoryFromFile(String name){
-        File myFile = new File(DIRECTORY + name + ".csv");
+        File myFile = new File(DIRECTORY + "/" + name + ".csv");
         Trajectory trajectory = Pathfinder.readFromCSV(myFile);
         return trajectory;
     }

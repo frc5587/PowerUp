@@ -68,34 +68,59 @@ public class Constants {
 
         public static final double vCompSaturation = 12.0;
 
-        public static final double holdPercent = 0.0;
+
+    //775pro lift code
+
+        // public static final double holdPercent = 0.2;
+
+        // // The tolerance for the target position (see Elevator.isDone())
+        // public static final double kDeadband = 200;
+        // //PID Constants
+        // public static final double kF = .2,
+        //         kP = 0.1,
+        //         kI = 0.0,
+        //         kD = 0.13;
+        // //Safety limits
+        // public static final double minPercentOut = 0,
+        //         maxPercentBw = .2,
+        //         maxPercentFw = 1;
+
+        // //System Constraints
+        // public static final int maxVelocity = 4200, //measured in native units/100ms
+        //         maxAcceleration = 8000; //measured in native units/100ms/sec
+        
+    //MiniCIM Lift Code
+
+        public static final double holdPercent = 0.28;
 
         // The tolerance for the target position (see Elevator.isDone())
-        public static final double kDeadband = 400;
+        public static final double kDeadband = 200;
         //PID Constants
-        public static final double kF = .11,
-                kP = 0.05,
+        public static final double kF = .67,
+                kP = 0.03,
                 kI = 0.0,
-                kD = 0.0;
+                kD = 0.05;
+        
         //Safety limits
         public static final double minPercentOut = 0,
-                maxPercentBw = .2,
-                maxPercentFw = .5;
+                maxPercentBw = .6,
+                maxPercentFw = 1;
 
         //System Constraints
-        public static final int maxVelocity = 9300/5, //measured in native units/100ms
-                maxAcceleration = 10000/5; //measured in native units/100ms/sec
-        
+        public static final int maxVelocity = 2500, //measured in native units/100ms
+                maxAcceleration = 2500; //measured in native units/100ms/sec
+
         //Unit Conversion
         public static final int stuPerInch = 940;
 
         //Hall effect sensor height in native units MEASURED FROM BOTTOM OF cube
         // 
-        public static final int hallHeight = 34310;
+        public static final int hallHeight = 31500;
 
         //Height to place on scale in inches
         public static final double scaleHeight = 77;
-        public static final double intakeHeight = 0;
+        public static final double barHeight = 62;
         public static final double switchHeight = 25;
+        public static final double intakeHeight = 0;
     }
 }

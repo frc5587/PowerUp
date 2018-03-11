@@ -27,8 +27,8 @@ public class Elevator extends Subsystem {
         tiltDoubleSol = new DoubleSolenoid(RobotMap.Elevator.ELEVATOR_SOLENOID[0], RobotMap.Elevator.ELEVATOR_SOLENOID[1]);
         hallEffect = new DigitalInput(RobotMap.Elevator.HALL_EFFECT_SENSOR);
         elevatorTalon = new TalonSRX(RobotMap.Elevator.ELEVATOR_TALON);
-        elevatorVictorSPX = new VictorSPX(RobotMap.Elevator.ELEVATOR_VICTORSPX);
-        elevatorVictorSPX.follow(elevatorTalon);
+        //elevatorVictorSPX = new VictorSPX(RobotMap.Elevator.ELEVATOR_VICTORSPX);
+        //elevatorVictorSPX.follow(elevatorTalon);
         configureTalon();
 
         setpoint = getEncoderPosition();
@@ -71,6 +71,7 @@ public class Elevator extends Subsystem {
                 Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
         elevatorTalon.setSensorPhase(false);
         elevatorTalon.setInverted(true);
+        //elevatorVictorSPX.setInverted(false);
         // Set relevant frame periods to be at least as fast as periodic rate
         elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.Elevator.kTimeoutMs);
         elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10,
@@ -81,6 +82,10 @@ public class Elevator extends Subsystem {
         elevatorTalon.configNominalOutputReverse(-Constants.Elevator.minPercentOut, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configPeakOutputForward(Constants.Elevator.maxPercentFw, Constants.Elevator.kTimeoutMs);
         elevatorTalon.configPeakOutputReverse(-Constants.Elevator.maxPercentBw, Constants.Elevator.kTimeoutMs);
+
+        elevatorTalon.configPeakCurrentLimit(40, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configPeakCurrentDuration(200, Constants.Elevator.kTimeoutMs);
+        elevatorTalon.configContinuousCurrentLimit(35, Constants.Elevator.kTimeoutMs);
 
         // set closed loop gains in set slot
         elevatorTalon.selectProfileSlot(Constants.Elevator.kSlotIdx, Constants.Elevator.kPIDLoopIdx);
@@ -207,8 +212,8 @@ public class Elevator extends Subsystem {
 
     public enum HeightLevels {
         // The order that the values are presented is the order the bumpers will cycle through
-        INTAKE(Constants.Elevator.intakeHeight), SWITCH(Constants.Elevator.switchHeight), SCALE(
-                Constants.Elevator.scaleHeight);
+        INTAKE(Constants.Elevator.intakeHeight), SWITCH(Constants.Elevator.switchHeight), 
+        CLIMB(Constants.Elevator.barHeight), SCALE(Constants.Elevator.scaleHeight);
 
         private double height;
 
