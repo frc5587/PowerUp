@@ -46,7 +46,9 @@ public class Robot extends TimedRobot {
 	public static final Climber climber = new Climber();
 
 	public static final OI m_oi = new OI();
+
 	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 80, 100);
+
 
 	public static CameraServer cameraServer;
 	public static UsbCamera driverCamera, grabberCamera;
@@ -72,22 +74,24 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
-		//SmartDashboard.putData("Generate Profiles", new GenerateMPs());
 
 		cameraServer = CameraServer.getInstance();
 		driverCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.DRIVER_CAMERA);
 		grabberCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.GRABBER_CAMERA);
-		driverCvSink = new CvSink("driverCamera");
-		driverCvSink.setSource(driverCamera);
-		driverCvSink.setEnabled(true);
-		grabberCvSink = new CvSink("grabberCamera");
-		grabberCvSink.setSource(grabberCamera);
-		grabberCvSink.setEnabled(true);
+		// driverCvSink = new CvSink("driverCamera");
+		// driverCvSink.setSource(driverCamera);
+		// driverCvSink.setEnabled(true);
+		// grabberCvSink = new CvSink("grabberCamera");
+		// grabberCvSink.setSource(grabberCamera);
+		// grabberCvSink.setEnabled(true);
 		cameraServer.startAutomaticCapture(driverCamera);
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
-		new GenerateMPs();
+		//new CameraSwitching().start();
+		SmartDashboard.putData("Start Compressor", new RunCompressor(true));
+		SmartDashboard.putData("Stop Compressor", new RunCompressor(false));
+		SmartDashboard.putData("Generate Profiles", new MPGenCommand());
 	}
 
 	/**
@@ -133,7 +137,8 @@ public class Robot extends TimedRobot {
 				autonomousCommand = new LeftToLeftSwitchOutside();
 			} else if (nearSwitchSide == OwnedSide.RIGHT) {
 				System.out.println("Switch is far away while we are starting on left");
-				autonomousCommand = new LeftToRightSwitchFront();
+				//autonomousCommand = new LeftToRightSwitchFront();
+				autonomousCommand = new GyroCompMPRunner("DriveStraight");
 			}
 			else {
 				System.out.println("Switch is unknown");
@@ -145,7 +150,7 @@ public class Robot extends TimedRobot {
 				autonomousCommand = new RightToRightSwitchOutside();
 			} else if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is far away while we are starting on right");
-				autonomousCommand = new GyroCompMPRunner("TurnRight");
+				autonomousCommand = new GyroCompMPRunner("DriveStraight");
 			}
 			else {
 				System.out.println("Switch is unknown");
@@ -154,8 +159,10 @@ public class Robot extends TimedRobot {
 		case CENTER:
 			if (nearSwitchSide == OwnedSide.LEFT) {
 				System.out.println("Switch is on left side");
+				autonomousCommand = new CenterToLeftSwitchFront();
 			} else if (nearSwitchSide == OwnedSide.RIGHT){
 				System.out.println("Switch is on right side");
+				autonomousCommand = new CenterToRightSwitchFront();
 			}
 			else {
 				System.out.println("Switch is unknown");
@@ -163,7 +170,7 @@ public class Robot extends TimedRobot {
 			break;
 		default:
 			System.out.println("Testin stuff");
-			autonomousCommand = new LeftToLeftScale();
+			autonomousCommand = new GyroCompMPRunner("DriveStraight");
 			break;
 		}
 		if(autonomousCommand != null){
@@ -192,14 +199,10 @@ public class Robot extends TimedRobot {
 		}
 
 		new ControlGrabber().start();
-		//new ControlElevator().start();
-		new TestElevator().start();
+		new ControlElevator().start();
+		//new TestElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
-		new CameraSwitching().start();
-		SmartDashboard.putData("switch height", new ElevatorToSetpoint(HeightLevels.SWITCH));
-		SmartDashboard.putData("scale height", new ElevatorToSetpoint(HeightLevels.SCALE));
-		SmartDashboard.putData("intake height", new ElevatorToSetpoint(HeightLevels.INTAKE));
 	}
 
 	/**

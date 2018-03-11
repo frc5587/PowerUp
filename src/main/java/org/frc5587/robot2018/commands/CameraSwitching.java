@@ -22,6 +22,7 @@ public class CameraSwitching extends Command {
         driverCamera = Robot.driverCamera;
         grabberCamera = Robot.grabberCamera;
         cameraSink = Robot.cameraServer.getServer();
+        this.setRunWhenDisabled(true);
     }
 
     // Called just before this Command runs the first time

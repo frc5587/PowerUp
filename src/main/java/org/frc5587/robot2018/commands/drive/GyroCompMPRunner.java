@@ -20,16 +20,26 @@ public class GyroCompMPRunner extends Command{
     Notifier looper;
     String name = "Unknown Name";
     double initialHeading = 0;
+    boolean forwards;
+    boolean pathFinished = false;
 
     public GyroCompMPRunner(String pathName){
-        this(Pathgen.getTrajectoryFromFile(pathName));
+        this(Pathgen.getTrajectoryFromFile(pathName), true);
         name = pathName;
     }
 
-    public GyroCompMPRunner(Trajectory t){
+    public GyroCompMPRunner(String pathName, boolean forwards){
+        this(Pathgen.getTrajectoryFromFile(pathName), forwards);
+        name = pathName;
+    }
+
+    public GyroCompMPRunner(Trajectory t, boolean forwards){
         drive = Robot.kDrive;
+        requires(drive);
         p = Robot.pathgen;
         trajectory = t;
+        this.forwards = forwards;
+
         lEncoderFollower = new EncoderFollower(p.getLeftSide(trajectory));
         rEncoderFollower = new EncoderFollower(p.getRightSide(trajectory));
         looper = new Notifier(new ProfileLooper());
@@ -73,7 +83,7 @@ public class GyroCompMPRunner extends Command{
     }
 
     public boolean isFinished(){
-        return false;
+        return pathFinished;
     }
 
     public void end(){
@@ -87,6 +97,8 @@ public class GyroCompMPRunner extends Command{
     public class ProfileLooper implements Runnable{
         @Override
         public void run() {
+            double left = 0, right = 0;
+
             if(!lEncoderFollower.isFinished()){
                 SmartDashboard.putNumber("Left Expected Pos", lEncoderFollower.getSegment().position * Constants.Drive.stuPerInch);
                 SmartDashboard.putNumber("Left Expected Vel", lEncoderFollower.getSegment().velocity * Constants.Drive.stuPerInch / 10f);
@@ -100,8 +112,16 @@ public class GyroCompMPRunner extends Command{
                 SmartDashboard.putNumber("Left Vel Error", rEncoderFollower.getSegment().velocity - drive.getRightVelocity() / (double)Constants.Drive.stuPerInch * 10);
             }
 
-            double left = lEncoderFollower.calculate(drive.getLeftPosition());
-            double right = rEncoderFollower.calculate(drive.getRightPosition());
+            pathFinished = lEncoderFollower.isFinished() && rEncoderFollower.isFinished();
+
+            if(forwards){
+                left = lEncoderFollower.calculate(drive.getLeftPosition());
+                right = rEncoderFollower.calculate(drive.getRightPosition());
+            }
+            else{
+                left = -rEncoderFollower.calculate(-drive.getLeftPosition());
+                right = -lEncoderFollower.calculate(-drive.getRightPosition());
+            }
 
             double gyroHeading = drive.getHeading();
             double desiredHeading = Pathfinder.r2d(lEncoderFollower.getHeading());
