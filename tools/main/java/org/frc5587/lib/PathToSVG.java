@@ -37,7 +37,17 @@ public class PathToSVG {
     "      <polyline points=\"140.000,238.750 196.000,238.750\"/>\n" +
     "      <polyline points=\"196.000,238.750 196.000,202.750\"/>\n" +
     "      <polyline points=\"196.000,202.750 140.000,202.750\"/>\n" +
-    "      <polyline points=\"140.000,202.750 140.000,238.750\"/>";
+    "      <polyline points=\"140.000,202.750 140.000,238.750\"/>\n" +
+    /* bottom scale */
+    "      <polyline points=\"299.65,71.57 347.65,71.57\"/>\n" +
+    "      <polyline points=\"347.65,71.57 347.65,107.57\"/>\n" +
+    "      <polyline points=\"347.65,107.57 299.65,107.57\"/>\n" +
+    "      <polyline points=\"299.65,107.57 299.65,71.57\"/>\n" +
+    /* top scale */
+    "      <polyline points=\"299.65,252.43 347.65,252.43\"/>\n" +
+    "      <polyline points=\"347.65,252.43 347.65,216.43\"/>\n" +
+    "      <polyline points=\"347.65,216.43 299.65,216.43\"/>\n" +
+    "      <polyline points=\"299.65,216.43 299.65,252.43\"/>";
 
   public static String HTML_EPILOG =
     "    </svg>\n" +
