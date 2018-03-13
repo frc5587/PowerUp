@@ -16,13 +16,15 @@ public class PathToSVG {
     "        width: 1200;\n" +
     "        height: 1200;\n" +
     "      }\n" +
-    "      polygon {\n" +
-    "        stroke: grey;\n" +
-    "        stroke-width: 1;\n" +
-    "      }\n" +
     "      polyline {\n" +
     "        stroke: grey;\n" +
     "        stroke-width: 1;\n" +
+    "      }\n" +
+    "      polyline.left {\n" +
+    "        stroke: red;\n" +
+    "      }\n" +
+    "      polyline.right {\n" +
+    "        stroke: blue;\n" +
     "      }\n" +
     "    </style>\n" +
     "  </head>\n" +
@@ -61,11 +63,26 @@ public class PathToSVG {
       new Waypoint(144, 268, Pathfinder.d2r(0)),
       new Waypoint(180, 230, Pathfinder.d2r(-89))
     });
+    Trajectory l = fastPath.getLeftSide(t);
+    Trajectory r = fastPath.getRightSide(t);
     System.out.println(HTML_PROLOG);
+    /* Draw main trajectory */
     for (int i = 0; i < t.segments.length - 1; i++) {
       Segment s = t.segments[i];
       Segment e = t.segments[i + 1];
       System.out.println("      <polyline points=\"" + s.x + "," + s.y + " " + e.x + "," + e.y + "\"/>");
+    }
+    /* Draw trajectory left side */
+    for (int i = 0; i < l.segments.length - 1; i++) {
+      Segment s = l.segments[i];
+      Segment e = l.segments[i + 1];
+      System.out.println("      <polyline class=\"left\" points=\"" + s.x + "," + s.y + " " + e.x + "," + e.y + "\"/>");
+    }
+    /* Draw trajectory right side */
+    for (int i = 0; i < r.segments.length - 1; i++) {
+      Segment s = r.segments[i];
+      Segment e = r.segments[i + 1];
+      System.out.println("      <polyline class=\"right\" points=\"" + s.x + "," + s.y + " " + e.x + "," + e.y + "\"/>");
     }
     System.out.println(HTML_EPILOG);
   }
