@@ -65,6 +65,15 @@ public class GenerateMPs{
 			}
 		);
 
+		medPath.createNew(
+			"RightToRightScale", 
+			new Waypoint[] { 
+				new Waypoint(39, 46.5, 0),
+				new Waypoint(210, 46.5, Pathfinder.d2r(0)), 
+				new Waypoint(285, 110.5, Pathfinder.d2r(-20))
+			}
+		);
+
 		// fastPath.createNew(
 		// 	"LeftToRightScale", 
 		// 	new Waypoint[]{
