@@ -8,11 +8,11 @@ import org.frc5587.robot2018.commands.elevator.SetElevatorPistons;
 import org.frc5587.robot2018.commands.grabber.ShootCube;
 import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 
-public class LeftToLeftScale extends CommandGroup{
-    public LeftToLeftScale(){
+public class RightToRightScale extends CommandGroup {
+    public RightToRightScale() {
         addSequential(new SetElevatorPistons(Value.kReverse));
         addParallel(new ElevatorToSetpoint(HeightLevels.SWITCH));
-        addSequential(new GyroCompMPRunner("LeftToLeftScale"), 5.5);
+        addSequential(new GyroCompMPRunner("RightToRightScale"), 5.5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SCALE), 3);
         addSequential(new ShootCube());
         addSequential(new ElevatorToSetpoint(HeightLevels.SWITCH));
