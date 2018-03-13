@@ -69,8 +69,8 @@ public class Elevator extends Subsystem {
         // Choose sensor type
         elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,
                 Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
-        elevatorTalon.setSensorPhase(false);
-        elevatorTalon.setInverted(true);
+        elevatorTalon.setSensorPhase(true);
+        elevatorTalon.setInverted(false);
         //elevatorVictorSPX.setInverted(false);
         // Set relevant frame periods to be at least as fast as periodic rate
         elevatorTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, Constants.Elevator.kTimeoutMs);
@@ -212,8 +212,9 @@ public class Elevator extends Subsystem {
 
     public enum HeightLevels {
         // The order that the values are presented is the order the bumpers will cycle through
-        INTAKE(Constants.Elevator.intakeHeight), SWITCH(Constants.Elevator.switchHeight), 
-        CLIMB(Constants.Elevator.barHeight), SCALE(Constants.Elevator.scaleHeight);
+        INTAKE(Constants.Elevator.intakeHeight), CARRY(Constants.Elevator.carryHeight), 
+        SWITCH(Constants.Elevator.switchHeight), CLIMB(Constants.Elevator.barHeight), 
+        SCALE(Constants.Elevator.scaleHeight);
 
         private double height;
 

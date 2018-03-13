@@ -91,12 +91,12 @@ public class Constants {
         
     //MiniCIM Lift Code
 
-        public static final double holdPercent = 0.28;
+        public static final double holdPercent = 0.2;
 
         // The tolerance for the target position (see Elevator.isDone())
         public static final double kDeadband = 200;
         //PID Constants
-        public static final double kF = .67,
+        public static final double kF = .58,
                 kP = 0.03,
                 kI = 0.0,
                 kD = 0.05;
@@ -121,6 +121,7 @@ public class Constants {
         public static final double scaleHeight = 77;
         public static final double barHeight = 62;
         public static final double switchHeight = 25;
+        public static final double carryHeight = 7.25;
         public static final double intakeHeight = 0;
     }
 }
