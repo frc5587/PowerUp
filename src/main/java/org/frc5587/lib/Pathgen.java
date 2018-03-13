@@ -46,7 +46,7 @@ public class Pathgen{
      * @param points Array of waypoints, Units are in inches and radians
      */
     public void createNew(String filename, Waypoint[] points){
-        Trajectory trajectory = Pathfinder.generate(points, config);
+        Trajectory trajectory = createTrajectory(points);
         System.out.println("Writing " + filename + " to csv");
         File resourcesDir = new File(DIRECTORY);
         if(!resourcesDir.exists()){
@@ -81,4 +81,13 @@ public class Pathgen{
         Trajectory trajectory = Pathfinder.readFromCSV(myFile);
         return trajectory;
     }
+
+    /**
+     * Return the trajectory for a set of waypoints
+     * @param points Array of waypoints, Units are in inches and radians
+     */
+    public Trajectory createTrajectory(Waypoint[] points) {
+        return Pathfinder.generate(points, config);
+    }
+
 }
