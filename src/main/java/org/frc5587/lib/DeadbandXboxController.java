@@ -3,7 +3,7 @@ package org.frc5587.lib;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class DeadbandXboxController extends XboxController {
-    private double deadbandCutoff = 0.1;
+    private double deadbandCutoff;
 
     /**
     * Construct an instance of a joystick. The joystick index is the USB port on the drivers
@@ -13,9 +13,10 @@ public class DeadbandXboxController extends XboxController {
     */
     public DeadbandXboxController(final int port) {
         super(port);
+        this.deadbandCutoff = 0.1;
     }
 
-     /**
+    /**
     * Construct an instance of a joystick. The joystick index is the USB port on the drivers
     * station.
     *
@@ -63,5 +64,9 @@ public class DeadbandXboxController extends XboxController {
         } else {
             return (joystickValue - (Math.abs(joystickValue) / joystickValue * deadbandCutoff)) / (1 - deadbandCutoff);
         }
+    }
+
+    public boolean getTrigger(Hand hand) {
+        return super.getTriggerAxis(hand) > deadbandCutoff;
     }
 }

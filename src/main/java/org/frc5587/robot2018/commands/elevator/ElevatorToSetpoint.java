@@ -2,7 +2,6 @@ package org.frc5587.robot2018.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.commands.TestElevator;
 import org.frc5587.robot2018.subsystems.Elevator;
 import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 
@@ -48,7 +47,6 @@ public class ElevatorToSetpoint extends Command {
      */
     protected void end() {
         elevator.holdWithVoltage();
-        new TestElevator().start();
         System.out.println("Elevator MotionMagic Finished");
     }
 

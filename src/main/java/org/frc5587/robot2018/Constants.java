@@ -22,32 +22,40 @@ public class Constants {
 
         //Safety limits
         public static final double minPercentOut = 0,
-            maxPercentBw = .4,
-            maxPercentFw = .4; 
+            maxPercentBw = 1,
+            maxPercentFw = 1; 
 
         //PIDF Constants
         public static final double[] leftPIDs = {
             0.01,	//kP
             0.0,	//kI
             0.01,	//kD
-            0.5 	//kF
+            0.000327 * 1023 	//kF
         };
         public static final double[] rightPIDs = {
             0.01,	//kP
             0.0,	//kI
             0.01,	//kD
-            0.5    //kF
+            0.000317 * 1023    //kF
         };
 
-        public static final double[] pathfinderPIDVA = {
-            0.02,    //kP
+        public static final double[] pathfinderPIDVALeft = {
+            0.04,    //kP
             0.0,    //kI
             0.0,    //kD
-            0.339,    //kV
-            0.01     //kA
+            0.000327 * stuPerInch / 10f,    //kV
+            0.0001 * stuPerInch / 10f   //kA
+        };
+        public static final double[] pathfinderPIDVARight = {
+            0.04,    //kP
+            0.0,    //kI
+            0.0,    //kD
+            0.000317 * stuPerInch / 10f,    //kV
+            0.0001 * stuPerInch / 10f     //kA
         };
 
-		public static double gyrokP = 0.03;
+
+		public static double gyrokP = 0.00;
     }
     public class Elevator {
         // Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2 or 3.
@@ -57,30 +65,63 @@ public class Constants {
         // set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action fails
         public static final int kTimeoutMs = 10;
 
+
+        public static final double vCompSaturation = 12.0;
+
+
+    //775pro lift code
+
+        // public static final double holdPercent = 0.2;
+
+        // // The tolerance for the target position (see Elevator.isDone())
+        // public static final double kDeadband = 200;
+        // //PID Constants
+        // public static final double kF = .2,
+        //         kP = 0.1,
+        //         kI = 0.0,
+        //         kD = 0.13;
+        // //Safety limits
+        // public static final double minPercentOut = 0,
+        //         maxPercentBw = .2,
+        //         maxPercentFw = 1;
+
+        // //System Constraints
+        // public static final int maxVelocity = 4200, //measured in native units/100ms
+        //         maxAcceleration = 8000; //measured in native units/100ms/sec
+        
+    //MiniCIM Lift Code
+
+        public static final double holdPercent = 0.2;
+
         // The tolerance for the target position (see Elevator.isDone())
-        public static final double kDeadband = 400;
+        public static final double kDeadband = 200;
         //PID Constants
-        public static final double kF = .67,
-            kP = 0.02,
-            kI = 0.0,
-            kD = 0.0;
+        public static final double kF = .58,
+                kP = 0.03,
+                kI = 0.0,
+                kD = 0.05;
+        
         //Safety limits
         public static final double minPercentOut = 0,
-            maxPercentBw = .6,
-            maxPercentFw = 1;
+                maxPercentBw = .6,
+                maxPercentFw = 1;
+
         //System Constraints
         public static final int maxVelocity = 2500, //measured in native units/100ms
-            maxAcceleration = 1600; //measured in native units/100ms/sec
+                maxAcceleration = 2500; //measured in native units/100ms/sec
+
         //Unit Conversion
         public static final int stuPerInch = 940;
 
         //Hall effect sensor height in native units MEASURED FROM BOTTOM OF cube
         // 
-        public static final int hallHeight = 30150;
+        public static final int hallHeight = 31500;
 
         //Height to place on scale in inches
-        public static final double scaleHeight = 73;
-        public static final double intakeHeight = 0;
+        public static final double scaleHeight = 77;
+        public static final double barHeight = 62;
         public static final double switchHeight = 25;
+        public static final double carryHeight = 7.25;
+        public static final double intakeHeight = 0;
     }
 }

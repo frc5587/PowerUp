@@ -1,9 +1,7 @@
 package org.frc5587.robot2018.commands.drive;
 
-import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import jaci.pathfinder.Trajectory;
-import jaci.pathfinder.Waypoint;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +43,7 @@ public class MotionProfileFiller extends Command{
     public static TrajectoryPoint[][] deserializeProfile(String filename, boolean zeroTalonDistance){
         Pathgen p = Robot.pathgen;
         System.out.println("Loading...");
-        Trajectory unmodified = p.getTrajectoryFromFile(filename);
+        Trajectory unmodified = Pathgen.getTrajectoryFromFile(filename);
         Trajectory leftTrajectory = p.getLeftSide(unmodified);
         Trajectory rightTrajectory = p.getRightSide(unmodified);
         System.out.println("Trajectory Modified.");

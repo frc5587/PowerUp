@@ -7,8 +7,10 @@
 
 package org.frc5587.robot2018.subsystems;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,7 +24,6 @@ import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -37,6 +38,7 @@ public class Drive extends Subsystem {
 	VictorSPX leftSlave, rightSlave;
 	TitanDrive driveHelper;
 	AHRS navx;
+	ADXRS450_Gyro gyro;
 	MotionProfileStatus[] statuses = {new MotionProfileStatus(), new MotionProfileStatus()};
 
 	public Drive(){
@@ -48,6 +50,14 @@ public class Drive extends Subsystem {
 		catch(Exception e){
 			e.printStackTrace();
 		}
+
+		try{
+			gyro = new ADXRS450_Gyro(Port.kOnboardCS0);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+
 		//initialize Talons
 		leftMaster = new TalonSRX(RobotMap.Drive.leftMaster);
 		rightMaster = new TalonSRX(RobotMap.Drive.rightMaster);
@@ -230,8 +240,16 @@ public class Drive extends Subsystem {
 		return rightMaster.getSelectedSensorVelocity(0);
 	}
 
+	public double getLeftVoltage(){
+		return leftMaster.getMotorOutputVoltage();
+	}
+
+	public double getRightVoltage(){
+		return rightMaster.getMotorOutputVoltage();
+	}
+
 	public double getHeading(){
-		return navx.getAngle();
+		return gyro.getAngle();
 	}
 
 	public void resetEncoders(){
