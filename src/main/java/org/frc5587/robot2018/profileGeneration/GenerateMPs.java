@@ -108,19 +108,21 @@ public class GenerateMPs{
 			}
 		);
 
-		fastPath.createNew(
+		medPath.createNew(
 			"CenterToLeftSwitchFront", 
 			new Waypoint[]{
-				new Waypoint(39, 130, Pathfinder.d2r(0)),
-				new Waypoint(144, 12*18, Pathfinder.d2r(0))
+				new Waypoint(39, 12*11.5, Pathfinder.d2r(0)),
+				new Waypoint(12*10, 12*18, Pathfinder.d2r(0)),
+				new Waypoint(12*13.5, 12*18, Pathfinder.d2r(0))
 			}
 		);
 
-		fastPath.createNew(
+		medPath.createNew(
 			"CenterToRightSwitchFront", 
 			new Waypoint[]{
-				new Waypoint(39, 130, Pathfinder.d2r(0)),
-				new Waypoint(144, 12*8.5, Pathfinder.d2r(0))
+				new Waypoint(39, 12*11.5, Pathfinder.d2r(0)),
+				new Waypoint(12*10, 12*8.5, Pathfinder.d2r(0)),
+				new Waypoint(12*13.5, 12*8.5, Pathfinder.d2r(0))
 			}
 		);
 
