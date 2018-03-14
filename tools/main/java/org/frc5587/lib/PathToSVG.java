@@ -1,3 +1,7 @@
+/**
+ * Build: javac -cp Pathfinder-Java-1.8.jar:src/main/java tools/main/java/org/frc5587/lib/PathToSVG.java
+ *   Run: java -Djava.library.path=pathfinderjava/shared/any64/ -cp Pathfinder-Java-1.8.jar:src/main/java:tools/main/java org.frc5587.lib.PathToSVG > asdf.html
+ */
 package org.frc5587.lib;
 
 import org.frc5587.lib.Pathgen;
