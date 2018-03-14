@@ -60,6 +60,20 @@ public class PathToSVG {
     "  </body>\n" +
     "</html>";
 
+  public static void drawLine(double x0, double y0, double x1, double y1) {
+    drawLine(null, x0, y0, x1, y1);
+  }
+
+  public static void drawLine(String _class, double x0, double y0, double x1, double y1) {
+    StringBuffer sb = new StringBuffer(1024);
+    sb.append("      <polyline");
+    if (_class != null) {
+      sb.append(" class=\"" + _class + "\"");
+    }
+    sb.append(" points=\"" + x0 + "," + y0 + " " + x1 + "," + y1 + "\"/>");
+    System.out.println(sb.toString());
+  }
+
   public static void main(String[] args) {
     Pathgen fastPath = new Pathgen(30, 0.010, 84, 80, 160);
     Trajectory t = fastPath.createTrajectory(new Waypoint[] {
@@ -74,19 +88,19 @@ public class PathToSVG {
     for (int i = 0; i < t.segments.length - 1; i++) {
       Segment s = t.segments[i];
       Segment e = t.segments[i + 1];
-      System.out.println("      <polyline points=\"" + s.x + "," + s.y + " " + e.x + "," + e.y + "\"/>");
+      drawLine(s.x, s.y, e.x, e.y);
     }
     /* Draw trajectory left side */
     for (int i = 0; i < l.segments.length - 1; i++) {
       Segment s = l.segments[i];
       Segment e = l.segments[i + 1];
-      System.out.println("      <polyline class=\"left\" points=\"" + s.x + "," + s.y + " " + e.x + "," + e.y + "\"/>");
+      drawLine("left", s.x, s.y, e.x, e.y);
     }
     /* Draw trajectory right side */
     for (int i = 0; i < r.segments.length - 1; i++) {
       Segment s = r.segments[i];
       Segment e = r.segments[i + 1];
-      System.out.println("      <polyline class=\"right\" points=\"" + s.x + "," + s.y + " " + e.x + "," + e.y + "\"/>");
+      drawLine("right", s.x, s.y, e.x, e.y);
     }
     System.out.println(HTML_EPILOG);
   }
