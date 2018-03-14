@@ -48,6 +48,8 @@ public class PathToSVG {
   }
 
   public static void drawLine(String _class, double x0, double y0, double x1, double y1) {
+    y0 = BOARD_HEIGHT - y0;
+    y1 = BOARD_HEIGHT - y1;
     StringBuffer sb = new StringBuffer(1024);
     sb.append("      <polyline");
     if (_class != null) {
