@@ -33,27 +33,7 @@ public class PathToSVG {
     "    </style>\n" +
     "  </head>\n" +
     "  <body>\n" +
-    "    <svg>\n" +
-    /* bottom left switch */
-    "      <polyline points=\"140.000,83.250 196.000,83.250\"/>\n" +
-    "      <polyline points=\"196.000,83.250 196.000,119.250\"/>\n" +
-    "      <polyline points=\"196.000,119.250 140.000,119.250\"/>\n" +
-    "      <polyline points=\"140.000,119.250 140.000,83.250\"/>\n" +
-    /* top left switch */
-    "      <polyline points=\"140.000,238.750 196.000,238.750\"/>\n" +
-    "      <polyline points=\"196.000,238.750 196.000,202.750\"/>\n" +
-    "      <polyline points=\"196.000,202.750 140.000,202.750\"/>\n" +
-    "      <polyline points=\"140.000,202.750 140.000,238.750\"/>\n" +
-    /* bottom scale */
-    "      <polyline points=\"299.65,71.57 347.65,71.57\"/>\n" +
-    "      <polyline points=\"347.65,71.57 347.65,107.57\"/>\n" +
-    "      <polyline points=\"347.65,107.57 299.65,107.57\"/>\n" +
-    "      <polyline points=\"299.65,107.57 299.65,71.57\"/>\n" +
-    /* top scale */
-    "      <polyline points=\"299.65,252.43 347.65,252.43\"/>\n" +
-    "      <polyline points=\"347.65,252.43 347.65,216.43\"/>\n" +
-    "      <polyline points=\"347.65,216.43 299.65,216.43\"/>\n" +
-    "      <polyline points=\"299.65,216.43 299.65,252.43\"/>";
+    "    <svg>";
 
   public static String HTML_EPILOG =
     "    </svg>\n" +
@@ -74,6 +54,17 @@ public class PathToSVG {
     System.out.println(sb.toString());
   }
 
+  public static void drawBox(double x, double y, double w, double h) {
+    drawBox(null, x, y, w, h);
+  }
+
+  public static void drawBox(String _class, double x, double y, double w, double h) {
+    drawLine(_class, x + 0, y + 0, x + w, y + 0);
+    drawLine(_class, x + w, y + 0, x + w, y + h);
+    drawLine(_class, x + w, y + h, x + 0, y + h);
+    drawLine(_class, x + 0, y + h, x + 0, y + 0);
+  }
+
   public static void main(String[] args) {
     Pathgen fastPath = new Pathgen(30, 0.010, 84, 80, 160);
     Trajectory t = fastPath.createTrajectory(new Waypoint[] {
@@ -84,6 +75,14 @@ public class PathToSVG {
     Trajectory l = fastPath.getLeftSide(t);
     Trajectory r = fastPath.getRightSide(t);
     System.out.println(HTML_PROLOG);
+    /* Draw bottom left switch */
+    drawBox(140.000, 83.250, 56, 36);
+    /* Draw top left switch */
+    drawBox(140.000, 202.750, 56, 36);
+    /* Draw bottom scale */
+    drawBox(299.65, 71.57, 48, 36);
+    /* Draw top scale */
+    drawBox(299.65, 216.43, 48, 36);
     /* Draw main trajectory */
     for (int i = 0; i < t.segments.length - 1; i++) {
       Segment s = t.segments[i];
