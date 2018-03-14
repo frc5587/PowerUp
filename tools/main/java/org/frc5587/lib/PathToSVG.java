@@ -12,13 +12,16 @@ import jaci.pathfinder.Waypoint;
 
 public class PathToSVG {
 
+  public static int BOARD_HEIGHT = 360;
+  public static int BOARD_WIDTH = 648;
+
   public static String HTML_PROLOG =
     "<html>\n" +
     "  <head>\n" +
     "    <style type=\"text/css\">\n" +
     "      svg {\n" +
-    "        width: 1200;\n" +
-    "        height: 1200;\n" +
+    "        width: " + BOARD_WIDTH + ";\n" +
+    "        height: " + BOARD_HEIGHT + ";\n" +
     "      }\n" +
     "      polyline {\n" +
     "        stroke: grey;\n" +
@@ -75,6 +78,8 @@ public class PathToSVG {
     Trajectory l = fastPath.getLeftSide(t);
     Trajectory r = fastPath.getRightSide(t);
     System.out.println(HTML_PROLOG);
+    /* Draw game board */
+    drawBox(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
     /* Draw bottom left switch */
     drawBox(140.000, 83.250, 56, 36);
     /* Draw top left switch */
