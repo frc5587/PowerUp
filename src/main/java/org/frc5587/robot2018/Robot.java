@@ -49,12 +49,12 @@ public class Robot extends TimedRobot {
 
 	public static final Pathgen pathgen = new Pathgen(30, .010, 60, 80, 100);
 
-
 	public static CameraServer cameraServer;
 	public static UsbCamera driverCamera, grabberCamera;
 	public static CvSink driverCvSink, grabberCvSink;
-	
+
 	private SendableChooser<StartPosition> positionChooser;
+	private SendableChooser<AutoModes> autoTargetChooser;
 	OwnedSide nearSwitchSide = OwnedSide.UNKNOWN;
 	OwnedSide scaleSide = OwnedSide.UNKNOWN;
 
@@ -72,6 +72,10 @@ public class Robot extends TimedRobot {
 			positionChooser.addObject(pos.name(), pos);
 		}
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
+
+		autoTargetChooser.addDefault("Switch Only", AutoModes.SWITCH_ONLY);
+		autoTargetChooser.addDefault("Switch and Scale", AutoModes.SCALE_AND_SWITCH);
+		SmartDashboard.putData("Target for Autonomous Period", autoTargetChooser);
 
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 
@@ -110,7 +114,7 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 		nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
-		scaleSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
+		scaleSide = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
 		SmartDashboard.putBoolean("HasCube", grabber.hasCube());
 	}
 
@@ -130,52 +134,88 @@ public class Robot extends TimedRobot {
 		System.out.println("Autonomous Starting...");
 		kDrive.resetEncoders();
 
-		switch (positionChooser.getSelected()) {
+		StartPosition startPosition = positionChooser.getSelected();
+		AutoModes target = autoTargetChooser.getSelected();
+		switch (startPosition) {
 		case LEFT:
-			if (nearSwitchSide == OwnedSide.LEFT) {
-				System.out.println("Switch is close on left side");
-				autonomousCommand = new LeftToLeftSwitchOutside();
-			} else if (nearSwitchSide == OwnedSide.RIGHT) {
-				System.out.println("Switch is far away while we are starting on left");
-				//autonomousCommand = new LeftToRightSwitchFront();
-				autonomousCommand = new GyroCompMPRunner("DriveStraight");
-			}
-			else {
-				System.out.println("Switch is unknown");
+			switch (target) {
+			case SCALE_AND_SWITCH:
+				if (scaleSide == OwnedSide.LEFT) {
+					System.out.println("Scale is close on left side");
+					autonomousCommand = new GyroCompMPRunner("LeftToLeftScale");
+				} else if (scaleSide != OwnedSide.LEFT && nearSwitchSide == OwnedSide.LEFT) {
+					System.out.println("Switch is close on left side");
+					autonomousCommand = new LeftToLeftSwitchOutside();
+				} else { // TODO: Add check and execution for LeftToRightScaleFront()
+					System.out.println("Neither switch nor scale are close, while starting on left");
+					autonomousCommand = new GyroCompMPRunner("DriveStraight");
+				}
+				break;
+			default:
+				switch (nearSwitchSide) {
+				case LEFT:
+					System.out.println("Switch is close on left side");
+					autonomousCommand = new LeftToLeftSwitchOutside();
+					break;
+				default:
+					System.out.println("Switch is far away while we are starting on left");
+					autonomousCommand = new GyroCompMPRunner("DriveStraight");
+					break;
+				}
+				break;
 			}
 			break;
 		case RIGHT:
-			if (nearSwitchSide == OwnedSide.RIGHT) {
-				System.out.println("Switch is close on right side");
-				autonomousCommand = new RightToRightSwitchOutside();
-			} else if (nearSwitchSide == OwnedSide.LEFT) {
-				System.out.println("Switch is far away while we are starting on right");
-				autonomousCommand = new GyroCompMPRunner("DriveStraight");
-			}
-			else {
-				System.out.println("Switch is unknown");
+			switch (target) {
+			case SCALE_AND_SWITCH:
+				if (scaleSide == OwnedSide.RIGHT) {
+					System.out.println("Scale is close on right side");
+					autonomousCommand = new GyroCompMPRunner("LeftToLeftScale");
+				} else if (scaleSide != OwnedSide.RIGHT && nearSwitchSide == OwnedSide.RIGHT) {
+					System.out.println("Switch is close on right side");
+					autonomousCommand = new LeftToLeftSwitchOutside();
+				} else { // TODO: Add check and execution for RightToLeftScale()
+					System.out.println("Neither switch nor scale are close, while starting on right");
+					autonomousCommand = new GyroCompMPRunner("DriveStraight");
+				}
+				break;
+			default:
+				switch (nearSwitchSide) {
+				case RIGHT:
+					System.out.println("Switch is close on right side");
+					autonomousCommand = new RightToRightSwitchOutside();
+					break;
+				default:
+					System.out.println("Switch is far away while we are starting on right");
+					autonomousCommand = new GyroCompMPRunner("DriveStraight");
+					break;
+				}
+				break;
 			}
 			break;
-		case CENTER:
-			if (nearSwitchSide == OwnedSide.LEFT) {
+		default: // Otherwise, assume centre...
+			switch (nearSwitchSide) {
+			case LEFT:
 				System.out.println("Switch is on left side");
 				autonomousCommand = new CenterToLeftSwitchFront();
-			} else if (nearSwitchSide == OwnedSide.RIGHT){
+				break;
+			case RIGHT:
 				System.out.println("Switch is on right side");
 				autonomousCommand = new CenterToRightSwitchFront();
-			}
-			else {
+				break;
+			default:
 				System.out.println("Switch is unknown");
+				break;
 			}
-			break;
-		default:
-			System.out.println("Testin stuff");
-			autonomousCommand = new GyroCompMPRunner("DriveStraight");
 			break;
 		}
-		if(autonomousCommand != null){
+
+		if (autonomousCommand != null) {
 			autonomousCommand.start();
 			System.out.println("Starting Command: " + autonomousCommand.toString());
+		} else {
+			System.out.println("Position of self and/or elements was unknown, so starting the drive straight profile");
+			System.out.println("Autonomous Mode: " + target + "\nStarting Position: " + startPosition);
 		}
 	}
 
@@ -194,7 +234,7 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if(autonomousCommand != null){
+		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
 
@@ -222,5 +262,9 @@ public class Robot extends TimedRobot {
 
 	public enum StartPosition {
 		LEFT, CENTER, RIGHT, TEST;
+	}
+
+	public enum AutoModes {
+		SWITCH_ONLY, SCALE_AND_SWITCH;
 	}
 }
