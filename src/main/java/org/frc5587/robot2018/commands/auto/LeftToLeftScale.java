@@ -10,11 +10,13 @@ import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
 
 public class LeftToLeftScale extends CommandGroup{
     public LeftToLeftScale(){
-        addSequential(new SetElevatorPistons(Value.kReverse));
         addParallel(new ElevatorToSetpoint(HeightLevels.SWITCH));
-        addSequential(new GyroCompMPRunner("LeftToLeftScale"), 5.5);
+        addSequential(new SetElevatorPistons(Value.kReverse));
+        addSequential(new GyroCompMPRunner("LeftToLeftScale1/3"), 5.5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SCALE), 3);
+        addSequential(new GyroCompMPRunner("LeftToLeftScale2/3"), 2.5);
         addSequential(new ShootCube());
+        addSequential(new GyroCompMPRunner("LeftToLeftScale3/3", true), 2.5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SWITCH));
     }
 }

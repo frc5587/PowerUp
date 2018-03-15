@@ -56,46 +56,71 @@ public class GenerateMPs{
 			}
 		);
 
-		medPath.createNew(
-			"LeftToLeftScale", 
+		medPath.createNew( // To the a bit before the scale
+			"LeftToLeftScale1/3", 
 			new Waypoint[]{
-				new Waypoint(39, 268, 0),
-				new Waypoint(210, 268, Pathfinder.d2r(0)),
-				new Waypoint(285, 204, Pathfinder.d2r(-20))
+				new Waypoint(0, 268, Pathfinder.d2r(180)), 
+				new Waypoint(265, 297, Pathfinder.d2r(180)),
+				new Waypoint(323.65, 258, Pathfinder.d2r(90))
 			}
 		);
 
+		slowPath.createNew( // Over the scale
+			"LeftToLeftScale2/3", 
+			new Waypoint[] { 
+				new Waypoint(323.65, 258, Pathfinder.d2r(90)),
+				new Waypoint(323.65, 250, Pathfinder.d2r(90)),
+			}
+		);
+
+		slowPath.createNew( // Back to a bit before the scale (MUST BE RUN BACKWARDS)
+			"LeftToLeftScale3/3",
+			new Waypoint[] {
+				new Waypoint(323.65, 250, Pathfinder.d2r(90)),
+				new Waypoint(323.65, 258, Pathfinder.d2r(90)),
+			}
+		);
+		
 		medPath.createNew(
-			"RightToRightScale", 
+			"RightToRightScale1/3", 
 			new Waypoint[] { 
 				new Waypoint(39, 46.5, 0),
-				new Waypoint(210, 46.5, Pathfinder.d2r(0)), 
-				new Waypoint(285, 110.5, Pathfinder.d2r(-20))
+				new Waypoint(265, 27.0, Pathfinder.d2r(180)),
+				new Waypoint(323.65, 66.0, Pathfinder.d2r(90))
 			}
 		);
 
-		// fastPath.createNew(
-		// 	"LeftToRightScale", 
-		// 	new Waypoint[]{
-		// 		new Waypoint(39, 268, Pathfinder.d2r(0)),
+		slowPath.createNew(
+			"RightToRightScale2/3", 
+			new Waypoint[] { 
+				new Waypoint(323.65, 66.0, Pathfinder.d2r(90)),
+				new Waypoint(323.65, 74.0, Pathfinder.d2r(90))
+			}
+		);
 
-		// 	}
-		// );
+		slowPath.createNew(
+			"RightToRightScale3/3", 
+			new Waypoint[] { 
+				new Waypoint(323.65, 74.0, Pathfinder.d2r(90)),
+				new Waypoint(323.65, 66.0, Pathfinder.d2r(90))
+			}
+		);
 
 		fastPath.createNew("LeftToLeftScaleBackwards", new Waypoint[] { 
-			new Waypoint(0, 268, Pathfinder.d2r(180)),
-			new Waypoint(195, 268, Pathfinder.d2r(180)), 
-			new Waypoint(270, 234, Pathfinder.d2r(180))
+			new Waypoint(0, 268, Pathfinder.d2r(180)), 
+			new Waypoint(205, 278, Pathfinder.d2r(180)),
+			new Waypoint(286, 264, Pathfinder.d2r(135))
 		 });
 
 		slowPath.createNew("LeftScaleBackwardsToLeftSwitchBack_Finish", new Waypoint[] {
-			new Waypoint(270, 234, Pathfinder.d2r(180)), 
-			new Waypoint(285, 234, Pathfinder.d2r(180)) 
+			new Waypoint(286, 264, Pathfinder.d2r(135)), 
+			new Waypoint(291, 259, Pathfinder.d2r(135))
 		});
 
 		slowPath.createNew("LeftScaleBackwardsToLeftSwitch", new Waypoint[] {
-			new Waypoint(285, 234, Pathfinder.d2r(180)), 
-			new Waypoint(220, 200, Pathfinder.d2r(180))
+			new Waypoint(291, 259, Pathfinder.d2r(135)), 
+			new Waypoint(286, 264, Pathfinder.d2r(180)),
+			new Waypoint(200, 200, Pathfinder.d2r(180))
 		});
 
 		medPath.createNew(
