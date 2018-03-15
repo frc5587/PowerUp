@@ -88,6 +88,7 @@ public class GyroCompMPRunner extends Command{
 
     public void end(){
         looper.stop();
+        drive.stop();
     }
 
     public void interrupted(){
