@@ -12,6 +12,9 @@ import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.auto.*;
+import org.frc5587.robot2018.profileGeneration.*;
+import org.frc5587.robot2018.subsystems.*;
+import org.frc5587.lib.Pathgen;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -23,10 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.frc5587.lib.Pathgen;
-import org.frc5587.robot2018.profileGeneration.*;
-import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
-import org.frc5587.robot2018.subsystems.*;
+
 import openrio.powerup.MatchData;
 import openrio.powerup.MatchData.OwnedSide;
 
@@ -73,8 +73,9 @@ public class Robot extends TimedRobot {
 		}
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
+		autoTargetChooser = new SendableChooser<>();
 		autoTargetChooser.addDefault("Switch Only", AutoModes.SWITCH_ONLY);
-		autoTargetChooser.addDefault("Switch and Scale", AutoModes.SCALE_AND_SWITCH);
+		autoTargetChooser.addObject("Switch and Scale", AutoModes.SCALE_AND_SWITCH);
 		SmartDashboard.putData("Target for Autonomous Period", autoTargetChooser);
 
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
@@ -115,7 +116,6 @@ public class Robot extends TimedRobot {
 		ledControl.sendColor(DriverStation.getInstance().getAlliance());
 		nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
 		scaleSide = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
-		SmartDashboard.putBoolean("HasCube", grabber.hasCube());
 	}
 
 	/**
@@ -141,8 +141,13 @@ public class Robot extends TimedRobot {
 			switch (target) {
 			case SCALE_AND_SWITCH:
 				if (scaleSide == OwnedSide.LEFT) {
-					System.out.println("Scale is close on left side");
-					autonomousCommand = new GyroCompMPRunner("LeftToLeftScale");
+					if(nearSwitchSide == OwnedSide.LEFT) {
+						System.out.println("Scale and switch are close on left side");
+						autonomousCommand = new TwoCubeLeft();
+					} else {
+						System.out.println("Only scale is close on left side");
+						autonomousCommand = new LeftToLeftScale();
+					}
 				} else if (scaleSide != OwnedSide.LEFT && nearSwitchSide == OwnedSide.LEFT) {
 					System.out.println("Switch is close on left side");
 					autonomousCommand = new LeftToLeftSwitchOutside();
@@ -170,7 +175,7 @@ public class Robot extends TimedRobot {
 			case SCALE_AND_SWITCH:
 				if (scaleSide == OwnedSide.RIGHT) {
 					System.out.println("Scale is close on right side");
-					autonomousCommand = new GyroCompMPRunner("LeftToLeftScale");
+					autonomousCommand = new RightToRightScale();
 				} else if (scaleSide != OwnedSide.RIGHT && nearSwitchSide == OwnedSide.RIGHT) {
 					System.out.println("Switch is close on right side");
 					autonomousCommand = new LeftToLeftSwitchOutside();

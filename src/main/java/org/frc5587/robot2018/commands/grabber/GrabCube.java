@@ -24,7 +24,7 @@ public class GrabCube extends Command{
     }
 
     public boolean isFinished(){
-        return t.hasPeriodPassed(3) || grabber.hasCube();
+        return t.hasPeriodPassed(3);
     }
 
     public void end(){

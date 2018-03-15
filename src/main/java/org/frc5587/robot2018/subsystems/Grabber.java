@@ -6,7 +6,6 @@ import org.frc5587.robot2018.RobotMap;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -43,10 +42,6 @@ public class Grabber extends Subsystem {
         return expandSolenoid.get();
     }
 
-    public boolean hasCube() {
-        return breakBeam.get();
-    }
-
     public void initDefaultCommand() {
         //    setDefaultCommand(new MySpecialCommand());
     }
@@ -55,7 +50,7 @@ public class Grabber extends Subsystem {
         OFF           (new double[] { 0.0, 0.0 }), 
         INTAKE        (new double[] { -0.6, -0.6 }), 
         EJECT         (new double[] { 0.7, 0.7 }), 
-        PASS_THROUGH  (new double[] { -0.5, -0.5 }), 
+        PASS_THROUGH  (new double[] { -0.7, -0.7 }), 
         RIGHT_ASSIST  (new double[] { -0.5, -0.7 }),
         LEFT_ASSIST   (new double[] { -0.7, -0.5 });
 

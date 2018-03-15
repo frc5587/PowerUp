@@ -82,30 +82,21 @@ public class GenerateMPs{
 		// 	}
 		// );
 
-		fastPath.createNew(
-			"LeftToLeftScaleBackwards", 
-			new Waypoint[]{
-				new Waypoint(0, 268, Pathfinder.d2r(180)),
-				new Waypoint(171, 268, Pathfinder.d2r(180)),
-				new Waypoint(270, 204, Pathfinder.d2r(200))
-			}
-		);
+		fastPath.createNew("LeftToLeftScaleBackwards", new Waypoint[] { 
+			new Waypoint(0, 268, Pathfinder.d2r(180)),
+			new Waypoint(195, 268, Pathfinder.d2r(180)), 
+			new Waypoint(270, 234, Pathfinder.d2r(180))
+		 });
 
-		slowPath.createNew(
-			"LeftScaleBackwardsToLeftSwitchBack_Finish", 
-			new Waypoint[]{
-				new Waypoint(270, 204, Pathfinder.d2r(200)),
-				new Waypoint(295, 204, Pathfinder.d2r(180))
-			}
-		);
+		slowPath.createNew("LeftScaleBackwardsToLeftSwitchBack_Finish", new Waypoint[] {
+			new Waypoint(270, 234, Pathfinder.d2r(180)), 
+			new Waypoint(285, 234, Pathfinder.d2r(180)) 
+		});
 
-		slowPath.createNew(
-			"LeftScaleBackwardsToLeftSwitchBack", 
-			new Waypoint[]{
-				new Waypoint(295, 204, Pathfinder.d2r(180)),
-				new Waypoint(220, 200, Pathfinder.d2r(180))
-			}
-		);
+		slowPath.createNew("LeftScaleBackwardsToLeftSwitch", new Waypoint[] {
+			new Waypoint(285, 234, Pathfinder.d2r(180)), 
+			new Waypoint(220, 200, Pathfinder.d2r(180))
+		});
 
 		medPath.createNew(
 			"LeftToRightSwitchFront", 
