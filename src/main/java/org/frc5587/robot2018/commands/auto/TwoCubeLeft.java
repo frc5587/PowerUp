@@ -20,11 +20,11 @@ public class TwoCubeLeft extends CommandGroup{
         addSequential(new GyroCompMPRunner("LeftToLeftScaleBackwards", false), 6);
         addSequential(new SetElevatorPistons(Value.kReverse));
         addSequential(new ElevatorToSetpoint(HeightLevels.SCALE), 4);
-        addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitchBack_Finish", true), 2);
+        // addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitchBack_Finish", false), 2);
         addSequential(new ShootCubeBackwards());
         addSequential(new ElevatorToSetpoint(HeightLevels.INTAKE), 4);
         addParallel(new GrabCube());
-        addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitch", true), 3);
+        addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitch", true), 5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SWITCH), 2);
         addSequential(new ShootCube());
     }

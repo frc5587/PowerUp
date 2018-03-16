@@ -34,8 +34,8 @@ public class GyroCompMPRunner extends Command{
     }
 
     public GyroCompMPRunner(Trajectory t, boolean forwards){
+        requires(Robot.kDrive);
         drive = Robot.kDrive;
-        requires(drive);
         p = Robot.pathgen;
         trajectory = t;
         this.forwards = forwards;
@@ -87,7 +87,9 @@ public class GyroCompMPRunner extends Command{
     }
 
     public void end(){
+        System.out.println("GyroCompMPRunner ending");
         looper.stop();
+        drive.stop();
     }
 
     public void interrupted(){

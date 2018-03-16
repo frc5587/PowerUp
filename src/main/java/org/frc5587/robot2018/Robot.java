@@ -74,9 +74,9 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
 		autoTargetChooser = new SendableChooser<>();
-		autoTargetChooser.addDefault("Switch Only", AutoModes.SWITCH_ONLY);
+		autoTargetChooser.addObject("Switch Only", AutoModes.SWITCH_ONLY);
 		autoTargetChooser.addObject("Switch and Scale", AutoModes.SCALE_AND_SWITCH);
-		SmartDashboard.putData("Target for Autonomous Period", autoTargetChooser);
+		SmartDashboard.putData("Target for Auto", autoTargetChooser);
 
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 
@@ -199,6 +199,7 @@ public class Robot extends TimedRobot {
 			}
 			break;
 		default: // Otherwise, assume centre...
+			System.out.println(nearSwitchSide);
 			switch (nearSwitchSide) {
 			case LEFT:
 				System.out.println("Switch is on left side");
