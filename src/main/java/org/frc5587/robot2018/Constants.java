@@ -8,7 +8,7 @@ public class Constants {
         // set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action fails
         public static final int kTimeoutMs = 10;
 
-        public static final double kMaxVelocity = 0.0;
+        public static final double kMaxVelocity = 2500; //measured in STU
 
         public static final double kVCompSaturation = 12.0;
 
