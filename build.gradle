@@ -56,6 +56,10 @@ dependencies {
     compile openrio.powerup.matchData()
 }
 
+wpi {
+    wpilibVersion = "2018.4.1"
+}
+
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib
 // knows where to look for our Robot Class.
