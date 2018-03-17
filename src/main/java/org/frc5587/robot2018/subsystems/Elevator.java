@@ -174,6 +174,10 @@ public class Elevator extends Subsystem {
                 Constants.Elevator.kTimeoutMs);
     }
 
+    public void setEncoderPosition(int val){
+        elevatorTalon.setSelectedSensorPosition(val, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
+    }
+
     /**
      * Returns how many inches from the ground the elevator currently is
      * @return elevator's current height in inches

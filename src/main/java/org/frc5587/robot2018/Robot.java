@@ -72,8 +72,6 @@ public class Robot extends TimedRobot {
 		}
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
 
-		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
-
 		cameraServer = CameraServer.getInstance();
 		driverCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.DRIVER_CAMERA);
 		grabberCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.GRABBER_CAMERA);
@@ -91,6 +89,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Start Compressor", new RunCompressor(true));
 		SmartDashboard.putData("Stop Compressor", new RunCompressor(false));
 		SmartDashboard.putData("Generate Profiles", new MPGenCommand());
+		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
+		SmartDashboard.putData("Zero Elevator", new ZeroElevator());
 	}
 
 	/**

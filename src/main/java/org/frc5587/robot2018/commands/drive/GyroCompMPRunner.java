@@ -89,58 +89,61 @@ public class GyroCompMPRunner extends Command{
     public void end(){
         System.out.println("GyroCompMPRunner ending");
         looper.stop();
-        drive.stop();
+        //drive.stop();
+        pathFinished = true;
     }
 
     public void interrupted(){
         end();
+        pathFinished = true;
     }
 
     public class ProfileLooper implements Runnable{
         @Override
         public void run() {
-            double left = 0, right = 0;
+            if(!pathFinished){
+                double left = 0, right = 0;
 
-            if(!lEncoderFollower.isFinished()){
-                SmartDashboard.putNumber("Left Expected Pos", lEncoderFollower.getSegment().position * Constants.Drive.stuPerInch);
-                SmartDashboard.putNumber("Left Expected Vel", lEncoderFollower.getSegment().velocity * Constants.Drive.stuPerInch / 10f);
-                SmartDashboard.putNumber("Left Pos Error", lEncoderFollower.getSegment().position - drive.getLeftPosition() / (double)Constants.Drive.stuPerInch);
-                SmartDashboard.putNumber("Left Vel Error", lEncoderFollower.getSegment().velocity - drive.getLeftVelocity() / (double)Constants.Drive.stuPerInch * 10);
+                if(!lEncoderFollower.isFinished()){
+                    SmartDashboard.putNumber("Left Expected Pos", lEncoderFollower.getSegment().position * Constants.Drive.stuPerInch);
+                    SmartDashboard.putNumber("Left Expected Vel", lEncoderFollower.getSegment().velocity * Constants.Drive.stuPerInch / 10f);
+                    SmartDashboard.putNumber("Left Pos Error", lEncoderFollower.getSegment().position - drive.getLeftPosition() / (double)Constants.Drive.stuPerInch);
+                    SmartDashboard.putNumber("Left Vel Error", lEncoderFollower.getSegment().velocity - drive.getLeftVelocity() / (double)Constants.Drive.stuPerInch * 10);
+                }
+                if(!rEncoderFollower.isFinished()){
+                    SmartDashboard.putNumber("Right Expected Pos", rEncoderFollower.getSegment().position * Constants.Drive.stuPerInch);
+                    SmartDashboard.putNumber("Right Expected Vel", rEncoderFollower.getSegment().velocity * Constants.Drive.stuPerInch / 10f);
+                    SmartDashboard.putNumber("Right Pos Error", rEncoderFollower.getSegment().position  - drive.getRightPosition() / (double)Constants.Drive.stuPerInch);
+                    SmartDashboard.putNumber("Left Vel Error", rEncoderFollower.getSegment().velocity - drive.getRightVelocity() / (double)Constants.Drive.stuPerInch * 10);
+                }
+
+                if(forwards){
+                    left = lEncoderFollower.calculate(drive.getLeftPosition());
+                    right = rEncoderFollower.calculate(drive.getRightPosition());
+                }
+                else{
+                    left = -rEncoderFollower.calculate(-drive.getLeftPosition());
+                    right = -lEncoderFollower.calculate(-drive.getRightPosition());
+                }
+
+                double gyroHeading = drive.getHeading();
+                double desiredHeading = Pathfinder.r2d(lEncoderFollower.getHeading());
+                double angleDifference = Pathfinder.boundHalfDegrees(initialHeading + desiredHeading - gyroHeading);
+
+                SmartDashboard.putNumber("Gyro Heading", gyroHeading);
+                SmartDashboard.putNumber("Desired Heading", desiredHeading);
+                SmartDashboard.putNumber("Angle Difference", angleDifference);
+
+                double turn = Constants.Drive.gyrokP * angleDifference;            
+
+                left += turn;
+                right -= turn;
+
+                //System.out.println("Left: " + left + " Right: " + right );
+
+                pathFinished = lEncoderFollower.isFinished() && rEncoderFollower.isFinished();
+                drive.vbusLR(left, right);
             }
-            if(!rEncoderFollower.isFinished()){
-                SmartDashboard.putNumber("Right Expected Pos", rEncoderFollower.getSegment().position * Constants.Drive.stuPerInch);
-                SmartDashboard.putNumber("Right Expected Vel", rEncoderFollower.getSegment().velocity * Constants.Drive.stuPerInch / 10f);
-                SmartDashboard.putNumber("Right Pos Error", rEncoderFollower.getSegment().position  - drive.getRightPosition() / (double)Constants.Drive.stuPerInch);
-                SmartDashboard.putNumber("Left Vel Error", rEncoderFollower.getSegment().velocity - drive.getRightVelocity() / (double)Constants.Drive.stuPerInch * 10);
-            }
-
-            pathFinished = lEncoderFollower.isFinished() && rEncoderFollower.isFinished();
-
-            if(forwards){
-                left = lEncoderFollower.calculate(drive.getLeftPosition());
-                right = rEncoderFollower.calculate(drive.getRightPosition());
-            }
-            else{
-                left = -rEncoderFollower.calculate(-drive.getLeftPosition());
-                right = -lEncoderFollower.calculate(-drive.getRightPosition());
-            }
-
-            double gyroHeading = drive.getHeading();
-            double desiredHeading = Pathfinder.r2d(lEncoderFollower.getHeading());
-            double angleDifference = Pathfinder.boundHalfDegrees(initialHeading + desiredHeading - gyroHeading);
-
-            SmartDashboard.putNumber("Gyro Heading", gyroHeading);
-            SmartDashboard.putNumber("Desired Heading", desiredHeading);
-            SmartDashboard.putNumber("Angle Difference", angleDifference);
-
-            double turn = Constants.Drive.gyrokP * angleDifference;            
-
-            left += turn;
-            right -= turn;
-
-            //System.out.println("Left: " + left + " Right: " + right );
-
-            drive.vbusLR(left, right);
         }
     }
 }
