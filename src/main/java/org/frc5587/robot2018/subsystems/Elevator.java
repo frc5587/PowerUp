@@ -138,6 +138,7 @@ public class Elevator extends Subsystem {
         setpoint = inchesToEncoder(currentHeight.getHeight());
         System.out.println(setpoint);
         elevatorTalon.set(ControlMode.MotionMagic, setpoint);
+        sendMotionMagicDebugInfo();
     }
 
     /**

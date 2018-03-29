@@ -1,7 +1,6 @@
 package org.frc5587.robot2018.commands;
 
 import org.frc5587.robot2018.Robot;
-import org.frc5587.robot2018.subsystems.Drive;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 public class RunCompressor extends InstantCommand{

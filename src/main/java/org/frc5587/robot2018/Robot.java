@@ -71,10 +71,15 @@ public class Robot extends TimedRobot {
 			positionChooser.addObject(pos.name(), pos);
 		}
 		SmartDashboard.putData("Starting Position Chooser", positionChooser);
-
+		SmartDashboard.putData("Start Compressor", new RunCompressor(true));
+		SmartDashboard.putData("Stop Compressor", new RunCompressor(false));
+		SmartDashboard.putData("Generate Profiles", new MPGenCommand());
+		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
+		SmartDashboard.putData("Zero Elevator", new ZeroElevator());
+		
 		cameraServer = CameraServer.getInstance();
 		driverCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.DRIVER_CAMERA);
-		grabberCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.GRABBER_CAMERA);
+		//grabberCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.GRABBER_CAMERA);
 		// driverCvSink = new CvSink("driverCamera");
 		// driverCvSink.setSource(driverCamera);
 		// driverCvSink.setEnabled(true);
@@ -86,11 +91,7 @@ public class Robot extends TimedRobot {
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
 		//new CameraSwitching().start();
-		SmartDashboard.putData("Start Compressor", new RunCompressor(true));
-		SmartDashboard.putData("Stop Compressor", new RunCompressor(false));
-		SmartDashboard.putData("Generate Profiles", new MPGenCommand());
-		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
-		SmartDashboard.putData("Zero Elevator", new ZeroElevator());
+		
 	}
 
 	/**

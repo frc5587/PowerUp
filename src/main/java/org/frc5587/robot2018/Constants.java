@@ -119,7 +119,7 @@ public class Constants {
 
         //Height to place on scale in inches
         public static final double scaleHeight = 77;
-        public static final double barHeight = 62;
+        public static final double barHeight = 55;
         public static final double switchHeight = 25;
         public static final double carryHeight = 7.25;
         public static final double intakeHeight = 0;

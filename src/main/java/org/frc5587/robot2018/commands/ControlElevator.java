@@ -58,7 +58,6 @@ public class ControlElevator extends Command {
         }
 
         elevator.sendDebugInfo();
-        elevator.sendMotionMagicDebugInfo();
     }
 
     protected boolean isFinished() {

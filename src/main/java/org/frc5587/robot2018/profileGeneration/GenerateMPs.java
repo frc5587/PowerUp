@@ -137,8 +137,8 @@ public class GenerateMPs{
 			"CenterToLeftSwitchFront", 
 			new Waypoint[]{
 				new Waypoint(39, 12*11.5, Pathfinder.d2r(0)),
-				new Waypoint(12*10, 12*18, Pathfinder.d2r(0)),
-				new Waypoint(12*13.5, 12*18, Pathfinder.d2r(0))
+				new Waypoint(12*10, 12*18.5, Pathfinder.d2r(0)),
+				new Waypoint(12*13.5, 12*18.5, Pathfinder.d2r(0))
 			}
 		);
 

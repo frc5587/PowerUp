@@ -87,14 +87,16 @@ public class GyroCompMPRunner extends Command{
     }
 
     public void end(){
-        System.out.println("GyroCompMPRunner ending");
+        System.out.println("GyroCompMPRunner: " + name + " ending");
         looper.stop();
-        //drive.stop();
+        drive.stop();
         pathFinished = true;
     }
 
     public void interrupted(){
-        end();
+        System.out.println("GyroCompMPRunner: " + name + " interrupted.");
+        looper.stop();
+        drive.stop();
         pathFinished = true;
     }
 
