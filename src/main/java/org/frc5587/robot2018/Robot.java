@@ -7,6 +7,9 @@
 
 package org.frc5587.robot2018;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import org.frc5587.robot2018.commands.climber.Climb;
 import org.frc5587.robot2018.commands.elevator.*;
 import org.frc5587.robot2018.fieldInfo.FieldInfo;
@@ -55,6 +58,9 @@ public class Robot extends TimedRobot {
 
 	private SendableChooser<StartPosition> positionChooser;
 
+	private static NetworkTableEntry matchStartedEntry;
+	private static boolean matchStarted = false;
+
 	Command autonomousCommand;
 
 	/**
@@ -89,6 +95,10 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Generate Profiles", new MPGenCommand());
 		SmartDashboard.putData("Reset Drive Encoders", new ResetSensorPos());
 		SmartDashboard.putData("Zero Elevator", new ZeroElevator());
+
+		NetworkTableInstance inst = NetworkTableInstance.getDefault();
+		NetworkTable table = inst.getTable("dataTable");
+		matchStartedEntry = table.getEntry("Match Started");
 	}
 
 	/**
@@ -100,7 +110,8 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
 		kDrive.enableBrakeMode(false);
-	}
+        matchStartedEntry.setBoolean(false);
+    }
 
 	@Override
 	public void disabledPeriodic() {
@@ -123,7 +134,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Autonomous Starting...");
-		kDrive.resetEncoders();
+        matchStartedEntry.setBoolean(true);
+
+        kDrive.resetEncoders();
 
 		OwnedSide nearSwitchSide = FieldInfo.getOwnedSide(FieldObjects.CLOSE_SWITCH);
 		switch (positionChooser.getSelected()) {
