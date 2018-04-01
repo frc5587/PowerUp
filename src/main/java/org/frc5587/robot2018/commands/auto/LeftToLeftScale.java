@@ -12,11 +12,11 @@ public class LeftToLeftScale extends CommandGroup{
     public LeftToLeftScale(){
         addParallel(new ElevatorToSetpoint(HeightLevels.SWITCH));
         addSequential(new SetElevatorPistons(Value.kReverse));
-        addSequential(new GyroCompMPRunner("LeftToLeftScale1/3"), 5.5);
+        addSequential(new GyroCompMPRunner("LeftToLeftScale1_3", true), 5.5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SCALE), 3);
-        addSequential(new GyroCompMPRunner("LeftToLeftScale2/3"), 2.5);
+        addSequential(new GyroCompMPRunner("LeftToLeftScale2_3", true), 2.5);
         addSequential(new ShootCube());
-        addSequential(new GyroCompMPRunner("LeftToLeftScale3/3", true), 2.5);
+        addSequential(new GyroCompMPRunner("LeftToLeftScale3_3", true), 2.5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SWITCH));
     }
 }
