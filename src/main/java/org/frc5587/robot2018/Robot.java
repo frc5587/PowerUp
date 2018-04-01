@@ -7,8 +7,14 @@
 
 package org.frc5587.robot2018;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import org.frc5587.robot2018.commands.climber.Climb;
 import org.frc5587.robot2018.commands.elevator.*;
+import org.frc5587.robot2018.fieldInfo.FieldInfo;
+import org.frc5587.robot2018.fieldInfo.FieldInfo.FieldObjects;
+import org.frc5587.robot2018.fieldInfo.FieldInfo.OwnedSide;
 import org.frc5587.robot2018.commands.drive.*;
 import org.frc5587.robot2018.commands.*;
 import org.frc5587.robot2018.commands.auto.*;
@@ -26,9 +32,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import openrio.powerup.MatchData;
-import openrio.powerup.MatchData.OwnedSide;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,8 +57,9 @@ public class Robot extends TimedRobot {
 	public static CvSink driverCvSink, grabberCvSink;
 
 	private SendableChooser<StartPosition> positionChooser;
-	OwnedSide nearSwitchSide = OwnedSide.UNKNOWN;
-	OwnedSide scaleSide = OwnedSide.UNKNOWN;
+
+	private static NetworkTableEntry matchStartedEntry;
+	private static boolean matchStarted = false;
 
 	Command autonomousCommand;
 
@@ -91,7 +95,10 @@ public class Robot extends TimedRobot {
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
 		//new CameraSwitching().start();
-		
+
+		NetworkTableInstance inst = NetworkTableInstance.getDefault();
+		NetworkTable table = inst.getTable("dataTable");
+		matchStartedEntry = table.getEntry("Match Started");
 	}
 
 	/**
@@ -103,14 +110,14 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 		System.out.println("Disabled starting. . .");
 		kDrive.enableBrakeMode(false);
-	}
+        matchStartedEntry.setBoolean(false);
+    }
 
 	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		ledControl.sendColor(DriverStation.getInstance().getAlliance());
-		nearSwitchSide = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
-		scaleSide = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
+		FieldInfo.updateData();
 	}
 
 	/**
@@ -127,8 +134,12 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		System.out.println("Autonomous Starting...");
-		kDrive.resetEncoders();
+		FieldInfo.updateData();
+        matchStartedEntry.setBoolean(true);
 
+        kDrive.resetEncoders();
+
+		OwnedSide nearSwitchSide = FieldInfo.getOwnedSide(FieldObjects.CLOSE_SWITCH);
 		switch (positionChooser.getSelected()) {
 		case LEFT:
 			if (nearSwitchSide == OwnedSide.LEFT) {
@@ -166,7 +177,7 @@ public class Robot extends TimedRobot {
 			break;
 		default:
 			System.out.println("Just driving forward");
-			autonomousCommand = new GyroCompMPRunner("DriveStraight");
+			autonomousCommand = new RightToRightScale();
 			break;
 		}
 		if (autonomousCommand != null) {
