@@ -34,6 +34,9 @@ public class Climb extends Command {
         if(OI.xb.getBackButton()){
             climber.setClimbSpeed(OI.xb.getY(GenericHID.Hand.kRight));
         }
+        else{
+            climber.setClimbSpeed(0);
+        }
     }
 
     /**
