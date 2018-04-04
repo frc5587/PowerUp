@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
 	private SendableChooser<StartPosition> positionChooser;
 
 	private static NetworkTableEntry matchStartedEntry;
-	private static boolean matchStarted = false;
 
 	Command autonomousCommand;
 
@@ -83,18 +82,10 @@ public class Robot extends TimedRobot {
 		
 		cameraServer = CameraServer.getInstance();
 		driverCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.DRIVER_CAMERA);
-		//grabberCamera = cameraServer.startAutomaticCapture(RobotMap.Camera.GRABBER_CAMERA);
-		// driverCvSink = new CvSink("driverCamera");
-		// driverCvSink.setSource(driverCamera);
-		// driverCvSink.setEnabled(true);
-		// grabberCvSink = new CvSink("grabberCamera");
-		// grabberCvSink.setSource(grabberCamera);
-		// grabberCvSink.setEnabled(true);
 		cameraServer.startAutomaticCapture(driverCamera);
 
 		new LEDElevatorHeight().start();
 		new ResetElevator().start();
-		//new CameraSwitching().start();
 
 		NetworkTableInstance inst = NetworkTableInstance.getDefault();
 		NetworkTable table = inst.getTable("dataTable");
@@ -177,12 +168,17 @@ public class Robot extends TimedRobot {
 			break;
 		default:
 			System.out.println("Just driving forward");
-			autonomousCommand = new RightToRightScale();
+			autonomousCommand = new GyroCompMPRunner("DriveStraight");
 			break;
 		}
+
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
 			System.out.println("Starting Command: " + autonomousCommand.toString());
+		} else {
+			System.out.println("<< No autonomous command was configured - running DriveStraight >>");
+			autonomousCommand = new GyroCompMPRunner("DriveStraight");
+			autonomousCommand.start();
 		}
 	}
 
@@ -207,7 +203,6 @@ public class Robot extends TimedRobot {
 
 		new ControlGrabber().start();
 		new ControlElevator().start();
-		//new TestElevator().start();
 		new Climb().start();
 		new ArcadeDrive().start();
 	}
