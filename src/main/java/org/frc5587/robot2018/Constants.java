@@ -8,7 +8,7 @@ public class Constants {
         // set to zero to skip waiting for confirmation, set to nonzero to wait and report to DS if action fails
         public static final int kTimeoutMs = 10;
 
-        public static final double kMaxVelocity = 0.0;
+        public static final double kMaxVelocity = 2500; //measured in STU
 
         public static final double kVCompSaturation = 12.0;
 
@@ -119,7 +119,7 @@ public class Constants {
 
         //Height to place on scale in inches
         public static final double scaleHeight = 77;
-        public static final double barHeight = 62;
+        public static final double barHeight = 55;
         public static final double switchHeight = 25;
         public static final double carryHeight = 7.25;
         public static final double intakeHeight = 0;

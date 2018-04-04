@@ -138,6 +138,7 @@ public class Elevator extends Subsystem {
         setpoint = inchesToEncoder(currentHeight.getHeight());
         System.out.println(setpoint);
         elevatorTalon.set(ControlMode.MotionMagic, setpoint);
+        sendMotionMagicDebugInfo();
     }
 
     /**
@@ -172,6 +173,10 @@ public class Elevator extends Subsystem {
     public void resetEncoderPosition() {
         elevatorTalon.setSelectedSensorPosition(Constants.Elevator.hallHeight, Constants.Elevator.kPIDLoopIdx,
                 Constants.Elevator.kTimeoutMs);
+    }
+
+    public void setEncoderPosition(int val){
+        elevatorTalon.setSelectedSensorPosition(val, Constants.Elevator.kPIDLoopIdx, Constants.Elevator.kTimeoutMs);
     }
 
     /**

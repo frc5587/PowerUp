@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.frc5587.lib.Pathgen;
+import org.frc5587.lib.TalonPath;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Drive;
@@ -42,19 +43,20 @@ public class MotionProfileFiller extends Command{
 
     public static TrajectoryPoint[][] deserializeProfile(String filename, boolean zeroTalonDistance){
         Pathgen p = Robot.pathgen;
+        
         System.out.println("Loading...");
         Trajectory unmodified = Pathgen.getTrajectoryFromFile(filename);
         Trajectory leftTrajectory = p.getLeftSide(unmodified);
         Trajectory rightTrajectory = p.getRightSide(unmodified);
         System.out.println("Trajectory Modified.");
-        TrajectoryPoint[] leftTalonPoints = p.convertToTalon(
+        TrajectoryPoint[] leftTalonPoints = TalonPath.convertToTalon(
             leftTrajectory, 
             0, 
             0, 
             Constants.Drive.stuPerInch,
             zeroTalonDistance
         );
-        TrajectoryPoint[] rightTalonPoints = p.convertToTalon(
+        TrajectoryPoint[] rightTalonPoints = TalonPath.convertToTalon(
             rightTrajectory, 
             0, 
             0, 

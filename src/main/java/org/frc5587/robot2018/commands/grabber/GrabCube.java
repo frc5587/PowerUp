@@ -23,8 +23,14 @@ public class GrabCube extends Command{
         t.start();
     }
 
+    public void execute() {
+        if(t.hasPeriodPassed(2.0)) {
+            grabber.setPistons(Value.kForward);
+        }
+    }
+
     public boolean isFinished(){
-        return t.hasPeriodPassed(3) || grabber.hasCube();
+        return t.hasPeriodPassed(3);
     }
 
     public void end(){

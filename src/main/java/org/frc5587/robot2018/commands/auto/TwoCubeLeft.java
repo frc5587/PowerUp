@@ -14,17 +14,17 @@ import org.frc5587.robot2018.subsystems.Elevator.HeightLevels;
  * Paths go forwards instead of backwards
  * DO NOT USE without modifying profiles
  */
-public class TwoCube extends CommandGroup{
-    public TwoCube(){
-        addParallel(new ElevatorToSetpoint(HeightLevels.INTAKE), 2);
+public class TwoCubeLeft extends CommandGroup{
+    public TwoCubeLeft(){
+        addParallel(new ElevatorToSetpoint(HeightLevels.SWITCH), 2);
         addSequential(new GyroCompMPRunner("LeftToLeftScaleBackwards", false), 6);
-        addParallel(new SetElevatorPistons(Value.kReverse));
-        addSequential(new ElevatorToSetpoint(HeightLevels.SCALE));
-        addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitchBack_Finish", false), 2);
+        addSequential(new SetElevatorPistons(Value.kReverse));
+        addSequential(new ElevatorToSetpoint(HeightLevels.SCALE), 4);
+        // addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitchBack_Finish", false), 2);
         addSequential(new ShootCubeBackwards());
-        addSequential(new ElevatorToSetpoint(HeightLevels.INTAKE), 2);
+        addSequential(new ElevatorToSetpoint(HeightLevels.INTAKE), 4);
         addParallel(new GrabCube());
-        addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitchBack"), 3);
+        addSequential(new GyroCompMPRunner("LeftScaleBackwardsToLeftSwitch", true), 5);
         addSequential(new ElevatorToSetpoint(HeightLevels.SWITCH), 2);
         addSequential(new ShootCube());
     }

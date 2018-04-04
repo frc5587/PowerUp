@@ -36,7 +36,7 @@ public class SetGrabberMotors extends Command {
     @Override
     protected void execute(){
         for(Grabber.MotorSpeed speed : DISABLED_SPEEDS) {
-            if(grabber.hasCube()&& grabber.currentSpeed == speed){
+            if(grabber.currentSpeed == speed){
                 timer.start();
                 if(timer.get() <= 1) {
                     grabber.setMotors(Grabber.MotorSpeed.OFF);

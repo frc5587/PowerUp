@@ -220,8 +220,8 @@ public class Drive extends Subsystem {
 	}
 
 	public void stop(){
-		leftMaster.set(ControlMode.PercentOutput, 0.0);
-		rightMaster.set(ControlMode.PercentOutput, 0.0);
+		leftMaster.neutralOutput();
+		rightMaster.neutralOutput();
 	}
 
 	public int getLeftPosition(){

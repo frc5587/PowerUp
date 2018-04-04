@@ -6,7 +6,6 @@ import org.frc5587.robot2018.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TestElevator extends Command{
     Elevator elevator;

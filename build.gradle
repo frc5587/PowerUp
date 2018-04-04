@@ -53,7 +53,10 @@ dependencies {
     compile ctre()
     compile navx()
     compile pathfinder()
-    compile openrio.powerup.matchData()
+}
+
+wpi {
+    wpilibVersion = "2018.4.1"
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
