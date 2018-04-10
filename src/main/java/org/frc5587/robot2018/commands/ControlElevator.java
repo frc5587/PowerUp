@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ControlElevator extends Command {
-    private Elevator elevator;
+    private boolean elevatorPistonsOn = false, manualControlOn = false;
     private DeadbandXboxController xb;
-    private boolean elevatorPistonsOn = false;
+    private Elevator elevator;
 
     public ControlElevator() {
         requires(Robot.elevator);
@@ -28,10 +28,16 @@ public class ControlElevator extends Command {
     }
 
     protected void execute() {
-        if(!xb.getTrigger(Hand.kLeft)) {
+        if (!xb.getTrigger(Hand.kLeft)) {
             if (xb.getBackButtonPressed()) {
                 elevator.goToHeight(HeightLevels.INTAKE);
             } else {
+                if (manualControlOn) {
+                    // Reset to hold to override old joystick output
+                    elevator.holdWithVoltage();
+                    manualControlOn = false;
+                }
+
                 // Control elevator movement with bumpers
                 if (xb.getBumperPressed(Hand.kLeft)) {
                     elevator.goToHeight(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
@@ -41,11 +47,10 @@ public class ControlElevator extends Command {
                     elevator.holdWithVoltage();
                 }
             }
-        }
-        else {
+        } else {
+            manualControlOn = true;
             elevator.setPower(MathHelper.limit(-xb.getY(Hand.kLeft) + Constants.Elevator.holdPercent, -1, 1));
         }
-        
 
         // Toggle position of the elevator pistons using the start button
         if (xb.getStartButtonPressed()) {
