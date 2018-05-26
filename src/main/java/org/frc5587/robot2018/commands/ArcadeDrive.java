@@ -40,6 +40,10 @@ public class ArcadeDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
+		// Xbox configuration
+		// double throttle = -OI.xb.getY(Hand.kLeft);
+		// double curve = OI.xb.getX(Hand.kLeft);
+
 		double throttle = -OI.joystick.getY(Hand.kLeft);
 		double curve = OI.joystick.getX(Hand.kLeft);
 
