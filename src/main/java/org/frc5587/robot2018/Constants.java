@@ -113,8 +113,7 @@ public class Constants {
         //Unit Conversion
         public static final int stuPerInch = 940;
 
-        //Hall effect sensor height in native units MEASURED FROM BOTTOM OF cube
-        // 
+        //Hall effect sensor height in native units MEASURED FROM BOTTOM OF CUBE
         public static final int hallHeight = 31500;
 
         //Height to place on scale in inches
