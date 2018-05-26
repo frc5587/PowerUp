@@ -26,6 +26,7 @@ public class Elevator extends Subsystem {
 
     private DigitalInput hallEffect;
     private TalonSRX elevatorTalon;
+    @SuppressWarnings("unused")
     private VictorSPX elevatorVictorSPX;
     private DoubleSolenoid tiltDoubleSol;
 
@@ -139,8 +140,8 @@ public class Elevator extends Subsystem {
     }
 
     /**
-     * Puts information about the state of Motion Magic with the elevator's
-     * TalonSRX to Smart Dashboard for debugging
+     * Puts information about the state of Motion Magic with the elevator's TalonSRX
+     * to Smart Dashboard for debugging
      */
     public void sendMotionMagicDebugInfo() {
         double pos = elevatorTalon.getActiveTrajectoryPosition();

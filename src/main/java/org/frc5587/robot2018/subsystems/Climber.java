@@ -8,16 +8,28 @@ import org.frc5587.robot2018.RobotMap;
 public class Climber extends Subsystem {
     TalonSRX climberTalon;
 
+    /**
+     * Constructor for timer, which also configures the TalonSRX within the
+     * constructor call
+     */
     public Climber() {
         climberTalon = new TalonSRX(RobotMap.Climber.climberTalon);
         climberTalon.configContinuousCurrentLimit(50, 10);
         climberTalon.configPeakCurrentLimit(60, 10);
         climberTalon.configPeakCurrentDuration(200, 10);
     }
+    
+    @Override
+    protected void initDefaultCommand() {
+    }
 
-    public void initDefaultCommand() { }
-
-    public void setClimbSpeed(double climbSpeed) {
-        climberTalon.set(ControlMode.PercentOutput, climbSpeed);
+    /**
+     * Set the speed of the climber to a percentage using the TalonSRX percent ouput
+     * 
+     * @param percentSpeed the percentage output to set the climber's motor
+     *                     controller to
+     */
+    public void setClimbSpeed(double percentSpeed) {
+        climberTalon.set(ControlMode.PercentOutput, percentSpeed);
     }
 }
