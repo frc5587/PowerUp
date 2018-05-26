@@ -5,6 +5,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.frc5587.robot2018.RobotMap;
 
+/**
+ * Climber subsystem, which consists of a simple one-way winch controlled by a
+ * motor controller, enabling input to be issued to pull up the robot on the
+ * standard Power Up bar
+ */
 public class Climber extends Subsystem {
     TalonSRX climberTalon;
 
@@ -18,7 +23,7 @@ public class Climber extends Subsystem {
         climberTalon.configPeakCurrentLimit(60, 10);
         climberTalon.configPeakCurrentDuration(200, 10);
     }
-    
+
     @Override
     protected void initDefaultCommand() {
     }
