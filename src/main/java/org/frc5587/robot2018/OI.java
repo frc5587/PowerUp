@@ -7,7 +7,6 @@
 
 package org.frc5587.robot2018;
 
-import edu.wpi.first.wpilibj.XboxController;
 import org.frc5587.lib.DeadbandXboxController;
 import edu.wpi.first.wpilibj.Joystick;
 
