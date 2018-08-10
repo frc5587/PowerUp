@@ -26,20 +26,19 @@ public class RobotMap {
 	public static final int COMPRESSOR = 0;
 
 	public static class Elevator {
-		public static final int HALL_EFFECT_SENSOR = 0,
-				ELEVATOR_TALON = 7,
-				ELEVATOR_VICTORSPX = 8;
-
-		public static final int[] ELEVATOR_SOLENOID = {2, 3};
+		public static final int HALL_EFFECT_SENSOR = 0;
+		public static final int ELEVATOR_TALON = 7;
+		public static final int ELEVATOR_VICTORSPX = 8;
+		public static final int[] ELEVATOR_SOLENOID = { 2, 3 };
 	}
 
 	public static class Grabber {
-	    public static final int[] EXPANDER_SOLENOID = {1, 0};
-	    public static final int LEFT = 6, RIGHT = 5;
+		public static final int[] EXPANDER_SOLENOID = { 1, 0 };
+		public static final int LEFT = 6, RIGHT = 5;
 		public static final int RECEIVER = 2;
-    }
+	}
 
-	public static class Drive{
+	public static class Drive {
 		public static int leftMaster = 1;
 		public static int rightMaster = 2;
 		public static int leftSlave = 3;

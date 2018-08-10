@@ -45,4 +45,5 @@ public class OI {
 
 	public static Joystick joystick = new Joystick(1);
 	public static DeadbandXboxController xb = new DeadbandXboxController(0);
+	public static Joystick DriverStationButtons = new Joystick(2);
 }

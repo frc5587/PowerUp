@@ -37,6 +37,12 @@ public class CurveDrive extends Command {
 		double throttle = OI.xb.getY(Hand.kLeft);
 		double curve = -OI.xb.getX(Hand.kRight);
 		boolean isQuickTurn = OI.xb.getBumper(Hand.kRight);
+
+		// Trigger as throttle configuration
+		// double curve = OI.xb.getX(Hand.kLeft);
+		// double throttle = 0.5 * (OI.xb.getTriggerAxis(Hand.kRight) - OI.xb.getTriggerAxis(Hand.kLeft));
+		// boolean isQuickTurn = OI.xb.getStickButton(Hand.kRight);
+
 		SmartDashboard.putNumber("throttle", throttle);
 		SmartDashboard.putNumber("curve", curve);
 		kDrive.vbusCurve(throttle, curve, isQuickTurn);
