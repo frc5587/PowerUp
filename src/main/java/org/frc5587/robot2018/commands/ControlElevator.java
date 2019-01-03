@@ -1,7 +1,8 @@
 package org.frc5587.robot2018.commands;
 
-import org.frc5587.lib.DeadbandXboxController;
+import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.MathHelper;
+import org.frc5587.lib.control.Cycler;
 import org.frc5587.robot2018.Constants;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
@@ -15,12 +16,15 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ControlElevator extends Command {
     private boolean elevatorPistonsOn = false, manualControlOn = false;
     private DeadbandXboxController xb;
+    private Cycler<HeightLevels> cycler;
     private Elevator elevator;
 
     public ControlElevator() {
         requires(Robot.elevator);
         elevator = Robot.elevator;
         xb = OI.xb;
+
+        cycler = new Cycler<>(HeightLevels.values());
     }
 
     protected void initialize() {
@@ -30,7 +34,7 @@ public class ControlElevator extends Command {
     protected void execute() {
         if (!xb.getTrigger(Hand.kLeft)) {
             if (xb.getBackButtonPressed()) {
-                elevator.goToHeight(HeightLevels.INTAKE);
+                elevator.goToHeight(cycler.reset());
             } else {
                 if (manualControlOn) {
                     // Reset to hold to override old joystick output
@@ -40,9 +44,9 @@ public class ControlElevator extends Command {
 
                 // Control elevator movement with bumpers
                 if (xb.getBumperPressed(Hand.kLeft)) {
-                    elevator.goToHeight(HeightLevels.getPreviousValue(elevator.getHeightLevel()));
+                    elevator.goToHeight(cycler.prev());
                 } else if (xb.getBumperPressed(Hand.kRight)) {
-                    elevator.goToHeight(HeightLevels.getNextValue(elevator.getHeightLevel()));
+                    elevator.goToHeight(cycler.next());
                 } else if (elevator.isDoneMoving()) {
                     elevator.holdWithVoltage();
                 }

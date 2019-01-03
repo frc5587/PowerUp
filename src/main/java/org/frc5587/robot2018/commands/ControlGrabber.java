@@ -2,11 +2,10 @@ package org.frc5587.robot2018.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.frc5587.lib.DeadbandXboxController;
+import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
 import org.frc5587.robot2018.subsystems.Grabber;
@@ -16,14 +15,12 @@ public class ControlGrabber extends Command {
     MotorSpeed speed = MotorSpeed.OFF;
     Grabber grabber;
     DeadbandXboxController xb;
-    Joystick db;
     boolean kidMode = false;
 
     public ControlGrabber() {
         requires(Robot.grabber);
         grabber = Robot.grabber;
         xb = OI.xb;
-        db = OI.DriverStationButtons;
     }
 
     protected void initialize() {
@@ -38,23 +35,12 @@ public class ControlGrabber extends Command {
         }
 
 
-        if(!kidMode) {
-            if (xb.getYButton()) {
-                speed = Grabber.MotorSpeed.EJECT;
-            } else if (xb.getAButton()) {
-                speed = Grabber.MotorSpeed.INTAKE;
-            } else {
-                speed = Grabber.MotorSpeed.OFF;
-            }
-        }
-        else{
-            if (db.getRawButton(1)) {
-                speed = Grabber.MotorSpeed.EJECT;
-            } else if (db.getRawButton(2)) {
-                speed = Grabber.MotorSpeed.INTAKE;
-            } else {
-                speed = Grabber.MotorSpeed.OFF;
-            }
+        if (xb.getYButton()) {
+            speed = Grabber.MotorSpeed.EJECT;
+        } else if (xb.getAButton()) {
+            speed = Grabber.MotorSpeed.INTAKE;
+        } else {
+            speed = Grabber.MotorSpeed.OFF;
         }
         grabber.setMotors(speed);
 

@@ -2,7 +2,7 @@ package org.frc5587.robot2018.commands;
 
 import org.frc5587.robot2018.OI;
 import org.frc5587.robot2018.Robot;
-import org.frc5587.lib.DeadbandXboxController;
+import org.frc5587.lib.control.DeadbandXboxController;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;

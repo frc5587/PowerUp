@@ -36,14 +36,11 @@ public class Drive extends Subsystem {
 
 	TalonSRX leftMaster, rightMaster;
 	VictorSPX leftSlave, rightSlave;
-	TitanDrive driveHelper;
 	AHRS navx;
 	ADXRS450_Gyro gyro;
 	MotionProfileStatus[] statuses = {new MotionProfileStatus(), new MotionProfileStatus()};
 
 	public Drive(){
-		driveHelper = new TitanDrive();
-
 		try{
 			navx = new AHRS(I2C.Port.kMXP);
 		}
@@ -187,14 +184,14 @@ public class Drive extends Subsystem {
 	}
 
 	public void vbusCurve(double throttle, double curve, boolean isQuickTurn){
-		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
+		DriveSignal d = TitanDrive.curvatureDrive(throttle, curve, isQuickTurn);
 		
 		leftMaster.set(ControlMode.PercentOutput, d.left);
 		rightMaster.set(ControlMode.PercentOutput, d.right);
 	}
 
 	public void vbusArcade(double throttle, double turn){
-		DriveSignal d = driveHelper.arcadeDrive(throttle, turn);
+		DriveSignal d = TitanDrive.arcadeDrive(throttle, turn);
 		
 		leftMaster.set(ControlMode.PercentOutput, d.left);
 		rightMaster.set(ControlMode.PercentOutput, d.right);
@@ -206,14 +203,14 @@ public class Drive extends Subsystem {
 	}
 
 	public void velocityCurve(double throttle, double curve, boolean isQuickTurn){
-		DriveSignal d = driveHelper.curvatureDrive(throttle, curve, isQuickTurn);
+		DriveSignal d = TitanDrive.curvatureDrive(throttle, curve, isQuickTurn);
 		
 		leftMaster.set(ControlMode.Velocity, d.left * Constants.Drive.kMaxVelocity);
 		rightMaster.set(ControlMode.Velocity, d.right * Constants.Drive.kMaxVelocity);
 	}
 
 	public void velocityArcade(double throttle, double turn){
-		DriveSignal d = driveHelper.arcadeDrive(throttle, turn);
+		DriveSignal d = TitanDrive.arcadeDrive(throttle, turn);
 
 		leftMaster.set(ControlMode.Velocity, d.left * Constants.Drive.kMaxVelocity);
 		rightMaster.set(ControlMode.Velocity, d.right * Constants.Drive.kMaxVelocity);
